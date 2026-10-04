@@ -120,17 +120,24 @@ export function validate(model) {
     return d;
   };
   if (station && railDist(station.position) > 350) warn('warning', 'station_without_rail', station.id, 'Central Station has no railway.', station.position);
+  // rail geometry against its transport profile: the open line against the profile's minimum
+  // radius, the slow approaches to stations and turnouts against the approach radius, and no
+  // single change of direction that would read as a road-like corner
   for (const l of rail.lines) {
-    const pts = resamplePolyline(l.points, 80), limit = l.railClass === 'RAIL_FREIGHT' ? 160 : 260;
-    let worst = Infinity, at = null;
+    const al = l.alignment;
+    if (al && al.minRadiusAchieved !== null && al.minRadiusAchieved < al.minRadius * 0.85) warn('warning', 'rail_excessive_curvature', l.id, `${l.profile} line ${l.id} has a curve of ${al.minRadiusAchieved} m radius on open line (profile minimum ${al.minRadius} m).`, l.points[l.points.length >> 1]);
+    if (al && al.approachRadiusAchieved !== null && al.approachRadiusAchieved < al.approachRadius * 0.6) warn('warning', 'rail_tight_station_approach', l.id, `${l.profile} line ${l.id} approaches a station or turnout on a ${al.approachRadiusAchieved} m curve (profile allows ${al.approachRadius} m).`, l.points[0]);
+    const pts = resamplePolyline(l.points, 40);
     for (let i = 1; i + 1 < pts.length; i++) {
-      const a = pts[i - 1], b = pts[i], c = pts[i + 1];
-      const area = Math.abs((b.x - a.x) * (c.y - a.y) - (c.x - a.x) * (b.y - a.y)) / 2;
-      const radius = area < 1e-6 ? Infinity : (dist(a, b) * dist(b, c) * dist(a, c)) / (4 * area);
-      if (radius < worst) { worst = radius; at = b; }
+      let d = Math.abs(Math.atan2(pts[i + 1].y - pts[i].y, pts[i + 1].x - pts[i].x) - Math.atan2(pts[i].y - pts[i - 1].y, pts[i].x - pts[i - 1].x)); if (d > Math.PI) d = 2 * Math.PI - d;
+      if (d > 0.3) { warn('warning', 'rail_kink', l.id, `${l.profile} line ${l.id} turns ${Math.round((d * 180) / Math.PI)} degrees at one point.`, pts[i]); break; }
     }
-    if (worst < limit) warn('warning', 'rail_excessive_curvature', l.id, `${l.railClass} line ${l.id} has a curve of only ${Math.round(worst)} m radius.`, at);
   }
+  for (const st of rail.stations) if (st.alignment === 'CURVED' && st.kind !== 'freight_yard') warn('info', 'station_on_curve', st.id, `${st.kind} station sits on a ${st.trackRadius} m curve rather than on straight track.`, st.position);
+  // civic conflicts: every major road or railway meeting a civic object must have a recorded outcome
+  for (const c of model.civicConflicts || []) if (c.resolution === 'UNRESOLVED') warn('warning', 'civic_conflict_unresolved', c.roadId, c.reason.replace(/_/g, ' ') + '.', c.position);
+  // hierarchy: after fragments are demoted every level should be one network
+  for (const [lvl, share] of Object.entries(model.metadata.hierarchyCoherence || {})) if (share < 0.75) warn('info', 'hierarchy_level_was_fragmented', null, `${lvl} roads formed several separate networks (${Math.round(share * 100)}% in the largest); the fragments were demoted.`);
   const arterials = model.roads.filter((r) => (r.cls === 'R1' || r.cls === 'R2') && r.points.length > 1);
   const port = model.anchors.find((a) => a.type === 'port');
   for (const a of model.anchors.filter((x) => x.type === 'industrial')) {
@@ -167,8 +174,11 @@ export function validate(model) {
     if (!nom) continue;
     if (b.use === 'urban') { const t = typeArea[d.type] || (typeArea[d.type] = { n: 0, a: 0 }); t.n++; t.a += b.area; }
     if (b.area > 3.2 * nom && b.use === 'urban') warn('warning', 'oversized_block', b.id, `Block area exceeds the ${d.type} target by ${Math.round((b.area / nom - 1) * 100)}%.`, b.centroid);
-    else if (b.area < 0.15 * nom && b.use === 'urban') warn('warning', 'tiny_block', b.id, `Block is only ${Math.round((b.area / nom) * 100)}% of the ${d.type} target area.`, b.centroid);
-    if (b.minAngle < 0.38 && b.use === 'urban') warn('info', 'acute_block', b.id, `Block has a ${Math.round((b.minAngle * 180) / Math.PI)} degree corner.`, b.centroid);
+    else if (b.area < 0.15 * nom && b.use === 'urban' && !b.imperfection) warn('warning', 'tiny_block', b.id, `Block is only ${Math.round((b.area / nom) * 100)}% of the ${d.type} target area.`, b.centroid);
+    if (b.minAngle < 0.38 && b.use === 'urban' && !b.imperfection) warn('info', 'acute_block', b.id, `Block has a ${Math.round((b.minAngle * 180) / Math.PI)} degree corner.`, b.centroid);
+    // unusual but explained: reported for information, never as a defect
+    if (b.imperfection && b.imperfection.wouldHaveBeenRepaired) warn('info', 'awkward_but_valid_block', b.id, `${b.imperfection.kind.toLowerCase()} block kept: ${b.imperfection.cause.replace(/_/g, ' ')}.`, b.centroid);
+    if (b.use === 'urban' && (b.area < 350 || (2 * b.area) / b.perimeter < 7)) warn('warning', 'invalid_block_geometry', b.id, `Block is ${Math.round(b.area)} m2 and ${((2 * b.area) / b.perimeter).toFixed(1)} m wide: not a usable block.`, b.centroid);
     const ci = R.index(b.centroid.x, b.centroid.y);
     if (ci >= 0 && (T.water[ci] || T.buildability[ci] < 0.12)) warn('warning', 'block_on_unbuildable_terrain', b.id, 'Block sits on water or very steep ground.', b.centroid);
   }

@@ -2,15 +2,20 @@
 // freight spurs serve industry and port, and the major sub-centre gets a station - on the regional
 // line if it passes close enough, otherwise on a metropolitan branch.
 //
-// Rail is routed like roads (least-cost over terrain) but with much stricter limits: gentle
-// grades, heavy turn penalties, no entry into formal civic spaces or the civic core.
+// Rail has its own geometry (core/TransportProfiles.js). It is routed over terrain with gentle
+// grades and a heavy, heading-aware turn cost, and the routed path is then FITTED as a continuous
+// alignment (algorithms/Alignment.js): a curve with a minimum radius per rail profile, straight
+// through the station platforms, and tangent to the line a branch joins. Reserved civic spaces
+// are forbidden; the civic core is merely expensive.
 
 import { record } from '../core/CityModel.js';
-import { dist, simplifyDP, chaikin, polylineLength, resamplePolyline, pointSegment, pointInPolygon, pointPolylineDistance } from '../core/Geometry.js';
+import { dist, simplifyDP, polylineLength, resamplePolyline, pointSegment, pointInPolygon, pointPolylineDistance } from '../core/Geometry.js';
 import { leastCostPath, NEIGH16 } from '../algorithms/LeastCostPath.js';
 import { BRIDGEABLE } from './RegionalPlanner.js';
 import { REGIME } from './TerrainPlanner.js';
 import { engineeringOf } from './MajorNetworkPlanner.js';
+import { TRANSPORT_PROFILES, profileNameOf } from '../core/TransportProfiles.js';
+import { fitAlignment, minRadiusOf, circumradius } from '../algorithms/Alignment.js';
 
 const STAGE = 'rail';
 
@@ -49,6 +54,7 @@ export function planRail(model, ctx) {
   const elev = (i) => Math.max(0, T.elevation[i]);
   const links = new Set(); // existing track, cheap to share
   let avoid = new Uint8Array(n); // cells a particular search must keep off
+  let turnK = 7; // set per search from the rail profile being routed
   const stepCost = (from, to, k, arrival) => {
     let b = base[to];
     if (b === Infinity || avoid[to]) return Infinity;
@@ -64,7 +70,7 @@ export function planRail(model, ctx) {
     if (links.has(Math.min(from, to) * n + Math.max(from, to))) c *= 0.25;
     if (arrival >= 0) {
       const dot = dirX[k] * dirX[arrival] + dirY[k] * dirY[arrival];
-      c += (1 - dot) * 7 * cell + (dot < 0.7 ? 900 : 0); // curvature limit: only gentle changes of heading
+      c += (1 - dot) * turnK * cell + (dot < 0.7 ? 900 : 0); // curvature limit: only gentle changes of heading
     }
     return c;
   };
@@ -75,22 +81,29 @@ export function planRail(model, ctx) {
     if (first) pts[0] = first;
     return simplifyDP(pts, cell * 1.1);
   };
-  // rail geometry is relaxed far more than road geometry: resample, then repeatedly average
-  // each point with its neighbours (ends fixed) so that every change of heading becomes a broad curve
-  const relax = (pts, rounds = 14) => {
-    let cur = resamplePolyline(pts, 60);
-    for (let k = 0; k < rounds; k++) {
-      const next = cur.map((p, i) => (i === 0 || i === cur.length - 1 ? p : { x: 0.25 * cur[i - 1].x + 0.5 * p.x + 0.25 * cur[i + 1].x, y: 0.25 * cur[i - 1].y + 0.5 * p.y + 0.25 * cur[i + 1].y }));
-      cur = next;
-    }
-    return cur;
-  };
-  const addLine = (railClass, reason, rawPts, cells) => {
-    const pts = rawPts.length > 2 ? relax(rawPts) : rawPts;
+  const clear = (p) => { const i = R.index(p.x, p.y); return i >= 0 && base[i] !== Infinity; };
+  // `pinned`: arc-length ranges of the routed line that must stay exactly where they are
+  // trains are slow near platforms, yards and turnouts: within `SLOW` metres of one the profile's
+  // tighter approach radius applies
+  const SLOW = 750, slowPoints = [];
+  const radiusFor = (profile) => (p) => (slowPoints.some((q) => Math.hypot(p.x - q.x, p.y - q.y) < SLOW) ? profile.approachRadius : profile.minRadius);
+  const addLine = (railClass, reason, rawPts, cells, pinned = []) => {
+    const profileName = profileNameOf({ railClass }), profile = TRANSPORT_PROFILES[profileName];
+    const fit = rawPts.length > 2 ? fitAlignment(rawPts, { radiusAt: radiusFor(profile), step: 40, pinned, maxShift: profile.minRadius * 0.65, ok: clear }) : { points: rawPts, minRadiusAchieved: Infinity, maxShift: 0, shortfall: 0 };
+    const pts = fit.points;
     for (let i = 0; i + 1 < cells.length; i++) links.add(Math.min(cells[i], cells[i + 1]) * n + Math.max(cells[i], cells[i + 1]));
     for (const p of resamplePolyline(pts, 20)) { const i = R.index(p.x, p.y); if (i >= 0) rail.mask[i] = 1; }
     const engineering = engineeringOf(cells, T, R);
-    const line = record(ctx.id('rail'), railClass, STAGE, reason, { cls: 'rail', railClass, points: pts, length: polylineLength(pts), engineering, engineeringType: engineering.length ? engineering[0].type : 'NORMAL' });
+    // measured the way the validator will: open line against the profile radius, approaches against the approach radius
+    const at = radiusFor(profile), rs = resamplePolyline(pts, 80);
+    let open = Infinity, approach = Infinity;
+    for (let i = 1; i + 1 < rs.length; i++) { const r = circumradius(rs[i - 1], rs[i], rs[i + 1]); if (at(rs[i]) === profile.minRadius) open = Math.min(open, r); else approach = Math.min(approach, r); }
+    const round = (v) => (Number.isFinite(v) && v < 20000 ? Math.round(v) : null);
+    const line = record(ctx.id('rail'), railClass, STAGE, reason, {
+      cls: 'rail', railClass, profile: profileName, points: pts, length: polylineLength(pts), engineering, engineeringType: engineering.length ? engineering[0].type : 'NORMAL',
+      alignment: { method: 'smoothing_spline_with_minimum_radius', minRadius: profile.minRadius, approachRadius: profile.approachRadius, minRadiusAchieved: round(open), approachRadiusAchieved: round(approach), shiftFromRoute: Math.round(fit.maxShift), compromised: open < profile.minRadius * 0.85 || approach < profile.approachRadius * 0.85, pinned: pinned.length },
+    });
+    Object.defineProperty(line, 'pinnedFrom', { value: fit.pinnedFrom || [], enumerable: false });
     rail.lines.push(line);
     return line;
   };
@@ -111,8 +124,9 @@ export function planRail(model, ctx) {
     if (ok) { throat = { q, e1, e2, px, py }; break search; }
   }
   if (!throat) { ctx.log('no workable station throat: no rail'); return; }
-  const centralStation = record(ctx.id('railstation'), 'rail_station', STAGE, 'central_station_platforms_behind_the_station_building', { kind: 'central', position: throat.q, anchorId: station.id, tier: 1, angle: Math.atan2(throat.py, throat.px) });
+  const centralStation = record(ctx.id('railstation'), 'rail_station', STAGE, 'central_station_platforms_on_a_straight_behind_the_station_building', { kind: 'central', position: throat.q, anchorId: station.id, tier: 1, angle: Math.atan2(throat.py, throat.px), alignment: 'STRAIGHT' });
   rail.stations.push(centralStation);
+  slowPoints.push(throat.q);
 
   // --- regional passenger line: station -> two regional approaches (portals beside the road gateways)
   const portals = RP.gateways.map((g) => {
@@ -137,6 +151,7 @@ export function planRail(model, ctx) {
   const throatCells = [];
   for (let s = 0; s <= 40; s++) { const i = R.index(throat.e1.x + ((throat.e2.x - throat.e1.x) * s) / 40, throat.e1.y + ((throat.e2.y - throat.e1.y) * s) / 40); if (i >= 0 && !throatCells.includes(i)) throatCells.push(i); }
   const branches = [];
+  turnK = TRANSPORT_PROFILES.INTERCITY_RAIL.turnCost;
   if (pair) {
     const ends = [[throat.e1, throat.px, throat.py, pair[0]], [throat.e2, -throat.px, -throat.py, pair[1]]];
     for (const [e, dx, dy, portal] of ends) {
@@ -152,7 +167,9 @@ export function planRail(model, ctx) {
   if (branches.length) {
     const pts = branches.length === 2 ? [...[...branches[0].pts].reverse(), throat.q, ...branches[1].pts] : [throat.e2, throat.q, ...branches[0].pts];
     const cells = branches.length === 2 ? [...[...branches[0].cells].reverse(), ...throatCells, ...branches[1].cells] : [...throatCells, ...branches[0].cells];
-    addLine('RAIL_REGIONAL', branches.length === 2 ? 'regional_passenger_line_through_central_station' : 'regional_passenger_line_terminating_at_central_station', pts, cells);
+    // the platforms stay dead straight: the throat is pinned and the curves begin beyond it
+    const lead = branches.length === 2 ? polylineLength([...branches[0].pts].reverse()) : 0;
+    addLine('RAIL_REGIONAL', branches.length === 2 ? 'regional_passenger_line_through_central_station' : 'regional_passenger_line_terminating_at_central_station', pts, cells, [[lead, lead + dist(throat.e1, throat.e2)]]);
   } else addLine('RAIL_REGIONAL', 'station_tracks_without_a_feasible_regional_route', [throat.e1, throat.e2], throatCells);
 
   // --- spurs join existing track away from the station platforms
@@ -164,9 +181,49 @@ export function planRail(model, ctx) {
     let start = R.index(anchor.position.x + ((anchor.position.x - civic.position.x) / d) * offset, anchor.position.y + ((anchor.position.y - civic.position.y) / d) * offset);
     if (start < 0 || base[start] > 3) start = R.index(anchor.position.x, anchor.position.y);
     if (start < 0 || base[start] === Infinity) return null;
+    turnK = TRANSPORT_PROFILES[profileNameOf({ railClass })].turnCost;
     const path = route(start, { isGoal: joinable });
     if (!path || path.cells.length < 4) return null;
-    return { line: addLine(railClass, reason, smooth(path.cells), path.cells), at: R.center(start) };
+    // a branch leaves the line it joins tangentially: its last stretch runs along that line
+    const pts = smooth(path.cells), end = pts[pts.length - 1], before = pts[pts.length - 2];
+    let host = null;
+    for (const l of rail.lines) for (let i = 0; i + 1 < l.points.length; i++) {
+      const ps = pointSegment(end.x, end.y, l.points[i].x, l.points[i].y, l.points[i + 1].x, l.points[i + 1].y);
+      if (!host || ps.d < host.d) host = { d: ps.d, x: ps.x, y: ps.y, i, line: l };
+    }
+    let pinned = [], hostDir = 0;
+    slowPoints.push(R.center(start));
+    if (host && host.d < 120) {
+      const lp = host.line.points, fwd = { x: lp[host.i + 1].x - lp[host.i].x, y: lp[host.i + 1].y - lp[host.i].y };
+      const along = (end.x - before.x) * fwd.x + (end.y - before.y) * fwd.y >= 0 ? 1 : -1; // carry on in the direction the branch arrives
+      hostDir = Math.atan2(fwd.y * along, fwd.x * along);
+      // room for the turnout curve: the branch is cut back from where the route met the line, and
+      // rejoins it the same distance further on, running along it from there
+      const profile = TRANSPORT_PROFILES[profileNameOf({ railClass })];
+      const back = Math.min(profile.approachRadius * 1.1, polylineLength(pts) * 0.45);
+      let trimmed = resamplePolyline(pts, 40), tl = polylineLength(trimmed) - back;
+      { let a = 0, keep = [trimmed[0]]; for (let i = 1; i < trimmed.length; i++) { a += dist(trimmed[i - 1], trimmed[i]); if (a > tl) break; keep.push(trimmed[i]); } trimmed = keep; }
+      pts.length = 0; pts.push(...trimmed);
+      let left = back + 130, cur = { x: host.x, y: host.y }, joinAt = null;
+      slowPoints.push(cur);
+      for (let k = along > 0 ? host.i + 1 : host.i; k >= 0 && k < lp.length && left > 0; k += along) {
+        const d = dist(cur, lp[k]);
+        if (d < 1) continue;
+        const t = Math.min(1, left / d);
+        cur = { x: cur.x + (lp[k].x - cur.x) * t, y: cur.y + (lp[k].y - cur.y) * t };
+        left -= d * t;
+        if (left <= 130) { if (joinAt === null) { pts.push(cur); joinAt = polylineLength(pts); } else pts.push(cur); }
+      }
+      if (joinAt === null) { pts.push(cur); joinAt = polylineLength(pts); } // the host line ended first
+      pinned = [[joinAt, joinAt + 130]];
+    }
+    const line = addLine(railClass, reason, pts, path.cells, pinned);
+    if (pinned.length) { // the shared stretch belongs to the host line: the branch ends at the turnout
+      const from = line.pinnedFrom && line.pinnedFrom[0] > 0 ? line.pinnedFrom[0] : line.points.length - 1;
+      line.points = line.points.slice(0, from + 1); line.length = polylineLength(line.points);
+      line.joins = host.line.id; line.junction = 'TANGENTIAL_TURNOUT';
+    }
+    return { line, at: R.center(start) };
   };
   const industrial = model.anchors.find((a) => a.type === 'industrial'), port = model.anchors.find((a) => a.type === 'port');
   const freight = spur(industrial, 'RAIL_FREIGHT', 'freight_spur_serving_the_industrial_zone', 180);
@@ -189,5 +246,16 @@ export function planRail(model, ctx) {
       if (branch) rail.stations.push(record(ctx.id('railstation'), 'rail_station', STAGE, 'terminus_of_metropolitan_branch_at_major_sub_centre', { kind: 'secondary', position: branch.at, anchorId: sub.id, tier: 2 }));
     }
   }
-  ctx.log(`${rail.lines.map((l) => `${l.railClass.replace('RAIL_', '').toLowerCase()} ${(l.length / 1000).toFixed(1)} km`).join(', ')}; ${rail.stations.length} stations`);
+  // how straight the track is at each station: platforms want a straight or a very gentle curve
+  for (const st of rail.stations) {
+    let local = Infinity;
+    for (const l of rail.lines) {
+      if (pointPolylineDistance(st.position, l.points) > 60) continue;
+      const near = resamplePolyline(l.points, 60).filter((p) => dist(p, st.position) < 260);
+      if (near.length >= 3) local = Math.min(local, minRadiusOf(near, 120).radius);
+    }
+    st.trackRadius = Number.isFinite(local) ? Math.round(local) : null;
+    if (!st.alignment) st.alignment = local > 4000 ? 'STRAIGHT' : local > 900 ? 'GENTLE_CURVE' : 'CURVED';
+  }
+  ctx.log(`${rail.lines.map((l) => `${l.profile.replace('_RAIL', '').toLowerCase()} ${(l.length / 1000).toFixed(1)} km (min radius ${l.alignment.minRadiusAchieved ?? 'straight'} m)`).join(', ')}; ${rail.stations.length} stations`);
 }

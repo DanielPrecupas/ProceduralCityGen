@@ -1,3 +1,8 @@
 .DS_Store
 node_modules/
 .claude/
+reference/networks/*.json
+.venv/
+calibration/*.log
+cache/
+__pycache__/

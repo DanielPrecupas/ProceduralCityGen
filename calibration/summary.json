@@ -1,0 +1,5187 @@
+{
+ "refs": 8,
+ "seeds": 96,
+ "scales": {
+  "city": {
+   "intersectionDensity": {
+    "citygen": {
+     "p10": 60.997,
+     "p25": 70.048,
+     "p50": 77.398,
+     "p75": 82.738,
+     "p90": 85.953,
+     "n": 96
+    },
+    "citygenSeedMedians": {
+     "p10": 60.997,
+     "p25": 70.048,
+     "p50": 77.398,
+     "p75": 82.738,
+     "p90": 85.953,
+     "n": 96
+    },
+    "refMin": 30.4,
+    "refMax": 113.84,
+    "refMedian": 66.547,
+    "refPooled": {
+     "p10": 47.196,
+     "p25": 55.715,
+     "p50": 66.547,
+     "p75": 96.397,
+     "p90": 102.81,
+     "n": 8
+    },
+    "position": "inside",
+    "refCitiesBelow": 5,
+    "inEnvelope": 1,
+    "cities": {
+     "denver": 56.156,
+     "seville": 113.84,
+     "helsinki": 54.394,
+     "palermo": 65.877,
+     "tirana": 67.217,
+     "nashville": 30.4,
+     "paris": 95.833,
+     "barcelona": 98.088
+    }
+   },
+   "streetDensity": {
+    "citygen": {
+     "p10": 11.787,
+     "p25": 13.139,
+     "p50": 14.786,
+     "p75": 15.714,
+     "p90": 16.37,
+     "n": 96
+    },
+    "citygenSeedMedians": {
+     "p10": 11.787,
+     "p25": 13.139,
+     "p50": 14.786,
+     "p75": 15.714,
+     "p90": 16.37,
+     "n": 96
+    },
+    "refMin": 9.4411,
+    "refMax": 16.745,
+    "refMedian": 12.791,
+    "refPooled": {
+     "p10": 10.367,
+     "p25": 11.46,
+     "p50": 12.791,
+     "p75": 15.99,
+     "p90": 16.235,
+     "n": 8
+    },
+    "position": "inside",
+    "refCitiesBelow": 5,
+    "inEnvelope": 0.94792,
+    "cities": {
+     "denver": 13.494,
+     "seville": 15.981,
+     "helsinki": 10.764,
+     "palermo": 11.692,
+     "tirana": 12.088,
+     "nashville": 9.4411,
+     "paris": 16.016,
+     "barcelona": 16.745
+    }
+   },
+   "segmentLengthMean": {
+    "citygen": {
+     "p10": 99.489,
+     "p25": 101.28,
+     "p50": 103.85,
+     "p75": 107.55,
+     "p90": 110.63,
+     "n": 96
+    },
+    "citygenSeedMedians": {
+     "p10": 99.489,
+     "p25": 101.28,
+     "p50": 103.85,
+     "p75": 107.55,
+     "p90": 110.63,
+     "n": 96
+    },
+    "refMin": 85.62,
+    "refMax": 181.14,
+    "refMedian": 104.88,
+    "refPooled": {
+     "p10": 95.61,
+     "p25": 99.928,
+     "p50": 104.88,
+     "p75": 118.54,
+     "p90": 149.92,
+     "n": 8
+    },
+    "position": "inside",
+    "refCitiesBelow": 3,
+    "inEnvelope": 1,
+    "cities": {
+     "denver": 136.54,
+     "seville": 85.62,
+     "helsinki": 112.54,
+     "palermo": 104.74,
+     "tirana": 105.02,
+     "nashville": 181.14,
+     "paris": 99.941,
+     "barcelona": 99.891
+    }
+   },
+   "segmentLengthMedian": {
+    "citygen": {
+     "p10": 81.981,
+     "p25": 85.36,
+     "p50": 88.01,
+     "p75": 90.13,
+     "p90": 92.593,
+     "n": 96
+    },
+    "citygenSeedMedians": {
+     "p10": 81.981,
+     "p25": 85.36,
+     "p50": 88.01,
+     "p75": 90.13,
+     "p90": 92.593,
+     "n": 96
+    },
+    "refMin": 53.727,
+    "refMax": 127.04,
+    "refMedian": 75.269,
+    "refPooled": {
+     "p10": 62.637,
+     "p25": 69.293,
+     "p50": 75.269,
+     "p75": 82.842,
+     "p90": 110.63,
+     "n": 8
+    },
+    "position": "inside",
+    "refCitiesBelow": 6,
+    "inEnvelope": 1,
+    "cities": {
+     "denver": 103.6,
+     "seville": 53.727,
+     "helsinki": 75.406,
+     "palermo": 66.456,
+     "tirana": 70.238,
+     "nashville": 127.04,
+     "paris": 75.923,
+     "barcelona": 75.133
+    }
+   },
+   "avgNodeDegree": {
+    "citygen": {
+     "p10": 3.4852,
+     "p25": 3.5648,
+     "p50": 3.6656,
+     "p75": 3.7196,
+     "p90": 3.747,
+     "n": 96
+    },
+    "citygenSeedMedians": {
+     "p10": 3.4852,
+     "p25": 3.5648,
+     "p50": 3.6656,
+     "p75": 3.7196,
+     "p90": 3.747,
+     "n": 96
+    },
+    "refMin": 2.5566,
+    "refMax": 3.239,
+    "refMedian": 2.9184,
+    "refPooled": {
+     "p10": 2.6925,
+     "p25": 2.8081,
+     "p50": 2.9184,
+     "p75": 3.1588,
+     "p90": 3.1875,
+     "n": 8
+    },
+    "position": "above all 8 (1.13x the highest)",
+    "refCitiesBelow": 8,
+    "inEnvelope": 0,
+    "cities": {
+     "denver": 3.239,
+     "seville": 2.9849,
+     "helsinki": 2.8272,
+     "palermo": 2.7508,
+     "tirana": 2.5566,
+     "nashville": 2.8518,
+     "paris": 3.1566,
+     "barcelona": 3.1655
+    }
+   },
+   "threeWayShare": {
+    "citygen": {
+     "p10": 23.601,
+     "p25": 26.218,
+     "p50": 30.673,
+     "p75": 40.034,
+     "p90": 46.775,
+     "n": 96
+    },
+    "citygenSeedMedians": {
+     "p10": 23.601,
+     "p25": 26.218,
+     "p50": 30.673,
+     "p75": 40.034,
+     "p90": 46.775,
+     "n": 96
+    },
+    "refMin": 52.411,
+    "refMax": 74.855,
+    "refMedian": 66.165,
+    "refPooled": {
+     "p10": 56.716,
+     "p25": 61.31,
+     "p50": 66.165,
+     "p75": 68.462,
+     "p90": 70.626,
+     "n": 8
+    },
+    "position": "below all 8 (0.59x the lowest)",
+    "refCitiesBelow": 0,
+    "inEnvelope": 0.010417,
+    "cities": {
+     "denver": 52.411,
+     "seville": 74.855,
+     "helsinki": 58.561,
+     "palermo": 68.345,
+     "tirana": 68.116,
+     "nashville": 64.214,
+     "paris": 68.813,
+     "barcelona": 62.226
+    }
+   },
+   "fourWayShare": {
+    "citygen": {
+     "p10": 50.878,
+     "p25": 58.323,
+     "p50": 67.833,
+     "p75": 72.751,
+     "p90": 75.528,
+     "n": 96
+    },
+    "citygenSeedMedians": {
+     "p10": 50.878,
+     "p25": 58.323,
+     "p50": 67.833,
+     "p75": 72.751,
+     "p90": 75.528,
+     "n": 96
+    },
+    "refMin": 6.3921,
+    "refMax": 39.307,
+    "refMedian": 20.148,
+    "refPooled": {
+     "p10": 10.807,
+     "p25": 15.213,
+     "p50": 20.148,
+     "p75": 26.465,
+     "p90": 32.954,
+     "n": 8
+    },
+    "position": "above all 8 (1.73x the highest)",
+    "refCitiesBelow": 8,
+    "inEnvelope": 0,
+    "cities": {
+     "denver": 39.307,
+     "seville": 16.051,
+     "helsinki": 21.581,
+     "palermo": 12.699,
+     "tirana": 6.3921,
+     "nashville": 18.715,
+     "paris": 25.21,
+     "barcelona": 30.232
+    }
+   },
+   "deadEndShare": {
+    "citygen": {
+     "p10": 0.10759,
+     "p25": 0.1395,
+     "p50": 0.23718,
+     "p75": 0.49575,
+     "p90": 0.87694,
+     "n": 96
+    },
+    "citygenSeedMedians": {
+     "p10": 0.10759,
+     "p25": 0.1395,
+     "p50": 0.23718,
+     "p75": 0.49575,
+     "p90": 0.87694,
+     "n": 96
+    },
+    "refMin": 5.6187,
+    "refMax": 25.349,
+    "refMedian": 12.903,
+    "refPooled": {
+     "p10": 6.8568,
+     "p25": 7.8295,
+     "p50": 12.903,
+     "p75": 19.028,
+     "p90": 21.334,
+     "n": 8
+    },
+    "position": "below all 8 (0.04x the lowest)",
+    "refCitiesBelow": 0,
+    "inEnvelope": 0,
+    "cities": {
+     "denver": 7.9769,
+     "seville": 8.9755,
+     "helsinki": 19.613,
+     "palermo": 18.833,
+     "tirana": 25.349,
+     "nashville": 16.831,
+     "paris": 5.6187,
+     "barcelona": 7.3874
+    }
+   },
+   "circuity": {
+    "citygen": {
+     "p10": 1.0164,
+     "p25": 1.0205,
+     "p50": 1.0261,
+     "p75": 1.0474,
+     "p90": 1.0671,
+     "n": 96
+    },
+    "citygenSeedMedians": {
+     "p10": 1.0164,
+     "p25": 1.0205,
+     "p50": 1.0261,
+     "p75": 1.0474,
+     "p90": 1.0671,
+     "n": 96
+    },
+    "refMin": 1.0298,
+    "refMax": 1.0841,
+    "refMedian": 1.059,
+    "refPooled": {
+     "p10": 1.031,
+     "p25": 1.0444,
+     "p50": 1.059,
+     "p75": 1.0697,
+     "p90": 1.0782,
+     "n": 8
+    },
+    "position": "below all 8 (1.00x the lowest)",
+    "refCitiesBelow": 0,
+    "inEnvelope": 0.40625,
+    "cities": {
+     "denver": 1.0315,
+     "seville": 1.0487,
+     "helsinki": 1.0677,
+     "palermo": 1.0841,
+     "tirana": 1.0757,
+     "nashville": 1.0596,
+     "paris": 1.0298,
+     "barcelona": 1.0584
+    }
+   },
+   "orientationEntropy": {
+    "citygen": {
+     "p10": 2.2419,
+     "p25": 2.4088,
+     "p50": 2.5968,
+     "p75": 3.1311,
+     "p90": 3.4655,
+     "n": 96
+    },
+    "citygenSeedMedians": {
+     "p10": 2.2419,
+     "p25": 2.4088,
+     "p50": 2.5968,
+     "p75": 3.1311,
+     "p90": 3.4655,
+     "n": 96
+    },
+    "refMin": 2.3487,
+    "refMax": 3.5712,
+    "refMedian": 3.5133,
+    "refPooled": {
+     "p10": 3.1097,
+     "p25": 3.4387,
+     "p50": 3.5133,
+     "p75": 3.5595,
+     "p90": 3.5697,
+     "n": 8
+    },
+    "position": "inside",
+    "refCitiesBelow": 1,
+    "inEnvelope": 0.84375,
+    "cities": {
+     "denver": 2.3487,
+     "seville": 3.5712,
+     "helsinki": 3.5563,
+     "palermo": 3.4992,
+     "tirana": 3.5274,
+     "nashville": 3.4396,
+     "paris": 3.5691,
+     "barcelona": 3.4359
+    }
+   },
+   "orientationOrder": {
+    "citygen": {
+     "p10": 0.10453,
+     "p25": 0.36886,
+     "p50": 0.69647,
+     "p75": 0.78345,
+     "p90": 0.84839,
+     "n": 96
+    },
+    "citygenSeedMedians": {
+     "p10": 0.10453,
+     "p25": 0.36886,
+     "p50": 0.69647,
+     "p75": 0.78345,
+     "p90": 0.84839,
+     "n": 96
+    },
+    "refMin": 0.011222,
+    "refMax": 0.80815,
+    "refMedian": 0.062869,
+    "refPooled": {
+     "p10": 0.012505,
+     "p25": 0.021733,
+     "p50": 0.062869,
+     "p75": 0.12752,
+     "p90": 0.33335,
+     "n": 8
+    },
+    "position": "inside",
+    "refCitiesBelow": 7,
+    "inEnvelope": 0.84375,
+    "cities": {
+     "denver": 0.80815,
+     "seville": 0.011222,
+     "helsinki": 0.024626,
+     "palermo": 0.075315,
+     "tirana": 0.050424,
+     "nashville": 0.12674,
+     "paris": 0.013055,
+     "barcelona": 0.12986
+    }
+   },
+   "dominantOrientations": {
+    "citygen": {
+     "p10": 1,
+     "p25": 1,
+     "p50": 1,
+     "p75": 1,
+     "p90": 1,
+     "n": 96
+    },
+    "citygenSeedMedians": {
+     "p10": 1,
+     "p25": 1,
+     "p50": 1,
+     "p75": 1,
+     "p90": 1,
+     "n": 96
+    },
+    "refMin": 0,
+    "refMax": 1,
+    "refMedian": 1,
+    "refPooled": {
+     "p10": 0,
+     "p25": 0,
+     "p50": 1,
+     "p75": 1,
+     "p90": 1,
+     "n": 8
+    },
+    "position": "inside",
+    "refCitiesBelow": 3,
+    "inEnvelope": 0.95833,
+    "cities": {
+     "denver": 1,
+     "seville": 0,
+     "helsinki": 0,
+     "palermo": 1,
+     "tirana": 1,
+     "nashville": 1,
+     "paris": 0,
+     "barcelona": 1
+    }
+   },
+   "shareRegional": {
+    "citygen": {
+     "p10": 0.931,
+     "p25": 1.1798,
+     "p50": 2.0731,
+     "p75": 4.3,
+     "p90": 6.9927,
+     "n": 96
+    },
+    "citygenSeedMedians": {
+     "p10": 0.931,
+     "p25": 1.1798,
+     "p50": 2.0731,
+     "p75": 4.3,
+     "p90": 6.9927,
+     "n": 96
+    },
+    "refMin": 2.4999,
+    "refMax": 14.01,
+    "refMedian": 7.3974,
+    "refPooled": {
+     "p10": 5.1234,
+     "p25": 6.6725,
+     "p50": 7.3974,
+     "p75": 11,
+     "p90": 13.766,
+     "n": 8
+    },
+    "position": "below all 8 (0.83x the lowest)",
+    "refCitiesBelow": 0,
+    "inEnvelope": 0.39583,
+    "cities": {
+     "denver": 7.1065,
+     "seville": 10.113,
+     "helsinki": 13.661,
+     "palermo": 2.4999,
+     "tirana": 6.2477,
+     "nashville": 14.01,
+     "paris": 7.6884,
+     "barcelona": 6.8141
+    }
+   },
+   "shareArterial": {
+    "citygen": {
+     "p10": 4.7389,
+     "p25": 5.7672,
+     "p50": 6.9539,
+     "p75": 11.765,
+     "p90": 16.73,
+     "n": 96
+    },
+    "citygenSeedMedians": {
+     "p10": 4.7389,
+     "p25": 5.7672,
+     "p50": 6.9539,
+     "p75": 11.765,
+     "p90": 16.73,
+     "n": 96
+    },
+    "refMin": 1.9313,
+    "refMax": 15.396,
+    "refMedian": 7.1267,
+    "refPooled": {
+     "p10": 4.3528,
+     "p25": 5.6709,
+     "p50": 7.1267,
+     "p75": 8.8999,
+     "p90": 11.511,
+     "n": 8
+    },
+    "position": "inside",
+    "refCitiesBelow": 4,
+    "inEnvelope": 0.86458,
+    "cities": {
+     "denver": 8.5843,
+     "seville": 7.4691,
+     "helsinki": 9.8466,
+     "palermo": 1.9313,
+     "tirana": 5.3906,
+     "nashville": 6.7844,
+     "paris": 15.396,
+     "barcelona": 5.7643
+    }
+   },
+   "shareAvenue": {
+    "citygen": {
+     "p10": 0.718,
+     "p25": 1.0276,
+     "p50": 1.7052,
+     "p75": 2.6568,
+     "p90": 3.1957,
+     "n": 96
+    },
+    "citygenSeedMedians": {
+     "p10": 0.718,
+     "p25": 1.0276,
+     "p50": 1.7052,
+     "p75": 2.6568,
+     "p90": 3.1957,
+     "n": 96
+    },
+    "refMin": 5.1949,
+    "refMax": 13.963,
+    "refMedian": 8.162,
+    "refPooled": {
+     "p10": 5.9665,
+     "p25": 7.4616,
+     "p50": 8.162,
+     "p75": 10.106,
+     "p90": 11.377,
+     "n": 8
+    },
+    "position": "below all 8 (0.33x the lowest)",
+    "refCitiesBelow": 0,
+    "inEnvelope": 0,
+    "cities": {
+     "denver": 7.8497,
+     "seville": 8.2563,
+     "helsinki": 13.963,
+     "palermo": 5.1949,
+     "tirana": 8.0677,
+     "nashville": 6.2972,
+     "paris": 10.269,
+     "barcelona": 10.052
+    }
+   },
+   "shareConnector": {
+    "citygen": {
+     "p10": 6.8312,
+     "p25": 9.7533,
+     "p50": 11.64,
+     "p75": 13.289,
+     "p90": 14.345,
+     "n": 96
+    },
+    "citygenSeedMedians": {
+     "p10": 6.8312,
+     "p25": 9.7533,
+     "p50": 11.64,
+     "p75": 13.289,
+     "p90": 14.345,
+     "n": 96
+    },
+    "refMin": 10.06,
+    "refMax": 18.727,
+    "refMedian": 12.561,
+    "refPooled": {
+     "p10": 10.419,
+     "p25": 10.865,
+     "p50": 12.561,
+     "p75": 14.613,
+     "p90": 15.973,
+     "n": 8
+    },
+    "position": "inside",
+    "refCitiesBelow": 4,
+    "inEnvelope": 0.71875,
+    "cities": {
+     "denver": 14.553,
+     "seville": 10.573,
+     "helsinki": 13.543,
+     "palermo": 18.727,
+     "tirana": 10.962,
+     "nashville": 11.58,
+     "paris": 10.06,
+     "barcelona": 14.793
+    }
+   },
+   "shareLocal": {
+    "citygen": {
+     "p10": 68.347,
+     "p25": 73.231,
+     "p50": 76.347,
+     "p75": 78.225,
+     "p90": 79.161,
+     "n": 96
+    },
+    "citygenSeedMedians": {
+     "p10": 68.347,
+     "p25": 73.231,
+     "p50": 76.347,
+     "p75": 78.225,
+     "p90": 79.161,
+     "n": 96
+    },
+    "refMin": 48.987,
+    "refMax": 71.647,
+    "refMedian": 62.242,
+    "refPooled": {
+     "p10": 54.307,
+     "p25": 60.144,
+     "p50": 62.242,
+     "p75": 65.024,
+     "p90": 70.026,
+     "n": 8
+    },
+    "position": "above all 8 (1.07x the highest)",
+    "refCitiesBelow": 8,
+    "inEnvelope": 0.21875,
+    "cities": {
+     "denver": 61.906,
+     "seville": 63.588,
+     "helsinki": 48.987,
+     "palermo": 71.647,
+     "tirana": 69.332,
+     "nashville": 61.329,
+     "paris": 56.587,
+     "barcelona": 62.577
+    }
+   },
+   "majorRoadShare": {
+    "citygen": {
+     "p10": 8.3546,
+     "p25": 9.2904,
+     "p50": 11.153,
+     "p75": 17.072,
+     "p90": 23.613,
+     "n": 96
+    },
+    "citygenSeedMedians": {
+     "p10": 8.3546,
+     "p25": 9.2904,
+     "p50": 11.153,
+     "p75": 17.072,
+     "p90": 23.613,
+     "n": 96
+    },
+    "refMin": 9.6261,
+    "refMax": 37.47,
+    "refMedian": 24.69,
+    "refPooled": {
+     "p10": 16.682,
+     "p25": 21.899,
+     "p50": 24.69,
+     "p75": 28.657,
+     "p90": 34.588,
+     "n": 8
+    },
+    "position": "inside",
+    "refCitiesBelow": 1,
+    "inEnvelope": 0.67708,
+    "cities": {
+     "denver": 23.541,
+     "seville": 25.839,
+     "helsinki": 37.47,
+     "palermo": 9.6261,
+     "tirana": 19.706,
+     "nashville": 27.091,
+     "paris": 33.353,
+     "barcelona": 22.63
+    }
+   },
+   "majorRoadSpacing": {
+    "citygen": {
+     "p10": 711.78,
+     "p25": 887.98,
+     "p50": 1221.8,
+     "p75": 1373.5,
+     "p90": 1468.8,
+     "n": 96
+    },
+    "citygenSeedMedians": {
+     "p10": 711.78,
+     "p25": 887.98,
+     "p50": 1221.8,
+     "p75": 1373.5,
+     "p90": 1468.8,
+     "n": 96
+    },
+    "refMin": 374.4,
+    "refMax": 1777,
+    "refMedian": 578.71,
+    "refPooled": {
+     "p10": 451.36,
+     "p25": 492.98,
+     "p50": 578.71,
+     "p75": 796.36,
+     "p90": 1120.8,
+     "n": 8
+    },
+    "position": "inside",
+    "refCitiesBelow": 7,
+    "inEnvelope": 1,
+    "cities": {
+     "denver": 629.63,
+     "seville": 484.34,
+     "helsinki": 495.86,
+     "palermo": 1777,
+     "tirana": 839.61,
+     "nashville": 781.94,
+     "paris": 374.4,
+     "barcelona": 527.79
+    }
+   },
+   "blockAreaMedian": {
+    "citygen": {
+     "p10": 0.67178,
+     "p25": 0.80293,
+     "p50": 0.9037,
+     "p75": 0.99372,
+     "p90": 1.0488,
+     "n": 96
+    },
+    "citygenSeedMedians": {
+     "p10": 0.67178,
+     "p25": 0.80293,
+     "p50": 0.9037,
+     "p75": 0.99372,
+     "p90": 1.0488,
+     "n": 96
+    },
+    "refMin": 0.53338,
+    "refMax": 2.6033,
+    "refMedian": 0.95044,
+    "refPooled": {
+     "p10": 0.56744,
+     "p25": 0.75482,
+     "p50": 0.95044,
+     "p75": 1.2691,
+     "p90": 2.0903,
+     "n": 8
+    },
+    "position": "inside",
+    "refCitiesBelow": 3,
+    "inEnvelope": 1,
+    "cities": {
+     "denver": 1.8705,
+     "seville": 0.53338,
+     "helsinki": 1.0686,
+     "palermo": 0.58203,
+     "tirana": 0.99021,
+     "nashville": 2.6033,
+     "paris": 0.91067,
+     "barcelona": 0.81242
+    }
+   },
+   "blockAreaP25": {
+    "citygen": {
+     "p10": 0.44937,
+     "p25": 0.48554,
+     "p50": 0.53144,
+     "p75": 0.59537,
+     "p90": 0.63127,
+     "n": 96
+    },
+    "citygenSeedMedians": {
+     "p10": 0.44937,
+     "p25": 0.48554,
+     "p50": 0.53144,
+     "p75": 0.59537,
+     "p90": 0.63127,
+     "n": 96
+    },
+    "refMin": 0.20529,
+    "refMax": 1.3605,
+    "refMedian": 0.36855,
+    "refPooled": {
+     "p10": 0.23504,
+     "p25": 0.25377,
+     "p50": 0.36855,
+     "p75": 0.66962,
+     "p90": 1.358,
+     "n": 8
+    },
+    "position": "inside",
+    "refCitiesBelow": 6,
+    "inEnvelope": 1,
+    "cities": {
+     "denver": 1.357,
+     "seville": 0.25576,
+     "helsinki": 0.20529,
+     "palermo": 0.24779,
+     "tirana": 0.35496,
+     "nashville": 1.3605,
+     "paris": 0.44049,
+     "barcelona": 0.38215
+    }
+   },
+   "blockAreaP75": {
+    "citygen": {
+     "p10": 1.1861,
+     "p25": 1.227,
+     "p50": 1.2963,
+     "p75": 1.4089,
+     "p90": 1.5222,
+     "n": 96
+    },
+    "citygenSeedMedians": {
+     "p10": 1.1861,
+     "p25": 1.227,
+     "p50": 1.2963,
+     "p75": 1.4089,
+     "p90": 1.5222,
+     "n": 96
+    },
+    "refMin": 1.1781,
+    "refMax": 4.8472,
+    "refMedian": 1.965,
+    "refPooled": {
+     "p10": 1.372,
+     "p25": 1.5571,
+     "p50": 1.965,
+     "p75": 2.3318,
+     "p90": 3.2085,
+     "n": 8
+    },
+    "position": "inside",
+    "refCitiesBelow": 1,
+    "inEnvelope": 0.92708,
+    "cities": {
+     "denver": 2.1119,
+     "seville": 1.1781,
+     "helsinki": 2.5062,
+     "palermo": 1.4551,
+     "tirana": 2.2737,
+     "nashville": 4.8472,
+     "paris": 1.8181,
+     "barcelona": 1.5911
+    }
+   },
+   "blockAspectMedian": {
+    "citygen": {
+     "p10": 1.3983,
+     "p25": 1.4208,
+     "p50": 1.4514,
+     "p75": 1.48,
+     "p90": 1.5085,
+     "n": 96
+    },
+    "citygenSeedMedians": {
+     "p10": 1.3983,
+     "p25": 1.4208,
+     "p50": 1.4514,
+     "p75": 1.48,
+     "p90": 1.5085,
+     "n": 96
+    },
+    "refMin": 1.677,
+    "refMax": 2.1014,
+    "refMedian": 1.8683,
+    "refPooled": {
+     "p10": 1.7119,
+     "p25": 1.7586,
+     "p50": 1.8683,
+     "p75": 1.9602,
+     "p90": 2.0152,
+     "n": 8
+    },
+    "position": "below all 8 (0.87x the lowest)",
+    "refCitiesBelow": 0,
+    "inEnvelope": 0,
+    "cities": {
+     "denver": 1.9541,
+     "seville": 1.9783,
+     "helsinki": 2.1014,
+     "palermo": 1.7269,
+     "tirana": 1.8711,
+     "nashville": 1.8656,
+     "paris": 1.7692,
+     "barcelona": 1.677
+    }
+   },
+   "blockAspectP75": {
+    "citygen": {
+     "p10": 1.673,
+     "p25": 1.7045,
+     "p50": 1.7386,
+     "p75": 1.7978,
+     "p90": 1.8472,
+     "n": 96
+    },
+    "citygenSeedMedians": {
+     "p10": 1.673,
+     "p25": 1.7045,
+     "p50": 1.7386,
+     "p75": 1.7978,
+     "p90": 1.8472,
+     "n": 96
+    },
+    "refMin": 2.2762,
+    "refMax": 4.8868,
+    "refMedian": 2.622,
+    "refPooled": {
+     "p10": 2.4306,
+     "p25": 2.5612,
+     "p50": 2.622,
+     "p75": 2.7537,
+     "p90": 3.5397,
+     "n": 8
+    },
+    "position": "below all 8 (0.76x the lowest)",
+    "refCitiesBelow": 0,
+    "inEnvelope": 0,
+    "cities": {
+     "denver": 2.2762,
+     "seville": 2.9624,
+     "helsinki": 4.8868,
+     "palermo": 2.5999,
+     "tirana": 2.6441,
+     "nashville": 2.6841,
+     "paris": 2.4967,
+     "barcelona": 2.5827
+    }
+   },
+   "corridorContinuity": {
+    "citygen": {
+     "p10": 0.3604,
+     "p25": 0.43452,
+     "p50": 0.53679,
+     "p75": 0.69744,
+     "p90": 0.8384,
+     "n": 96
+    },
+    "citygenSeedMedians": {
+     "p10": 0.3604,
+     "p25": 0.43452,
+     "p50": 0.53679,
+     "p75": 0.69744,
+     "p90": 0.8384,
+     "n": 96
+    },
+    "refMin": 0.21661,
+    "refMax": 0.90463,
+    "refMedian": 0.32937,
+    "refPooled": {
+     "p10": 0.26328,
+     "p25": 0.31559,
+     "p50": 0.32937,
+     "p75": 0.33953,
+     "p90": 0.516,
+     "n": 8
+    },
+    "position": "inside",
+    "refCitiesBelow": 7,
+    "inEnvelope": 0.92708,
+    "cities": {
+     "denver": 0.33016,
+     "seville": 0.21661,
+     "helsinki": 0.28328,
+     "palermo": 0.90463,
+     "tirana": 0.33623,
+     "nashville": 0.34944,
+     "paris": 0.32857,
+     "barcelona": 0.32636
+    }
+   },
+   "majorCorridorLengthKm": {
+    "citygen": {
+     "p10": 2.1227,
+     "p25": 2.414,
+     "p50": 2.8882,
+     "p75": 3.2648,
+     "p90": 3.7441,
+     "n": 96
+    },
+    "citygenSeedMedians": {
+     "p10": 2.1227,
+     "p25": 2.414,
+     "p50": 2.8882,
+     "p75": 3.2648,
+     "p90": 3.7441,
+     "n": 96
+    },
+    "refMin": 2.3886,
+    "refMax": 9.9064,
+    "refMedian": 3.3235,
+    "refPooled": {
+     "p10": 2.8322,
+     "p25": 3.1397,
+     "p50": 3.3235,
+     "p75": 5.7568,
+     "p90": 7.1826,
+     "n": 8
+    },
+    "position": "inside",
+    "refCitiesBelow": 1,
+    "inEnvelope": 0.75,
+    "cities": {
+     "denver": 5.6707,
+     "seville": 2.3886,
+     "helsinki": 3.266,
+     "palermo": 9.9064,
+     "tirana": 3.381,
+     "nashville": 6.0152,
+     "paris": 3.1788,
+     "barcelona": 3.0223
+    }
+   }
+  },
+  "district": {
+   "intersectionDensity": {
+    "citygen": {
+     "p10": 75.227,
+     "p25": 83.893,
+     "p50": 92.948,
+     "p75": 100.72,
+     "p90": 105.14,
+     "n": 214
+    },
+    "citygenSeedMedians": {
+     "p10": 81.434,
+     "p25": 85.472,
+     "p50": 92.238,
+     "p75": 97.806,
+     "p90": 103.1,
+     "n": 63
+    },
+    "refMin": 28.153,
+    "refMax": 127.64,
+    "refMedian": 79.576,
+    "refPooled": {
+     "p10": 27.077,
+     "p25": 39.184,
+     "p50": 59.871,
+     "p75": 90.908,
+     "p90": 116.94,
+     "n": 118
+    },
+    "position": "inside",
+    "refCitiesBelow": 5,
+    "inEnvelope": 1,
+    "cities": {
+     "denver": 58.621,
+     "seville": 127.64,
+     "helsinki": 56.92,
+     "palermo": 81.015,
+     "tirana": 78.136,
+     "nashville": 28.153,
+     "paris": 95.833,
+     "barcelona": 112.67
+    }
+   },
+   "streetDensity": {
+    "citygen": {
+     "p10": 14.905,
+     "p25": 15.968,
+     "p50": 16.94,
+     "p75": 17.808,
+     "p90": 18.493,
+     "n": 214
+    },
+    "citygenSeedMedians": {
+     "p10": 15.301,
+     "p25": 15.928,
+     "p50": 16.812,
+     "p75": 17.601,
+     "p90": 18.169,
+     "n": 63
+    },
+    "refMin": 9.4807,
+    "refMax": 18.463,
+    "refMedian": 13.717,
+    "refPooled": {
+     "p10": 8.7207,
+     "p25": 10.565,
+     "p50": 13.213,
+     "p75": 15.403,
+     "p90": 17.695,
+     "n": 118
+    },
+    "position": "inside",
+    "refCitiesBelow": 6,
+    "inEnvelope": 0.93651,
+    "cities": {
+     "denver": 14.123,
+     "seville": 17.08,
+     "helsinki": 11.071,
+     "palermo": 13.228,
+     "tirana": 13.311,
+     "nashville": 9.4807,
+     "paris": 15.889,
+     "barcelona": 18.463
+    }
+   },
+   "segmentLengthMean": {
+    "citygen": {
+     "p10": 92.384,
+     "p25": 94.447,
+     "p50": 98.227,
+     "p75": 102.74,
+     "p90": 108.99,
+     "n": 214
+    },
+    "citygenSeedMedians": {
+     "p10": 93.917,
+     "p25": 95.494,
+     "p50": 97.876,
+     "p75": 100.75,
+     "p90": 103.72,
+     "n": 63
+    },
+    "refMin": 84.499,
+    "refMax": 178.03,
+    "refMedian": 100.33,
+    "refPooled": {
+     "p10": 87.87,
+     "p25": 97.029,
+     "p50": 125.02,
+     "p75": 157.82,
+     "p90": 192,
+     "n": 118
+    },
+    "position": "inside",
+    "refCitiesBelow": 2,
+    "inEnvelope": 1,
+    "cities": {
+     "denver": 135.68,
+     "seville": 84.499,
+     "helsinki": 111.86,
+     "palermo": 99.972,
+     "tirana": 100.68,
+     "nashville": 178.03,
+     "paris": 98.81,
+     "barcelona": 96.673
+    }
+   },
+   "segmentLengthMedian": {
+    "citygen": {
+     "p10": 81.9,
+     "p25": 83.531,
+     "p50": 86.011,
+     "p75": 89.872,
+     "p90": 96.771,
+     "n": 214
+    },
+    "citygenSeedMedians": {
+     "p10": 82.552,
+     "p25": 84.081,
+     "p50": 86.214,
+     "p75": 87.853,
+     "p90": 89.729,
+     "n": 63
+    },
+    "refMin": 54.064,
+    "refMax": 129.98,
+    "refMedian": 74.546,
+    "refPooled": {
+     "p10": 58.2,
+     "p25": 70.664,
+     "p50": 89.063,
+     "p75": 118.46,
+     "p90": 137.59,
+     "n": 118
+    },
+    "position": "inside",
+    "refCitiesBelow": 6,
+    "inEnvelope": 1,
+    "cities": {
+     "denver": 104,
+     "seville": 54.064,
+     "helsinki": 73.313,
+     "palermo": 69.354,
+     "tirana": 67.751,
+     "nashville": 129.98,
+     "paris": 75.778,
+     "barcelona": 76.321
+    }
+   },
+   "avgNodeDegree": {
+    "citygen": {
+     "p10": 3.6448,
+     "p25": 3.6921,
+     "p50": 3.7288,
+     "p75": 3.7533,
+     "p90": 3.7825,
+     "n": 214
+    },
+    "citygenSeedMedians": {
+     "p10": 3.6155,
+     "p25": 3.6803,
+     "p50": 3.7207,
+     "p75": 3.7428,
+     "p90": 3.7672,
+     "n": 63
+    },
+    "refMin": 2.5618,
+    "refMax": 3.3157,
+    "refMedian": 2.9314,
+    "refPooled": {
+     "p10": 2.6532,
+     "p25": 2.7923,
+     "p50": 2.9865,
+     "p75": 3.1519,
+     "p90": 3.3223,
+     "n": 118
+    },
+    "position": "above all 8 (1.12x the highest)",
+    "refCitiesBelow": 8,
+    "inEnvelope": 0,
+    "cities": {
+     "denver": 3.3157,
+     "seville": 3.0139,
+     "helsinki": 2.8453,
+     "palermo": 2.8084,
+     "tirana": 2.5618,
+     "nashville": 2.849,
+     "paris": 3.1614,
+     "barcelona": 3.2018
+    }
+   },
+   "threeWayShare": {
+    "citygen": {
+     "p10": 21.086,
+     "p25": 23.452,
+     "p50": 26.016,
+     "p75": 29.334,
+     "p90": 33.633,
+     "n": 214
+    },
+    "citygenSeedMedians": {
+     "p10": 22.165,
+     "p25": 24.55,
+     "p50": 26.643,
+     "p75": 30.072,
+     "p90": 36.225,
+     "n": 63
+    },
+    "refMin": 49.688,
+    "refMax": 73.277,
+    "refMedian": 66.136,
+    "refPooled": {
+     "p10": 49.58,
+     "p25": 58.204,
+     "p50": 64.065,
+     "p75": 68.326,
+     "p90": 71.384,
+     "n": 118
+    },
+    "position": "below all 8 (0.54x the lowest)",
+    "refCitiesBelow": 0,
+    "inEnvelope": 0,
+    "cities": {
+     "denver": 49.688,
+     "seville": 73.277,
+     "helsinki": 58.424,
+     "palermo": 68.65,
+     "tirana": 68.192,
+     "nashville": 64.081,
+     "paris": 68.23,
+     "barcelona": 60.967
+    }
+   },
+   "fourWayShare": {
+    "citygen": {
+     "p10": 65.471,
+     "p25": 69.953,
+     "p50": 73.322,
+     "p75": 75.753,
+     "p90": 78.4,
+     "n": 214
+    },
+    "citygenSeedMedians": {
+     "p10": 62.519,
+     "p25": 68.787,
+     "p50": 72.493,
+     "p75": 74.834,
+     "p90": 77.168,
+     "n": 63
+    },
+    "refMin": 6.6222,
+    "refMax": 44.362,
+    "refMedian": 19.663,
+    "refPooled": {
+     "p10": 9.3531,
+     "p25": 15.395,
+     "p50": 20.407,
+     "p75": 28.591,
+     "p90": 44.449,
+     "n": 118
+    },
+    "position": "above all 8 (1.63x the highest)",
+    "refCitiesBelow": 8,
+    "inEnvelope": 0,
+    "cities": {
+     "denver": 44.362,
+     "seville": 18.417,
+     "helsinki": 20.909,
+     "palermo": 12.317,
+     "tirana": 6.6222,
+     "nashville": 16.578,
+     "paris": 25.605,
+     "barcelona": 32.241
+    }
+   },
+   "deadEndShare": {
+    "citygen": {
+     "p10": 0,
+     "p25": 0,
+     "p50": 0.053749,
+     "p75": 0.10303,
+     "p90": 0.14958,
+     "n": 214
+    },
+    "citygenSeedMedians": {
+     "p10": 0,
+     "p25": 0.033108,
+     "p50": 0.070522,
+     "p75": 0.10689,
+     "p90": 0.13869,
+     "n": 63
+    },
+    "refMin": 5.5031,
+    "refMax": 25.12,
+    "refMedian": 12.011,
+    "refPooled": {
+     "p10": 5.3996,
+     "p25": 7.0493,
+     "p50": 12.058,
+     "p75": 18.955,
+     "p90": 22.46,
+     "n": 118
+    },
+    "position": "below all 8 (0.01x the lowest)",
+    "refCitiesBelow": 0,
+    "inEnvelope": 0,
+    "cities": {
+     "denver": 6.5241,
+     "seville": 8.2155,
+     "helsinki": 19.033,
+     "palermo": 15.806,
+     "tirana": 25.12,
+     "nashville": 17.092,
+     "paris": 5.5031,
+     "barcelona": 6.5521
+    }
+   },
+   "circuity": {
+    "citygen": {
+     "p10": 1.0116,
+     "p25": 1.015,
+     "p50": 1.0189,
+     "p75": 1.0229,
+     "p90": 1.0274,
+     "n": 214
+    },
+    "citygenSeedMedians": {
+     "p10": 1.0125,
+     "p25": 1.016,
+     "p50": 1.0201,
+     "p75": 1.0253,
+     "p90": 1.031,
+     "n": 63
+    },
+    "refMin": 1.0259,
+    "refMax": 1.077,
+    "refMedian": 1.0483,
+    "refPooled": {
+     "p10": 1.023,
+     "p25": 1.0322,
+     "p50": 1.0482,
+     "p75": 1.0629,
+     "p90": 1.0812,
+     "n": 118
+    },
+    "position": "below all 8 (0.99x the lowest)",
+    "refCitiesBelow": 0,
+    "inEnvelope": 0.19048,
+    "cities": {
+     "denver": 1.0259,
+     "seville": 1.0405,
+     "helsinki": 1.06,
+     "palermo": 1.0682,
+     "tirana": 1.077,
+     "nashville": 1.0541,
+     "paris": 1.0281,
+     "barcelona": 1.0425
+    }
+   },
+   "orientationEntropy": {
+    "citygen": {
+     "p10": 2.1257,
+     "p25": 2.2742,
+     "p50": 2.4735,
+     "p75": 2.9857,
+     "p90": 3.3907,
+     "n": 214
+    },
+    "citygenSeedMedians": {
+     "p10": 2.1848,
+     "p25": 2.3018,
+     "p50": 2.5131,
+     "p75": 3.0139,
+     "p90": 3.3711,
+     "n": 63
+    },
+    "refMin": 2.2775,
+    "refMax": 3.5299,
+    "refMedian": 3.4816,
+    "refPooled": {
+     "p10": 2.2753,
+     "p25": 3.1604,
+     "p50": 3.4394,
+     "p75": 3.5146,
+     "p90": 3.542,
+     "n": 118
+    },
+    "position": "inside",
+    "refCitiesBelow": 1,
+    "inEnvelope": 0.80952,
+    "cities": {
+     "denver": 2.2775,
+     "seville": 3.5155,
+     "helsinki": 3.5273,
+     "palermo": 3.4513,
+     "tirana": 3.5119,
+     "nashville": 3.3869,
+     "paris": 3.5299,
+     "barcelona": 3.3588
+    }
+   },
+   "orientationOrder": {
+    "citygen": {
+     "p10": 0.16778,
+     "p25": 0.47009,
+     "p50": 0.75515,
+     "p75": 0.8367,
+     "p90": 0.88675,
+     "n": 214
+    },
+    "citygenSeedMedians": {
+     "p10": 0.18372,
+     "p25": 0.44946,
+     "p50": 0.73262,
+     "p75": 0.8257,
+     "p90": 0.86792,
+     "n": 63
+    },
+    "refMin": 0.048192,
+    "refMax": 0.83548,
+    "refMedian": 0.090435,
+    "refPooled": {
+     "p10": 0.037415,
+     "p25": 0.061763,
+     "p50": 0.12693,
+     "p75": 0.34804,
+     "p90": 0.8363,
+     "n": 118
+    },
+    "position": "inside",
+    "refCitiesBelow": 7,
+    "inEnvelope": 0.80952,
+    "cities": {
+     "denver": 0.83548,
+     "seville": 0.060924,
+     "helsinki": 0.050556,
+     "palermo": 0.11674,
+     "tirana": 0.064129,
+     "nashville": 0.171,
+     "paris": 0.048192,
+     "barcelona": 0.19412
+    }
+   },
+   "dominantOrientations": {
+    "citygen": {
+     "p10": 1,
+     "p25": 1,
+     "p50": 1,
+     "p75": 1,
+     "p90": 1,
+     "n": 214
+    },
+    "citygenSeedMedians": {
+     "p10": 1,
+     "p25": 1,
+     "p50": 1,
+     "p75": 1,
+     "p90": 1,
+     "n": 63
+    },
+    "refMin": 0,
+    "refMax": 1,
+    "refMedian": 1,
+    "refPooled": {
+     "p10": 0,
+     "p25": 1,
+     "p50": 1,
+     "p75": 1,
+     "p90": 1,
+     "n": 118
+    },
+    "position": "inside",
+    "refCitiesBelow": 1,
+    "inEnvelope": 0.90476,
+    "cities": {
+     "denver": 1,
+     "seville": 1,
+     "helsinki": 1,
+     "palermo": 1,
+     "tirana": 1,
+     "nashville": 1,
+     "paris": 0,
+     "barcelona": 1
+    }
+   },
+   "shareRegional": {
+    "citygen": {
+     "p10": 0,
+     "p25": 0,
+     "p50": 0,
+     "p75": 0.56701,
+     "p90": 0.90846,
+     "n": 214
+    },
+    "citygenSeedMedians": {
+     "p10": 0,
+     "p25": 0,
+     "p50": 0.0098766,
+     "p75": 0.41545,
+     "p90": 0.71393,
+     "n": 63
+    },
+    "refMin": 0,
+    "refMax": 13.771,
+    "refMedian": 7.6022,
+    "refPooled": {
+     "p10": 0,
+     "p25": 4.4736,
+     "p50": 8.5311,
+     "p75": 13.402,
+     "p90": 17.664,
+     "n": 118
+    },
+    "position": "inside",
+    "refCitiesBelow": 1,
+    "inEnvelope": 1,
+    "cities": {
+     "denver": 8.4023,
+     "seville": 10.14,
+     "helsinki": 13.397,
+     "palermo": 0,
+     "tirana": 6.8022,
+     "nashville": 13.771,
+     "paris": 5.4267,
+     "barcelona": 5.7327
+    }
+   },
+   "shareArterial": {
+    "citygen": {
+     "p10": 4.3714,
+     "p25": 5.1654,
+     "p50": 6.0712,
+     "p75": 7.0391,
+     "p90": 7.7481,
+     "n": 214
+    },
+    "citygenSeedMedians": {
+     "p10": 4.836,
+     "p25": 5.552,
+     "p50": 6.4101,
+     "p75": 7.3228,
+     "p90": 8.2077,
+     "n": 63
+    },
+    "refMin": 2.3748,
+    "refMax": 15.011,
+    "refMedian": 7.9006,
+    "refPooled": {
+     "p10": 3.185,
+     "p25": 5.4351,
+     "p50": 7.5559,
+     "p75": 10.009,
+     "p90": 13.852,
+     "n": 118
+    },
+    "position": "inside",
+    "refCitiesBelow": 2,
+    "inEnvelope": 1,
+    "cities": {
+     "denver": 8.4987,
+     "seville": 8.524,
+     "helsinki": 11.046,
+     "palermo": 2.3748,
+     "tirana": 6.061,
+     "nashville": 7.3026,
+     "paris": 15.011,
+     "barcelona": 6.4538
+    }
+   },
+   "shareAvenue": {
+    "citygen": {
+     "p10": 0.99816,
+     "p25": 1.463,
+     "p50": 2.1247,
+     "p75": 2.7165,
+     "p90": 3.4044,
+     "n": 214
+    },
+    "citygenSeedMedians": {
+     "p10": 1.0043,
+     "p25": 1.4455,
+     "p50": 2.1031,
+     "p75": 2.6766,
+     "p90": 3.1364,
+     "n": 63
+    },
+    "refMin": 3.7921,
+    "refMax": 14.05,
+    "refMedian": 8.6131,
+    "refPooled": {
+     "p10": 3.5973,
+     "p25": 5.6676,
+     "p50": 7.524,
+     "p75": 10.647,
+     "p90": 13.368,
+     "n": 118
+    },
+    "position": "below all 8 (0.55x the lowest)",
+    "refCitiesBelow": 0,
+    "inEnvelope": 0.015873,
+    "cities": {
+     "denver": 7.4048,
+     "seville": 8.1913,
+     "helsinki": 14.05,
+     "palermo": 3.7921,
+     "tirana": 9.0349,
+     "nashville": 6.3988,
+     "paris": 11.084,
+     "barcelona": 10.164
+    }
+   },
+   "shareConnector": {
+    "citygen": {
+     "p10": 10.203,
+     "p25": 11.091,
+     "p50": 12.647,
+     "p75": 13.876,
+     "p90": 15.254,
+     "n": 214
+    },
+    "citygenSeedMedians": {
+     "p10": 10.11,
+     "p25": 10.997,
+     "p50": 12.009,
+     "p75": 13.595,
+     "p90": 14.547,
+     "n": 63
+    },
+    "refMin": 9.627,
+    "refMax": 20.729,
+    "refMedian": 12,
+    "refPooled": {
+     "p10": 8.4688,
+     "p25": 10.489,
+     "p50": 12.34,
+     "p75": 15.318,
+     "p90": 18.523,
+     "n": 118
+    },
+    "position": "inside",
+    "refCitiesBelow": 5,
+    "inEnvelope": 0.92063,
+    "cities": {
+     "denver": 14.006,
+     "seville": 9.627,
+     "helsinki": 11.998,
+     "palermo": 20.729,
+     "tirana": 9.7812,
+     "nashville": 12.003,
+     "paris": 10.545,
+     "barcelona": 15.144
+    }
+   },
+   "shareLocal": {
+    "citygen": {
+     "p10": 75.973,
+     "p25": 77.388,
+     "p50": 78.858,
+     "p75": 80.311,
+     "p90": 81.353,
+     "n": 214
+    },
+    "citygenSeedMedians": {
+     "p10": 76.824,
+     "p25": 77.656,
+     "p50": 78.73,
+     "p75": 80.215,
+     "p90": 80.807,
+     "n": 63
+    },
+    "refMin": 48.971,
+    "refMax": 72.884,
+    "refMedian": 61.757,
+    "refPooled": {
+     "p10": 49.909,
+     "p25": 55.906,
+     "p50": 61.657,
+     "p75": 68.206,
+     "p90": 72.738,
+     "n": 118
+    },
+    "position": "above all 8 (1.08x the highest)",
+    "refCitiesBelow": 8,
+    "inEnvelope": 0.015873,
+    "cities": {
+     "denver": 63.029,
+     "seville": 60.329,
+     "helsinki": 48.971,
+     "palermo": 72.884,
+     "tirana": 68.442,
+     "nashville": 60.766,
+     "paris": 59.935,
+     "barcelona": 62.748
+    }
+   },
+   "majorRoadShare": {
+    "citygen": {
+     "p10": 6.6879,
+     "p25": 7.6419,
+     "p50": 8.59,
+     "p75": 9.3738,
+     "p90": 10.498,
+     "n": 214
+    },
+    "citygenSeedMedians": {
+     "p10": 7.2858,
+     "p25": 8.2142,
+     "p50": 8.7753,
+     "p75": 9.612,
+     "p90": 11.066,
+     "n": 63
+    },
+    "refMin": 7.2094,
+    "refMax": 38.12,
+    "refMedian": 26.36,
+    "refPooled": {
+     "p10": 11.233,
+     "p25": 19.558,
+     "p50": 25.451,
+     "p75": 31.76,
+     "p90": 37.087,
+     "n": 118
+    },
+    "position": "inside",
+    "refCitiesBelow": 1,
+    "inEnvelope": 0.90476,
+    "cities": {
+     "denver": 24.428,
+     "seville": 30.089,
+     "helsinki": 38.12,
+     "palermo": 7.2094,
+     "tirana": 23.372,
+     "nashville": 28.291,
+     "paris": 30.046,
+     "barcelona": 22.025
+    }
+   },
+   "majorRoadSpacing": {
+    "citygen": {
+     "p10": 1183.2,
+     "p25": 1288.8,
+     "p50": 1392.8,
+     "p75": 1534.5,
+     "p90": 1709.8,
+     "n": 214
+    },
+    "citygenSeedMedians": {
+     "p10": 1151.9,
+     "p25": 1297.1,
+     "p50": 1373.4,
+     "p75": 1430.7,
+     "p90": 1567.1,
+     "n": 63
+    },
+    "refMin": 408.77,
+    "refMax": 2139.4,
+    "refMedian": 535.4,
+    "refPooled": {
+     "p10": 392.12,
+     "p25": 465.86,
+     "p50": 583.29,
+     "p75": 844.67,
+     "p90": 1697.3,
+     "n": 118
+    },
+    "position": "inside",
+    "refCitiesBelow": 7,
+    "inEnvelope": 1,
+    "cities": {
+     "denver": 567.61,
+     "seville": 430.73,
+     "helsinki": 444.8,
+     "palermo": 2139.4,
+     "tirana": 704.44,
+     "nashville": 722.55,
+     "paris": 408.77,
+     "barcelona": 503.19
+    }
+   },
+   "blockAreaMedian": {
+    "citygen": {
+     "p10": 0.70482,
+     "p25": 0.77475,
+     "p50": 0.87198,
+     "p75": 0.96778,
+     "p90": 1.1091,
+     "n": 214
+    },
+    "citygenSeedMedians": {
+     "p10": 0.75241,
+     "p25": 0.79151,
+     "p50": 0.85749,
+     "p75": 0.93257,
+     "p90": 0.9665,
+     "n": 63
+    },
+    "refMin": 0.51372,
+    "refMax": 2.9056,
+    "refMedian": 0.87498,
+    "refPooled": {
+     "p10": 0.56315,
+     "p25": 0.77947,
+     "p50": 1.4914,
+     "p75": 2.0632,
+     "p90": 3.1474,
+     "n": 118
+    },
+    "position": "inside",
+    "refCitiesBelow": 4,
+    "inEnvelope": 1,
+    "cities": {
+     "denver": 1.8202,
+     "seville": 0.51372,
+     "helsinki": 0.94533,
+     "palermo": 0.68278,
+     "tirana": 0.85534,
+     "nashville": 2.9056,
+     "paris": 0.89462,
+     "barcelona": 0.81969
+    }
+   },
+   "blockAreaP25": {
+    "citygen": {
+     "p10": 0.44522,
+     "p25": 0.47523,
+     "p50": 0.52217,
+     "p75": 0.61824,
+     "p90": 0.78709,
+     "n": 214
+    },
+    "citygenSeedMedians": {
+     "p10": 0.45519,
+     "p25": 0.47883,
+     "p50": 0.51348,
+     "p75": 0.54955,
+     "p90": 0.59192,
+     "n": 63
+    },
+    "refMin": 0.23127,
+    "refMax": 1.4175,
+    "refMedian": 0.36503,
+    "refPooled": {
+     "p10": 0.2292,
+     "p25": 0.2801,
+     "p50": 0.45312,
+     "p75": 1.3933,
+     "p90": 1.6717,
+     "n": 118
+    },
+    "position": "inside",
+    "refCitiesBelow": 6,
+    "inEnvelope": 1,
+    "cities": {
+     "denver": 1.4175,
+     "seville": 0.25489,
+     "helsinki": 0.23127,
+     "palermo": 0.24389,
+     "tirana": 0.31863,
+     "nashville": 1.3843,
+     "paris": 0.44537,
+     "barcelona": 0.41142
+    }
+   },
+   "blockAreaP75": {
+    "citygen": {
+     "p10": 1.1162,
+     "p25": 1.17,
+     "p50": 1.2432,
+     "p75": 1.3478,
+     "p90": 1.5034,
+     "n": 214
+    },
+    "citygenSeedMedians": {
+     "p10": 1.1623,
+     "p25": 1.1793,
+     "p50": 1.2329,
+     "p75": 1.3281,
+     "p90": 1.43,
+     "n": 63
+    },
+    "refMin": 1.1461,
+    "refMax": 5.1661,
+    "refMedian": 1.9167,
+    "refPooled": {
+     "p10": 1.1892,
+     "p25": 1.7099,
+     "p50": 2.125,
+     "p75": 3.563,
+     "p90": 5.5528,
+     "n": 118
+    },
+    "position": "inside",
+    "refCitiesBelow": 1,
+    "inEnvelope": 0.93651,
+    "cities": {
+     "denver": 2.061,
+     "seville": 1.1461,
+     "helsinki": 2.7052,
+     "palermo": 1.5824,
+     "tirana": 2.1488,
+     "nashville": 5.1661,
+     "paris": 1.7724,
+     "barcelona": 1.5239
+    }
+   },
+   "blockAspectMedian": {
+    "citygen": {
+     "p10": 1.3862,
+     "p25": 1.4086,
+     "p50": 1.4393,
+     "p75": 1.476,
+     "p90": 1.5054,
+     "n": 214
+    },
+    "citygenSeedMedians": {
+     "p10": 1.3924,
+     "p25": 1.4106,
+     "p50": 1.4373,
+     "p75": 1.4671,
+     "p90": 1.4955,
+     "n": 63
+    },
+    "refMin": 1.6254,
+    "refMax": 2.119,
+    "refMedian": 1.8793,
+    "refPooled": {
+     "p10": 1.6195,
+     "p25": 1.7468,
+     "p50": 1.8939,
+     "p75": 2.0332,
+     "p90": 2.1212,
+     "n": 118
+    },
+    "position": "below all 8 (0.88x the lowest)",
+    "refCitiesBelow": 0,
+    "inEnvelope": 0,
+    "cities": {
+     "denver": 1.9511,
+     "seville": 1.9692,
+     "helsinki": 2.119,
+     "palermo": 1.7608,
+     "tirana": 1.8506,
+     "nashville": 1.908,
+     "paris": 1.7595,
+     "barcelona": 1.6254
+    }
+   },
+   "blockAspectP75": {
+    "citygen": {
+     "p10": 1.6522,
+     "p25": 1.6865,
+     "p50": 1.728,
+     "p75": 1.7829,
+     "p90": 1.8281,
+     "n": 214
+    },
+    "citygenSeedMedians": {
+     "p10": 1.6687,
+     "p25": 1.6879,
+     "p50": 1.7246,
+     "p75": 1.787,
+     "p90": 1.8045,
+     "n": 63
+    },
+    "refMin": 2.0801,
+    "refMax": 4.7753,
+    "refMedian": 2.6128,
+    "refPooled": {
+     "p10": 2.0743,
+     "p25": 2.3847,
+     "p50": 2.6029,
+     "p75": 2.9477,
+     "p90": 3.3121,
+     "n": 118
+    },
+    "position": "below all 8 (0.83x the lowest)",
+    "refCitiesBelow": 0,
+    "inEnvelope": 0,
+    "cities": {
+     "denver": 2.0801,
+     "seville": 2.9539,
+     "helsinki": 4.7753,
+     "palermo": 2.6674,
+     "tirana": 2.5583,
+     "nashville": 2.7864,
+     "paris": 2.4561,
+     "barcelona": 2.4471
+    }
+   }
+  },
+  "neighbourhood": {
+   "intersectionDensity": {
+    "citygen": {
+     "p10": 48.661,
+     "p25": 62.857,
+     "p50": 78.378,
+     "p75": 102.55,
+     "p90": 143.23,
+     "n": 5281
+    },
+    "citygenSeedMedians": {
+     "p10": 68.643,
+     "p25": 72.205,
+     "p50": 78.776,
+     "p75": 85.734,
+     "p90": 92.204,
+     "n": 96
+    },
+    "refMin": 27.632,
+    "refMax": 124.19,
+    "refMedian": 60.239,
+    "refPooled": {
+     "p10": 20.833,
+     "p25": 34.375,
+     "p50": 55.556,
+     "p75": 83.333,
+     "p90": 125.12,
+     "n": 2259
+    },
+    "position": "inside",
+    "refCitiesBelow": 5,
+    "inEnvelope": 1,
+    "cities": {
+     "denver": 56.542,
+     "seville": 124.19,
+     "helsinki": 50.985,
+     "palermo": 61.979,
+     "tirana": 58.5,
+     "nashville": 27.632,
+     "paris": 96.429,
+     "barcelona": 101.82
+    }
+   },
+   "streetDensity": {
+    "citygen": {
+     "p10": 11.281,
+     "p25": 13.677,
+     "p50": 16.056,
+     "p75": 18.831,
+     "p90": 22.164,
+     "n": 5281
+    },
+    "citygenSeedMedians": {
+     "p10": 13.862,
+     "p25": 14.877,
+     "p50": 15.904,
+     "p75": 16.639,
+     "p90": 17.072,
+     "n": 96
+    },
+    "refMin": 9.1765,
+    "refMax": 17.808,
+    "refMedian": 12.963,
+    "refPooled": {
+     "p10": 7.4008,
+     "p25": 9.5382,
+     "p50": 12.562,
+     "p75": 15.931,
+     "p90": 18.758,
+     "n": 2259
+    },
+    "position": "inside",
+    "refCitiesBelow": 5,
+    "inEnvelope": 0.97917,
+    "cities": {
+     "denver": 13.681,
+     "seville": 17.127,
+     "helsinki": 10.532,
+     "palermo": 12.246,
+     "tirana": 11.533,
+     "nashville": 9.1765,
+     "paris": 16.342,
+     "barcelona": 17.808
+    }
+   },
+   "segmentLengthMean": {
+    "citygen": {
+     "p10": 80.368,
+     "p25": 95.949,
+     "p50": 110.39,
+     "p75": 121.25,
+     "p90": 133.44,
+     "n": 5281
+    },
+    "citygenSeedMedians": {
+     "p10": 96.555,
+     "p25": 103.51,
+     "p50": 108.77,
+     "p75": 113.9,
+     "p90": 118.63,
+     "n": 96
+    },
+    "refMin": 84.291,
+    "refMax": 185.59,
+    "refMedian": 112.77,
+    "refPooled": {
+     "p10": 84.919,
+     "p25": 101.35,
+     "p50": 129.59,
+     "p75": 168.01,
+     "p90": 221.62,
+     "n": 2259
+    },
+    "position": "inside",
+    "refCitiesBelow": 3,
+    "inEnvelope": 1,
+    "cities": {
+     "denver": 137.12,
+     "seville": 84.291,
+     "helsinki": 111.83,
+     "palermo": 113.7,
+     "tirana": 113.79,
+     "nashville": 185.59,
+     "paris": 98.669,
+     "barcelona": 98.371
+    }
+   },
+   "segmentLengthMedian": {
+    "citygen": {
+     "p10": 72.74,
+     "p25": 84.979,
+     "p50": 98.67,
+     "p75": 111.87,
+     "p90": 122.9,
+     "n": 5281
+    },
+    "citygenSeedMedians": {
+     "p10": 80.32,
+     "p25": 89.552,
+     "p50": 95.597,
+     "p75": 101.82,
+     "p90": 108.33,
+     "n": 96
+    },
+    "refMin": 54.044,
+    "refMax": 135.59,
+    "refMedian": 75.498,
+    "refPooled": {
+     "p10": 55.878,
+     "p25": 71.808,
+     "p50": 98.116,
+     "p75": 120.23,
+     "p90": 156.93,
+     "n": 2259
+    },
+    "position": "inside",
+    "refCitiesBelow": 6,
+    "inEnvelope": 1,
+    "cities": {
+     "denver": 103.05,
+     "seville": 54.044,
+     "helsinki": 74.652,
+     "palermo": 74.649,
+     "tirana": 79.002,
+     "nashville": 135.59,
+     "paris": 76.343,
+     "barcelona": 74.387
+    }
+   },
+   "avgNodeDegree": {
+    "citygen": {
+     "p10": 3.4831,
+     "p25": 3.5935,
+     "p50": 3.7,
+     "p75": 3.7844,
+     "p90": 3.8465,
+     "n": 5281
+    },
+    "citygenSeedMedians": {
+     "p10": 3.4916,
+     "p25": 3.5707,
+     "p50": 3.68,
+     "p75": 3.7253,
+     "p90": 3.7624,
+     "n": 96
+    },
+    "refMin": 2.473,
+    "refMax": 3.1925,
+    "refMedian": 2.9037,
+    "refPooled": {
+     "p10": 2.4717,
+     "p25": 2.6962,
+     "p50": 2.9333,
+     "p75": 3.1444,
+     "p90": 3.3508,
+     "n": 2259
+    },
+    "position": "above all 8 (1.15x the highest)",
+    "refCitiesBelow": 8,
+    "inEnvelope": 0,
+    "cities": {
+     "denver": 3.1925,
+     "seville": 2.9814,
+     "helsinki": 2.7782,
+     "palermo": 2.6309,
+     "tirana": 2.473,
+     "nashville": 2.8261,
+     "paris": 3.1571,
+     "barcelona": 3.1456
+    }
+   },
+   "threeWayShare": {
+    "citygen": {
+     "p10": 14.851,
+     "p25": 20.779,
+     "p50": 28.704,
+     "p75": 37.885,
+     "p90": 47.328,
+     "n": 5281
+    },
+    "citygenSeedMedians": {
+     "p10": 22.709,
+     "p25": 25.821,
+     "p50": 30.869,
+     "p75": 40.579,
+     "p90": 48.194,
+     "n": 96
+    },
+    "refMin": 56.943,
+    "refMax": 76.081,
+    "refMedian": 66.178,
+    "refPooled": {
+     "p10": 47.368,
+     "p25": 56.522,
+     "p50": 64.912,
+     "p75": 71.429,
+     "p90": 77.117,
+     "n": 2259
+    },
+    "position": "below all 8 (0.54x the lowest)",
+    "refCitiesBelow": 0,
+    "inEnvelope": 0,
+    "cities": {
+     "denver": 56.943,
+     "seville": 76.081,
+     "helsinki": 58.708,
+     "palermo": 67.317,
+     "tirana": 67.241,
+     "nashville": 65.115,
+     "paris": 69.11,
+     "barcelona": 64.368
+    }
+   },
+   "fourWayShare": {
+    "citygen": {
+     "p10": 50.505,
+     "p25": 60.417,
+     "p50": 70.506,
+     "p75": 78.632,
+     "p90": 84.656,
+     "n": 5281
+    },
+    "citygenSeedMedians": {
+     "p10": 49.865,
+     "p25": 58.178,
+     "p50": 68.403,
+     "p75": 73.071,
+     "p90": 76.526,
+     "n": 96
+    },
+    "refMin": 4.8544,
+    "refMax": 33.929,
+    "refMedian": 17.294,
+    "refPooled": {
+     "p10": 5,
+     "p25": 10.283,
+     "p50": 18.182,
+     "p75": 28.72,
+     "p90": 43.636,
+     "n": 2259
+    },
+    "position": "above all 8 (2.02x the highest)",
+    "refCitiesBelow": 8,
+    "inEnvelope": 0,
+    "cities": {
+     "denver": 33.929,
+     "seville": 14.286,
+     "helsinki": 19.167,
+     "palermo": 7.0513,
+     "tirana": 4.8544,
+     "nashville": 15.42,
+     "paris": 25.357,
+     "barcelona": 26.667
+    }
+   },
+   "deadEndShare": {
+    "citygen": {
+     "p10": 0,
+     "p25": 0,
+     "p50": 0,
+     "p75": 0,
+     "p90": 0.5,
+     "n": 5281
+    },
+    "citygenSeedMedians": {
+     "p10": 0,
+     "p25": 0,
+     "p50": 0,
+     "p75": 0,
+     "p90": 0,
+     "n": 96
+    },
+    "refMin": 5.4902,
+    "refMax": 28.472,
+    "refMedian": 12.55,
+    "refPooled": {
+     "p10": 3.2038,
+     "p25": 6.6482,
+     "p50": 12.5,
+     "p75": 21.645,
+     "p90": 30.189,
+     "n": 2259
+    },
+    "position": "below all 8 (0.00x the lowest)",
+    "refCitiesBelow": 0,
+    "inEnvelope": 0,
+    "cities": {
+     "denver": 7.395,
+     "seville": 8.4337,
+     "helsinki": 20.231,
+     "palermo": 22.36,
+     "tirana": 28.472,
+     "nashville": 16.667,
+     "paris": 5.4902,
+     "barcelona": 6.135
+    }
+   },
+   "circuity": {
+    "citygen": {
+     "p10": 1.0031,
+     "p25": 1.0086,
+     "p50": 1.0178,
+     "p75": 1.0325,
+     "p90": 1.056,
+     "n": 5281
+    },
+    "citygenSeedMedians": {
+     "p10": 1.0113,
+     "p25": 1.0155,
+     "p50": 1.0225,
+     "p75": 1.0386,
+     "p90": 1.0561,
+     "n": 96
+    },
+    "refMin": 1.0261,
+    "refMax": 1.0676,
+    "refMedian": 1.0481,
+    "refPooled": {
+     "p10": 1.0131,
+     "p25": 1.0253,
+     "p50": 1.0444,
+     "p75": 1.0722,
+     "p90": 1.1101,
+     "n": 2259
+    },
+    "position": "below all 8 (1.00x the lowest)",
+    "refCitiesBelow": 0,
+    "inEnvelope": 0.34375,
+    "cities": {
+     "denver": 1.0267,
+     "seville": 1.0466,
+     "helsinki": 1.0572,
+     "palermo": 1.0549,
+     "tirana": 1.0676,
+     "nashville": 1.0496,
+     "paris": 1.0261,
+     "barcelona": 1.0382
+    }
+   },
+   "orientationEntropy": {
+    "citygen": {
+     "p10": 1.7156,
+     "p25": 1.9736,
+     "p50": 2.3698,
+     "p75": 2.8271,
+     "p90": 3.1466,
+     "n": 5281
+    },
+    "citygenSeedMedians": {
+     "p10": 1.9827,
+     "p25": 2.1496,
+     "p50": 2.3991,
+     "p75": 2.7933,
+     "p90": 3.1837,
+     "n": 96
+    },
+    "refMin": 2.0993,
+    "refMax": 3.3683,
+    "refMedian": 3.2223,
+    "refPooled": {
+     "p10": 1.9705,
+     "p25": 2.6365,
+     "p50": 3.1339,
+     "p75": 3.3375,
+     "p90": 3.4391,
+     "n": 2259
+    },
+    "position": "inside",
+    "refCitiesBelow": 1,
+    "inEnvelope": 0.79167,
+    "cities": {
+     "denver": 2.0993,
+     "seville": 3.2516,
+     "helsinki": 3.3483,
+     "palermo": 3.1931,
+     "tirana": 3.3683,
+     "nashville": 3.1441,
+     "paris": 3.291,
+     "barcelona": 3.1542
+    }
+   },
+   "orientationOrder": {
+    "citygen": {
+     "p10": 0.35815,
+     "p25": 0.57003,
+     "p50": 0.79964,
+     "p75": 0.92855,
+     "p90": 0.97754,
+     "n": 5281
+    },
+    "citygenSeedMedians": {
+     "p10": 0.33081,
+     "p25": 0.58988,
+     "p50": 0.78734,
+     "p75": 0.87933,
+     "p90": 0.92633,
+     "n": 96
+    },
+    "refMin": 0.18629,
+    "refMax": 0.8947,
+    "refMedian": 0.30152,
+    "refPooled": {
+     "p10": 0.12713,
+     "p25": 0.21141,
+     "p50": 0.36739,
+     "p75": 0.67623,
+     "p90": 0.9293,
+     "n": 2259
+    },
+    "position": "inside",
+    "refCitiesBelow": 7,
+    "inEnvelope": 0.79167,
+    "cities": {
+     "denver": 0.8947,
+     "seville": 0.27928,
+     "helsinki": 0.20263,
+     "palermo": 0.32377,
+     "tirana": 0.18629,
+     "nashville": 0.36001,
+     "paris": 0.24853,
+     "barcelona": 0.35258
+    }
+   },
+   "dominantOrientations": {
+    "citygen": {
+     "p10": 1,
+     "p25": 1,
+     "p50": 1,
+     "p75": 1,
+     "p90": 2,
+     "n": 5281
+    },
+    "citygenSeedMedians": {
+     "p10": 1,
+     "p25": 1,
+     "p50": 1,
+     "p75": 1,
+     "p90": 1,
+     "n": 96
+    },
+    "refMin": 1,
+    "refMax": 1,
+    "refMedian": 1,
+    "refPooled": {
+     "p10": 1,
+     "p25": 1,
+     "p50": 1,
+     "p75": 1,
+     "p90": 2,
+     "n": 2259
+    },
+    "position": "inside",
+    "refCitiesBelow": 0,
+    "inEnvelope": 0.98958,
+    "cities": {
+     "denver": 1,
+     "seville": 1,
+     "helsinki": 1,
+     "palermo": 1,
+     "tirana": 1,
+     "nashville": 1,
+     "paris": 1,
+     "barcelona": 1
+    }
+   },
+   "shareRegional": {
+    "citygen": {
+     "p10": 0,
+     "p25": 0,
+     "p50": 0,
+     "p75": 0,
+     "p90": 0,
+     "n": 5281
+    },
+    "citygenSeedMedians": {
+     "p10": 0,
+     "p25": 0,
+     "p50": 0,
+     "p75": 0,
+     "p90": 0,
+     "n": 96
+    },
+    "refMin": 0,
+    "refMax": 6.2757,
+    "refMedian": 0,
+    "refPooled": {
+     "p10": 0,
+     "p25": 0,
+     "p50": 0,
+     "p75": 16.698,
+     "p90": 28.446,
+     "n": 2259
+    },
+    "position": "inside",
+    "refCitiesBelow": 0,
+    "inEnvelope": 1,
+    "cities": {
+     "denver": 0,
+     "seville": 6.1343,
+     "helsinki": 6.2757,
+     "palermo": 0,
+     "tirana": 0,
+     "nashville": 0,
+     "paris": 0,
+     "barcelona": 2.6149
+    }
+   },
+   "shareArterial": {
+    "citygen": {
+     "p10": 0.97758,
+     "p25": 3.5135,
+     "p50": 5.9227,
+     "p75": 9.3369,
+     "p90": 13.439,
+     "n": 5281
+    },
+    "citygenSeedMedians": {
+     "p10": 4.4486,
+     "p25": 5.2679,
+     "p50": 6.7849,
+     "p75": 11.976,
+     "p90": 18.37,
+     "n": 96
+    },
+    "refMin": 0,
+    "refMax": 14.331,
+    "refMedian": 4.5566,
+    "refPooled": {
+     "p10": 0,
+     "p25": 0,
+     "p50": 5.8206,
+     "p75": 12.684,
+     "p90": 18.808,
+     "n": 2259
+    },
+    "position": "inside",
+    "refCitiesBelow": 6,
+    "inEnvelope": 0.80208,
+    "cities": {
+     "denver": 8.2479,
+     "seville": 4.3223,
+     "helsinki": 4.7909,
+     "palermo": 0,
+     "tirana": 1.5614,
+     "nashville": 5.7067,
+     "paris": 14.331,
+     "barcelona": 1.5275
+    }
+   },
+   "shareAvenue": {
+    "citygen": {
+     "p10": 0,
+     "p25": 0,
+     "p50": 1.4562,
+     "p75": 3.9206,
+     "p90": 6.4053,
+     "n": 5281
+    },
+    "citygenSeedMedians": {
+     "p10": 0,
+     "p25": 0.39028,
+     "p50": 1.2549,
+     "p75": 2.0872,
+     "p90": 2.9424,
+     "n": 96
+    },
+    "refMin": 0.31331,
+    "refMax": 13.302,
+    "refMedian": 6.5975,
+    "refPooled": {
+     "p10": 0,
+     "p25": 0.51443,
+     "p50": 6.8413,
+     "p75": 12.707,
+     "p90": 18.479,
+     "n": 2259
+    },
+    "position": "inside",
+    "refCitiesBelow": 1,
+    "inEnvelope": 0.77083,
+    "cities": {
+     "denver": 6.7044,
+     "seville": 6.4905,
+     "helsinki": 13.302,
+     "palermo": 0.31331,
+     "tirana": 6.1353,
+     "nashville": 5.3158,
+     "paris": 9.6907,
+     "barcelona": 8.5536
+    }
+   },
+   "shareConnector": {
+    "citygen": {
+     "p10": 5.7751,
+     "p25": 9.0839,
+     "p50": 12.863,
+     "p75": 16.799,
+     "p90": 20.53,
+     "n": 5281
+    },
+    "citygenSeedMedians": {
+     "p10": 6.488,
+     "p25": 9.6094,
+     "p50": 11.674,
+     "p75": 13.544,
+     "p90": 15.175,
+     "n": 96
+    },
+    "refMin": 8.6585,
+    "refMax": 18.993,
+    "refMedian": 11.429,
+    "refPooled": {
+     "p10": 1.9995,
+     "p25": 6.9085,
+     "p50": 12.389,
+     "p75": 18.9,
+     "p90": 25.5,
+     "n": 2259
+    },
+    "position": "inside",
+    "refCitiesBelow": 4,
+    "inEnvelope": 0.79167,
+    "cities": {
+     "denver": 13.683,
+     "seville": 8.6585,
+     "helsinki": 12.348,
+     "palermo": 18.993,
+     "tirana": 10.486,
+     "nashville": 10.51,
+     "paris": 10.381,
+     "barcelona": 15.439
+    }
+   },
+   "shareLocal": {
+    "citygen": {
+     "p10": 69.095,
+     "p25": 74.189,
+     "p50": 78.426,
+     "p75": 81.959,
+     "p90": 85.132,
+     "n": 5281
+    },
+    "citygenSeedMedians": {
+     "p10": 72.094,
+     "p25": 75.782,
+     "p50": 77.886,
+     "p75": 79.269,
+     "p90": 80.469,
+     "n": 96
+    },
+    "refMin": 48.102,
+    "refMax": 71.909,
+    "refMedian": 63.445,
+    "refPooled": {
+     "p10": 38.408,
+     "p25": 51.368,
+     "p50": 63.211,
+     "p75": 73.177,
+     "p90": 81.503,
+     "n": 2259
+    },
+    "position": "above all 8 (1.08x the highest)",
+    "refCitiesBelow": 8,
+    "inEnvelope": 0.09375,
+    "cities": {
+     "denver": 64.731,
+     "seville": 63.521,
+     "helsinki": 48.102,
+     "palermo": 71.909,
+     "tirana": 69.004,
+     "nashville": 63.37,
+     "paris": 59.737,
+     "barcelona": 61.965
+    }
+   },
+   "majorRoadShare": {
+    "citygen": {
+     "p10": 3.8574,
+     "p25": 5.7876,
+     "p50": 8.382,
+     "p75": 11.801,
+     "p90": 16.119,
+     "n": 5281
+    },
+    "citygenSeedMedians": {
+     "p10": 7.2086,
+     "p25": 7.9143,
+     "p50": 9.0917,
+     "p75": 13.423,
+     "p90": 19.313,
+     "n": 96
+    },
+    "refMin": 5.7266,
+    "refMax": 37.306,
+    "refMedian": 22.901,
+    "refPooled": {
+     "p10": 4.1593,
+     "p25": 12.52,
+     "p50": 23.085,
+     "p75": 35.422,
+     "p90": 47.569,
+     "n": 2259
+    },
+    "position": "inside",
+    "refCitiesBelow": 1,
+    "inEnvelope": 1,
+    "cities": {
+     "denver": 21.046,
+     "seville": 27.164,
+     "helsinki": 37.306,
+     "palermo": 5.7266,
+     "tirana": 18.517,
+     "nashville": 24.297,
+     "paris": 29.341,
+     "barcelona": 21.506
+    }
+   },
+   "majorRoadSpacing": {
+    "citygen": {
+     "p10": 818.26,
+     "p25": 1068.6,
+     "p50": 1460.8,
+     "p75": 2042.8,
+     "p90": 3084.1,
+     "n": 5214
+    },
+    "citygenSeedMedians": {
+     "p10": 733.56,
+     "p25": 1035.3,
+     "p50": 1361.8,
+     "p75": 1549.2,
+     "p90": 1636.1,
+     "n": 96
+    },
+    "refMin": 433.22,
+    "refMax": 1613.6,
+    "refMedian": 617.25,
+    "refPooled": {
+     "p10": 303.87,
+     "p25": 416.78,
+     "p50": 629.5,
+     "p75": 1159.2,
+     "p90": 2279.7,
+     "n": 2098
+    },
+    "position": "inside",
+    "refCitiesBelow": 7,
+    "inEnvelope": 0.875,
+    "cities": {
+     "denver": 698.98,
+     "seville": 459.67,
+     "helsinki": 475.63,
+     "palermo": 1613.6,
+     "tirana": 762.63,
+     "nashville": 820.16,
+     "paris": 433.22,
+     "barcelona": 535.51
+    }
+   },
+   "blockAreaMedian": {
+    "citygen": {
+     "p10": 0.51914,
+     "p25": 0.77304,
+     "p50": 1.0955,
+     "p75": 1.2646,
+     "p90": 1.4475,
+     "n": 5280
+    },
+    "citygenSeedMedians": {
+     "p10": 0.69122,
+     "p25": 0.91064,
+     "p50": 1.0573,
+     "p75": 1.1304,
+     "p90": 1.2348,
+     "n": 96
+    },
+    "refMin": 0.55881,
+    "refMax": 3.0114,
+    "refMedian": 0.99928,
+    "refPooled": {
+     "p10": 0.45874,
+     "p25": 0.76479,
+     "p50": 1.5198,
+     "p75": 2.2338,
+     "p90": 3.7957,
+     "n": 2171
+    },
+    "position": "inside",
+    "refCitiesBelow": 4,
+    "inEnvelope": 0.95833,
+    "cities": {
+     "denver": 1.9461,
+     "seville": 0.55881,
+     "helsinki": 1.0757,
+     "palermo": 0.70955,
+     "tirana": 1.2062,
+     "nashville": 3.0114,
+     "paris": 0.92286,
+     "barcelona": 0.84358
+    }
+   },
+   "blockAreaP25": {
+    "citygen": {
+     "p10": 0.40334,
+     "p25": 0.54753,
+     "p50": 0.86786,
+     "p75": 1.0488,
+     "p90": 1.1751,
+     "n": 5280
+    },
+    "citygenSeedMedians": {
+     "p10": 0.46264,
+     "p25": 0.61734,
+     "p50": 0.81224,
+     "p75": 0.91197,
+     "p90": 0.99593,
+     "n": 96
+    },
+    "refMin": 0.24635,
+    "refMax": 1.6304,
+    "refMedian": 0.43898,
+    "refPooled": {
+     "p10": 0.15715,
+     "p25": 0.28187,
+     "p50": 0.56203,
+     "p75": 1.5366,
+     "p90": 2.1804,
+     "n": 2171
+    },
+    "position": "inside",
+    "refCitiesBelow": 6,
+    "inEnvelope": 1,
+    "cities": {
+     "denver": 1.4267,
+     "seville": 0.26667,
+     "helsinki": 0.24635,
+     "palermo": 0.27712,
+     "tirana": 0.52354,
+     "nashville": 1.6304,
+     "paris": 0.46056,
+     "barcelona": 0.41739
+    }
+   },
+   "blockAreaP75": {
+    "citygen": {
+     "p10": 0.75088,
+     "p25": 1.1128,
+     "p50": 1.3986,
+     "p75": 1.6925,
+     "p90": 2.0186,
+     "n": 5280
+    },
+    "citygenSeedMedians": {
+     "p10": 1.1246,
+     "p25": 1.2652,
+     "p50": 1.3628,
+     "p75": 1.5036,
+     "p90": 1.6942,
+     "n": 96
+    },
+    "refMin": 1.2241,
+    "refMax": 5.3075,
+    "refMedian": 2.0906,
+    "refPooled": {
+     "p10": 1.1851,
+     "p25": 1.6996,
+     "p50": 2.4239,
+     "p75": 4.1287,
+     "p90": 7.3319,
+     "n": 2171
+    },
+    "position": "inside",
+    "refCitiesBelow": 1,
+    "inEnvelope": 0.83333,
+    "cities": {
+     "denver": 2.1798,
+     "seville": 1.2241,
+     "helsinki": 2.7882,
+     "palermo": 2.0014,
+     "tirana": 2.8922,
+     "nashville": 5.3075,
+     "paris": 1.8584,
+     "barcelona": 1.615
+    }
+   },
+   "blockAspectMedian": {
+    "citygen": {
+     "p10": 1.3187,
+     "p25": 1.3821,
+     "p50": 1.4646,
+     "p75": 1.5469,
+     "p90": 1.6326,
+     "n": 5280
+    },
+    "citygenSeedMedians": {
+     "p10": 1.4157,
+     "p25": 1.4341,
+     "p50": 1.4598,
+     "p75": 1.4932,
+     "p90": 1.5145,
+     "n": 96
+    },
+    "refMin": 1.7347,
+    "refMax": 2.0865,
+    "refMedian": 1.8961,
+    "refPooled": {
+     "p10": 1.5475,
+     "p25": 1.7125,
+     "p50": 1.929,
+     "p75": 2.1388,
+     "p90": 2.5449,
+     "n": 2171
+    },
+    "position": "below all 8 (0.84x the lowest)",
+    "refCitiesBelow": 0,
+    "inEnvelope": 0,
+    "cities": {
+     "denver": 1.9938,
+     "seville": 1.9813,
+     "helsinki": 2.0865,
+     "palermo": 1.8478,
+     "tirana": 1.8455,
+     "nashville": 1.9444,
+     "paris": 1.7761,
+     "barcelona": 1.7347
+    }
+   },
+   "blockAspectP75": {
+    "citygen": {
+     "p10": 1.552,
+     "p25": 1.6367,
+     "p50": 1.7476,
+     "p75": 1.892,
+     "p90": 2.0357,
+     "n": 5280
+    },
+    "citygenSeedMedians": {
+     "p10": 1.6807,
+     "p25": 1.7094,
+     "p50": 1.7428,
+     "p75": 1.7995,
+     "p90": 1.8494,
+     "n": 96
+    },
+    "refMin": 2.3855,
+    "refMax": 4.0835,
+    "refMedian": 2.6187,
+    "refPooled": {
+     "p10": 2.0131,
+     "p25": 2.2328,
+     "p50": 2.6758,
+     "p75": 3.3708,
+     "p90": 4.9385,
+     "n": 2171
+    },
+    "position": "below all 8 (0.73x the lowest)",
+    "refCitiesBelow": 0,
+    "inEnvelope": 0,
+    "cities": {
+     "denver": 2.3855,
+     "seville": 2.9927,
+     "helsinki": 4.0835,
+     "palermo": 2.9001,
+     "tirana": 2.5097,
+     "nashville": 2.6666,
+     "paris": 2.4885,
+     "barcelona": 2.5708
+    }
+   }
+  }
+ },
+ "archetypes": {
+  "GRID_METROPOLITAN": {
+   "city": {
+    "fourWayShare": [
+     30.232,
+     39.307
+    ],
+    "threeWayShare": [
+     52.411,
+     62.226
+    ],
+    "deadEndShare": [
+     7.3874,
+     7.9769
+    ],
+    "avgNodeDegree": [
+     3.1655,
+     3.239
+    ],
+    "majorRoadSpacing": [
+     527.79,
+     629.63
+    ],
+    "majorRoadShare": [
+     22.63,
+     23.541
+    ],
+    "shareRegional": [
+     6.8141,
+     7.1065
+    ],
+    "shareArterial": [
+     5.7643,
+     8.5843
+    ],
+    "shareAvenue": [
+     7.8497,
+     10.052
+    ],
+    "shareConnector": [
+     14.553,
+     14.793
+    ],
+    "shareLocal": [
+     61.906,
+     62.577
+    ],
+    "segmentLengthMean": [
+     99.891,
+     136.54
+    ],
+    "segmentLengthMedian": [
+     75.133,
+     103.6
+    ],
+    "intersectionDensity": [
+     56.156,
+     98.088
+    ],
+    "streetDensity": [
+     13.494,
+     16.745
+    ],
+    "orientationEntropy": [
+     2.3487,
+     3.4359
+    ],
+    "orientationOrder": [
+     0.12986,
+     0.80815
+    ],
+    "dominantOrientations": [
+     1,
+     1
+    ],
+    "circuity": [
+     1.0315,
+     1.0584
+    ],
+    "blockAreaMedian": [
+     0.81242,
+     1.8705
+    ],
+    "blockAspectMedian": [
+     1.677,
+     1.9541
+    ],
+    "corridorContinuity": [
+     0.32636,
+     0.33016
+    ],
+    "majorCorridorLengthKm": [
+     3.0223,
+     5.6707
+    ]
+   },
+   "neighbourhood": {
+    "fourWayShare": [
+     26.667,
+     33.929
+    ],
+    "threeWayShare": [
+     56.943,
+     64.368
+    ],
+    "deadEndShare": [
+     6.135,
+     7.395
+    ],
+    "avgNodeDegree": [
+     3.1456,
+     3.1925
+    ],
+    "majorRoadSpacing": [
+     535.51,
+     698.98
+    ],
+    "majorRoadShare": [
+     21.046,
+     21.506
+    ],
+    "shareRegional": [
+     0,
+     2.6149
+    ],
+    "shareArterial": [
+     1.5275,
+     8.2479
+    ],
+    "shareAvenue": [
+     6.7044,
+     8.5536
+    ],
+    "shareConnector": [
+     13.683,
+     15.439
+    ],
+    "shareLocal": [
+     61.965,
+     64.731
+    ],
+    "segmentLengthMean": [
+     98.371,
+     137.12
+    ],
+    "segmentLengthMedian": [
+     74.387,
+     103.05
+    ],
+    "intersectionDensity": [
+     56.542,
+     101.82
+    ],
+    "streetDensity": [
+     13.681,
+     17.808
+    ],
+    "orientationEntropy": [
+     2.0993,
+     3.1542
+    ],
+    "orientationOrder": [
+     0.35258,
+     0.8947
+    ],
+    "dominantOrientations": [
+     1,
+     1
+    ],
+    "circuity": [
+     1.0267,
+     1.0382
+    ],
+    "blockAreaMedian": [
+     0.84358,
+     1.9461
+    ],
+    "blockAspectMedian": [
+     1.7347,
+     1.9938
+    ]
+   }
+  },
+  "COMPACT_CONTINENTAL": {
+   "city": {
+    "fourWayShare": [
+     12.699,
+     25.21
+    ],
+    "threeWayShare": [
+     68.345,
+     74.855
+    ],
+    "deadEndShare": [
+     5.6187,
+     18.833
+    ],
+    "avgNodeDegree": [
+     2.7508,
+     3.1566
+    ],
+    "majorRoadSpacing": [
+     374.4,
+     1777
+    ],
+    "majorRoadShare": [
+     9.6261,
+     33.353
+    ],
+    "shareRegional": [
+     2.4999,
+     10.113
+    ],
+    "shareArterial": [
+     1.9313,
+     15.396
+    ],
+    "shareAvenue": [
+     5.1949,
+     10.269
+    ],
+    "shareConnector": [
+     10.06,
+     18.727
+    ],
+    "shareLocal": [
+     56.587,
+     71.647
+    ],
+    "segmentLengthMean": [
+     85.62,
+     104.74
+    ],
+    "segmentLengthMedian": [
+     53.727,
+     75.923
+    ],
+    "intersectionDensity": [
+     65.877,
+     113.84
+    ],
+    "streetDensity": [
+     11.692,
+     16.016
+    ],
+    "orientationEntropy": [
+     3.4992,
+     3.5712
+    ],
+    "orientationOrder": [
+     0.011222,
+     0.075315
+    ],
+    "dominantOrientations": [
+     0,
+     1
+    ],
+    "circuity": [
+     1.0298,
+     1.0841
+    ],
+    "blockAreaMedian": [
+     0.53338,
+     0.91067
+    ],
+    "blockAspectMedian": [
+     1.7269,
+     1.9783
+    ],
+    "corridorContinuity": [
+     0.21661,
+     0.90463
+    ],
+    "majorCorridorLengthKm": [
+     2.3886,
+     9.9064
+    ]
+   },
+   "neighbourhood": {
+    "fourWayShare": [
+     7.0513,
+     25.357
+    ],
+    "threeWayShare": [
+     67.317,
+     76.081
+    ],
+    "deadEndShare": [
+     5.4902,
+     22.36
+    ],
+    "avgNodeDegree": [
+     2.6309,
+     3.1571
+    ],
+    "majorRoadSpacing": [
+     433.22,
+     1613.6
+    ],
+    "majorRoadShare": [
+     5.7266,
+     29.341
+    ],
+    "shareRegional": [
+     0,
+     6.1343
+    ],
+    "shareArterial": [
+     0,
+     14.331
+    ],
+    "shareAvenue": [
+     0.31331,
+     9.6907
+    ],
+    "shareConnector": [
+     8.6585,
+     18.993
+    ],
+    "shareLocal": [
+     59.737,
+     71.909
+    ],
+    "segmentLengthMean": [
+     84.291,
+     113.7
+    ],
+    "segmentLengthMedian": [
+     54.044,
+     76.343
+    ],
+    "intersectionDensity": [
+     61.979,
+     124.19
+    ],
+    "streetDensity": [
+     12.246,
+     17.127
+    ],
+    "orientationEntropy": [
+     3.1931,
+     3.291
+    ],
+    "orientationOrder": [
+     0.24853,
+     0.32377
+    ],
+    "dominantOrientations": [
+     1,
+     1
+    ],
+    "circuity": [
+     1.0261,
+     1.0549
+    ],
+    "blockAreaMedian": [
+     0.55881,
+     0.92286
+    ],
+    "blockAspectMedian": [
+     1.7761,
+     1.9813
+    ]
+   }
+  },
+  "GEOGRAPHIC_FRAGMENTED": {
+   "city": {
+    "fourWayShare": [
+     21.581,
+     21.581
+    ],
+    "threeWayShare": [
+     58.561,
+     58.561
+    ],
+    "deadEndShare": [
+     19.613,
+     19.613
+    ],
+    "avgNodeDegree": [
+     2.8272,
+     2.8272
+    ],
+    "majorRoadSpacing": [
+     495.86,
+     495.86
+    ],
+    "majorRoadShare": [
+     37.47,
+     37.47
+    ],
+    "shareRegional": [
+     13.661,
+     13.661
+    ],
+    "shareArterial": [
+     9.8466,
+     9.8466
+    ],
+    "shareAvenue": [
+     13.963,
+     13.963
+    ],
+    "shareConnector": [
+     13.543,
+     13.543
+    ],
+    "shareLocal": [
+     48.987,
+     48.987
+    ],
+    "segmentLengthMean": [
+     112.54,
+     112.54
+    ],
+    "segmentLengthMedian": [
+     75.406,
+     75.406
+    ],
+    "intersectionDensity": [
+     54.394,
+     54.394
+    ],
+    "streetDensity": [
+     10.764,
+     10.764
+    ],
+    "orientationEntropy": [
+     3.5563,
+     3.5563
+    ],
+    "orientationOrder": [
+     0.024626,
+     0.024626
+    ],
+    "dominantOrientations": [
+     0,
+     0
+    ],
+    "circuity": [
+     1.0677,
+     1.0677
+    ],
+    "blockAreaMedian": [
+     1.0686,
+     1.0686
+    ],
+    "blockAspectMedian": [
+     2.1014,
+     2.1014
+    ],
+    "corridorContinuity": [
+     0.28328,
+     0.28328
+    ],
+    "majorCorridorLengthKm": [
+     3.266,
+     3.266
+    ]
+   },
+   "neighbourhood": {
+    "fourWayShare": [
+     13.303,
+     26.431
+    ],
+    "threeWayShare": [
+     53.76,
+     65.155
+    ],
+    "deadEndShare": [
+     13.998,
+     24.206
+    ],
+    "avgNodeDegree": [
+     2.6667,
+     2.9404
+    ],
+    "majorRoadSpacing": [
+     346.7,
+     759.63
+    ],
+    "majorRoadShare": [
+     26.97,
+     46.705
+    ],
+    "shareRegional": [
+     0,
+     24.681
+    ],
+    "shareArterial": [
+     0,
+     17.315
+    ],
+    "shareAvenue": [
+     6.8323,
+     19.841
+    ],
+    "shareConnector": [
+     7.8011,
+     19.465
+    ],
+    "shareLocal": [
+     39.169,
+     57.953
+    ],
+    "segmentLengthMean": [
+     98.584,
+     132.35
+    ],
+    "segmentLengthMedian": [
+     62.059,
+     86.917
+    ],
+    "intersectionDensity": [
+     42.206,
+     68.821
+    ],
+    "streetDensity": [
+     9.0751,
+     12.729
+    ],
+    "orientationEntropy": [
+     3.2384,
+     3.4275
+    ],
+    "orientationOrder": [
+     0.13699,
+     0.28946
+    ],
+    "dominantOrientations": [
+     1,
+     1
+    ],
+    "circuity": [
+     1.0421,
+     1.0844
+    ],
+    "blockAreaMedian": [
+     0.5099,
+     2.0371
+    ],
+    "blockAspectMedian": [
+     1.7832,
+     2.7283
+    ]
+   }
+  },
+  "RADIAL_TRANSITIONAL": {
+   "city": {
+    "fourWayShare": [
+     6.3921,
+     6.3921
+    ],
+    "threeWayShare": [
+     68.116,
+     68.116
+    ],
+    "deadEndShare": [
+     25.349,
+     25.349
+    ],
+    "avgNodeDegree": [
+     2.5566,
+     2.5566
+    ],
+    "majorRoadSpacing": [
+     839.61,
+     839.61
+    ],
+    "majorRoadShare": [
+     19.706,
+     19.706
+    ],
+    "shareRegional": [
+     6.2477,
+     6.2477
+    ],
+    "shareArterial": [
+     5.3906,
+     5.3906
+    ],
+    "shareAvenue": [
+     8.0677,
+     8.0677
+    ],
+    "shareConnector": [
+     10.962,
+     10.962
+    ],
+    "shareLocal": [
+     69.332,
+     69.332
+    ],
+    "segmentLengthMean": [
+     105.02,
+     105.02
+    ],
+    "segmentLengthMedian": [
+     70.238,
+     70.238
+    ],
+    "intersectionDensity": [
+     67.217,
+     67.217
+    ],
+    "streetDensity": [
+     12.088,
+     12.088
+    ],
+    "orientationEntropy": [
+     3.5274,
+     3.5274
+    ],
+    "orientationOrder": [
+     0.050424,
+     0.050424
+    ],
+    "dominantOrientations": [
+     1,
+     1
+    ],
+    "circuity": [
+     1.0757,
+     1.0757
+    ],
+    "blockAreaMedian": [
+     0.99021,
+     0.99021
+    ],
+    "blockAspectMedian": [
+     1.8711,
+     1.8711
+    ],
+    "corridorContinuity": [
+     0.33623,
+     0.33623
+    ],
+    "majorCorridorLengthKm": [
+     3.381,
+     3.381
+    ]
+   },
+   "neighbourhood": {
+    "fourWayShare": [
+     2.7273,
+     6.8966
+    ],
+    "threeWayShare": [
+     59.756,
+     71.831
+    ],
+    "deadEndShare": [
+     21.754,
+     35.714
+    ],
+    "avgNodeDegree": [
+     2.3143,
+     2.6443
+    ],
+    "majorRoadSpacing": [
+     473.79,
+     1609.2
+    ],
+    "majorRoadShare": [
+     7.189,
+     28.493
+    ],
+    "shareRegional": [
+     0,
+     11.988
+    ],
+    "shareArterial": [
+     0,
+     9.0589
+    ],
+    "shareAvenue": [
+     0,
+     11.993
+    ],
+    "shareConnector": [
+     5.2363,
+     16.407
+    ],
+    "shareLocal": [
+     60.28,
+     76.909
+    ],
+    "segmentLengthMean": [
+     96.385,
+     144.92
+    ],
+    "segmentLengthMedian": [
+     66.458,
+     95.134
+    ],
+    "intersectionDensity": [
+     32.927,
+     103.57
+    ],
+    "streetDensity": [
+     8.6937,
+     16.43
+    ],
+    "orientationEntropy": [
+     3.1326,
+     3.4707
+    ],
+    "orientationOrder": [
+     0.10008,
+     0.36829
+    ],
+    "dominantOrientations": [
+     1,
+     1
+    ],
+    "circuity": [
+     1.0477,
+     1.0956
+    ],
+    "blockAreaMedian": [
+     0.7947,
+     1.8074
+    ],
+    "blockAspectMedian": [
+     1.6792,
+     1.9815
+    ]
+   }
+  },
+  "RADIAL_AUTOMOTIVE": {
+   "city": {
+    "fourWayShare": [
+     18.715,
+     18.715
+    ],
+    "threeWayShare": [
+     64.214,
+     64.214
+    ],
+    "deadEndShare": [
+     16.831,
+     16.831
+    ],
+    "avgNodeDegree": [
+     2.8518,
+     2.8518
+    ],
+    "majorRoadSpacing": [
+     781.94,
+     781.94
+    ],
+    "majorRoadShare": [
+     27.091,
+     27.091
+    ],
+    "shareRegional": [
+     14.01,
+     14.01
+    ],
+    "shareArterial": [
+     6.7844,
+     6.7844
+    ],
+    "shareAvenue": [
+     6.2972,
+     6.2972
+    ],
+    "shareConnector": [
+     11.58,
+     11.58
+    ],
+    "shareLocal": [
+     61.329,
+     61.329
+    ],
+    "segmentLengthMean": [
+     181.14,
+     181.14
+    ],
+    "segmentLengthMedian": [
+     127.04,
+     127.04
+    ],
+    "intersectionDensity": [
+     30.4,
+     30.4
+    ],
+    "streetDensity": [
+     9.4411,
+     9.4411
+    ],
+    "orientationEntropy": [
+     3.4396,
+     3.4396
+    ],
+    "orientationOrder": [
+     0.12674,
+     0.12674
+    ],
+    "dominantOrientations": [
+     1,
+     1
+    ],
+    "circuity": [
+     1.0596,
+     1.0596
+    ],
+    "blockAreaMedian": [
+     2.6033,
+     2.6033
+    ],
+    "blockAspectMedian": [
+     1.8656,
+     1.8656
+    ],
+    "corridorContinuity": [
+     0.34944,
+     0.34944
+    ],
+    "majorCorridorLengthKm": [
+     6.0152,
+     6.0152
+    ]
+   },
+   "neighbourhood": {
+    "fourWayShare": [
+     10.78,
+     22.018
+    ],
+    "threeWayShare": [
+     58.537,
+     70.732
+    ],
+    "deadEndShare": [
+     10.811,
+     23.077
+    ],
+    "avgNodeDegree": [
+     2.6584,
+     3
+    ],
+    "majorRoadSpacing": [
+     484.17,
+     1569.5
+    ],
+    "majorRoadShare": [
+     11.853,
+     37.433
+    ],
+    "shareRegional": [
+     0,
+     22.467
+    ],
+    "shareArterial": [
+     0,
+     11.832
+    ],
+    "shareAvenue": [
+     0,
+     10.758
+    ],
+    "shareConnector": [
+     4.094,
+     17.276
+    ],
+    "shareLocal": [
+     52.238,
+     75.567
+    ],
+    "segmentLengthMean": [
+     157.03,
+     228.72
+    ],
+    "segmentLengthMedian": [
+     118.76,
+     169.04
+    ],
+    "intersectionDensity": [
+     20.497,
+     40.204
+    ],
+    "streetDensity": [
+     7.5156,
+     11.687
+    ],
+    "orientationEntropy": [
+     2.8982,
+     3.3081
+    ],
+    "orientationOrder": [
+     0.23501,
+     0.52651
+    ],
+    "dominantOrientations": [
+     1,
+     2
+    ],
+    "circuity": [
+     1.03,
+     1.078
+    ],
+    "blockAreaMedian": [
+     2.0891,
+     4.6142
+    ],
+    "blockAspectMedian": [
+     1.7168,
+     2.2131
+    ]
+   }
+  },
+  "FORMAL_PLANNED": {
+   "city": {
+    "fourWayShare": [
+     25.21,
+     30.232
+    ],
+    "threeWayShare": [
+     62.226,
+     68.813
+    ],
+    "deadEndShare": [
+     5.6187,
+     7.3874
+    ],
+    "avgNodeDegree": [
+     3.1566,
+     3.1655
+    ],
+    "majorRoadSpacing": [
+     374.4,
+     527.79
+    ],
+    "majorRoadShare": [
+     22.63,
+     33.353
+    ],
+    "shareRegional": [
+     6.8141,
+     7.6884
+    ],
+    "shareArterial": [
+     5.7643,
+     15.396
+    ],
+    "shareAvenue": [
+     10.052,
+     10.269
+    ],
+    "shareConnector": [
+     10.06,
+     14.793
+    ],
+    "shareLocal": [
+     56.587,
+     62.577
+    ],
+    "segmentLengthMean": [
+     99.891,
+     99.941
+    ],
+    "segmentLengthMedian": [
+     75.133,
+     75.923
+    ],
+    "intersectionDensity": [
+     95.833,
+     98.088
+    ],
+    "streetDensity": [
+     16.016,
+     16.745
+    ],
+    "orientationEntropy": [
+     3.4359,
+     3.5691
+    ],
+    "orientationOrder": [
+     0.013055,
+     0.12986
+    ],
+    "dominantOrientations": [
+     0,
+     1
+    ],
+    "circuity": [
+     1.0298,
+     1.0584
+    ],
+    "blockAreaMedian": [
+     0.81242,
+     0.91067
+    ],
+    "blockAspectMedian": [
+     1.677,
+     1.7692
+    ],
+    "corridorContinuity": [
+     0.32636,
+     0.32857
+    ],
+    "majorCorridorLengthKm": [
+     3.0223,
+     3.1788
+    ]
+   },
+   "neighbourhood": {
+    "fourWayShare": [
+     25.357,
+     26.667
+    ],
+    "threeWayShare": [
+     64.368,
+     69.11
+    ],
+    "deadEndShare": [
+     5.4902,
+     6.135
+    ],
+    "avgNodeDegree": [
+     3.1456,
+     3.1571
+    ],
+    "majorRoadSpacing": [
+     433.22,
+     535.51
+    ],
+    "majorRoadShare": [
+     21.506,
+     29.341
+    ],
+    "shareRegional": [
+     0,
+     2.6149
+    ],
+    "shareArterial": [
+     1.5275,
+     14.331
+    ],
+    "shareAvenue": [
+     8.5536,
+     9.6907
+    ],
+    "shareConnector": [
+     10.381,
+     15.439
+    ],
+    "shareLocal": [
+     59.737,
+     61.965
+    ],
+    "segmentLengthMean": [
+     98.371,
+     98.669
+    ],
+    "segmentLengthMedian": [
+     74.387,
+     76.343
+    ],
+    "intersectionDensity": [
+     96.429,
+     101.82
+    ],
+    "streetDensity": [
+     16.342,
+     17.808
+    ],
+    "orientationEntropy": [
+     3.1542,
+     3.291
+    ],
+    "orientationOrder": [
+     0.24853,
+     0.35258
+    ],
+    "dominantOrientations": [
+     1,
+     1
+    ],
+    "circuity": [
+     1.0261,
+     1.0382
+    ],
+    "blockAreaMedian": [
+     0.84358,
+     0.92286
+    ],
+    "blockAspectMedian": [
+     1.7347,
+     1.7761
+    ]
+   }
+  }
+ },
+ "variance": {
+  "element": {
+   "segmentLength": {
+    "citygen": {
+     "p10": 2.6237,
+     "p25": 2.794,
+     "p50": 2.9062,
+     "p75": 3.1815,
+     "p90": 3.4076,
+     "n": 96
+    },
+    "refs": {
+     "denver": 6.1212,
+     "seville": 12.059,
+     "helsinki": 22.405,
+     "palermo": 12.102,
+     "tirana": 11.504,
+     "nashville": 9.9097,
+     "paris": 10.796,
+     "barcelona": 10.038
+    }
+   },
+   "blockArea": {
+    "citygen": {
+     "p10": 4.1863,
+     "p25": 4.6174,
+     "p50": 5.1149,
+     "p75": 5.9121,
+     "p90": 6.5,
+     "n": 96
+    },
+    "refs": {
+     "denver": 9.8257,
+     "seville": 23.798,
+     "helsinki": 65.41,
+     "palermo": 36.73,
+     "tirana": 33.677,
+     "nashville": 48.607,
+     "paris": 20.585,
+     "barcelona": 14.528
+    }
+   },
+   "blockAspect": {
+    "citygen": {
+     "p10": 1.9122,
+     "p25": 1.9422,
+     "p50": 1.9903,
+     "p75": 2.0327,
+     "p90": 2.062,
+     "n": 96
+    },
+    "refs": {
+     "denver": 3.4546,
+     "seville": 4.7689,
+     "helsinki": 8.4928,
+     "palermo": 4.7357,
+     "tirana": 3.9216,
+     "nashville": 3.714,
+     "paris": 3.569,
+     "barcelona": 5.2347
+    }
+   }
+  },
+  "window": {
+   "intersectionDensity": {
+    "mode": "ratio",
+    "citygen": {
+     "p10": 2.0548,
+     "p25": 2.3365,
+     "p50": 2.7929,
+     "p75": 3.1688,
+     "p90": 3.5486,
+     "n": 92
+    },
+    "refs": {
+     "denver": 2.2938,
+     "seville": 2.8377,
+     "helsinki": 2.669,
+     "palermo": 8.7268,
+     "tirana": 6.4327,
+     "nashville": 3.4267,
+     "paris": 1.9644,
+     "barcelona": 3.3417
+    }
+   },
+   "streetDensity": {
+    "mode": "ratio",
+    "citygen": {
+     "p10": 1.6075,
+     "p25": 1.7133,
+     "p50": 1.8586,
+     "p75": 2.002,
+     "p90": 2.1627,
+     "n": 92
+    },
+    "refs": {
+     "denver": 1.6911,
+     "seville": 1.7859,
+     "helsinki": 2.0523,
+     "palermo": 2.8413,
+     "tirana": 2.7041,
+     "nashville": 2.1263,
+     "paris": 1.5056,
+     "barcelona": 2.0378
+    }
+   },
+   "blockAreaMedian": {
+    "mode": "ratio",
+    "citygen": {
+     "p10": 2.0063,
+     "p25": 2.3077,
+     "p50": 2.584,
+     "p75": 2.8474,
+     "p90": 3.0637,
+     "n": 92
+    },
+    "refs": {
+     "denver": 1.7203,
+     "seville": 2.4336,
+     "helsinki": 14.069,
+     "palermo": 7.5163,
+     "tirana": 5.1037,
+     "nashville": 5.1409,
+     "paris": 1.8216,
+     "barcelona": 4.5032
+    }
+   },
+   "segmentLengthMedian": {
+    "mode": "ratio",
+    "citygen": {
+     "p10": 1.3667,
+     "p25": 1.5048,
+     "p50": 1.6248,
+     "p75": 1.7074,
+     "p90": 1.7984,
+     "n": 92
+    },
+    "refs": {
+     "denver": 1.4278,
+     "seville": 1.58,
+     "helsinki": 2.0876,
+     "palermo": 2.4897,
+     "tirana": 2.1862,
+     "nashville": 1.8858,
+     "paris": 1.3746,
+     "barcelona": 2.2101
+    }
+   },
+   "fourWayShare": {
+    "mode": "diff",
+    "citygen": {
+     "p10": 14.499,
+     "p25": 21.375,
+     "p50": 26.034,
+     "p75": 30.677,
+     "p90": 33.729,
+     "n": 92
+    },
+    "refs": {
+     "denver": 52.363,
+     "seville": 17.089,
+     "helsinki": 24.462,
+     "palermo": 18.664,
+     "tirana": 9.522,
+     "nashville": 23.991,
+     "paris": 11.229,
+     "barcelona": 41.38
+    }
+   },
+   "deadEndShare": {
+    "mode": "diff",
+    "citygen": {
+     "p10": 0,
+     "p25": 0,
+     "p50": 0.49913,
+     "p75": 0.79677,
+     "p90": 1.0063,
+     "n": 92
+    },
+    "refs": {
+     "denver": 16.756,
+     "seville": 10.729,
+     "helsinki": 18.96,
+     "palermo": 31.376,
+     "tirana": 25.844,
+     "nashville": 23.567,
+     "paris": 6.56,
+     "barcelona": 12.676
+    }
+   },
+   "orientationOrder": {
+    "mode": "diff",
+    "citygen": {
+     "p10": 0.16721,
+     "p25": 0.23218,
+     "p50": 0.35601,
+     "p75": 0.45617,
+     "p90": 0.51973,
+     "n": 92
+    },
+    "refs": {
+     "denver": 0.43497,
+     "seville": 0.42401,
+     "helsinki": 0.28339,
+     "palermo": 0.44146,
+     "tirana": 0.49562,
+     "nashville": 0.53414,
+     "paris": 0.36293,
+     "barcelona": 0.66016
+    }
+   },
+   "majorRoadShare": {
+    "mode": "diff",
+    "citygen": {
+     "p10": 7.8809,
+     "p25": 9.3103,
+     "p50": 10.356,
+     "p75": 12.061,
+     "p90": 13.995,
+     "n": 92
+    },
+    "refs": {
+     "denver": 35.595,
+     "seville": 38.4,
+     "helsinki": 39.969,
+     "palermo": 19.004,
+     "tirana": 37.292,
+     "nashville": 50.056,
+     "paris": 32.697,
+     "barcelona": 26.267
+    }
+   }
+  },
+  "robust": {
+   "columns": [
+    "segmentLengthIQR",
+    "blockAreaIQR_over03ha",
+    "blockAspectMedian_over03ha",
+    "blockAspectP75_over03ha",
+    "smallFaceShare"
+   ],
+   "citygen": [
+    {
+     "p10": 1.6639,
+     "p25": 1.7094,
+     "p50": 1.7708,
+     "p75": 1.8537,
+     "p90": 1.9386,
+     "n": 96
+    },
+    {
+     "p10": 1.9758,
+     "p25": 2.1527,
+     "p50": 2.3425,
+     "p75": 2.5506,
+     "p90": 2.8447,
+     "n": 96
+    },
+    {
+     "p10": 1.3979,
+     "p25": 1.4206,
+     "p50": 1.4482,
+     "p75": 1.4773,
+     "p90": 1.5055,
+     "n": 96
+    },
+    {
+     "p10": 1.6622,
+     "p25": 1.6932,
+     "p50": 1.7344,
+     "p75": 1.7871,
+     "p90": 1.831,
+     "n": 96
+    },
+    {
+     "p10": 0.026243,
+     "p25": 0.029869,
+     "p50": 0.040401,
+     "p75": 0.055481,
+     "p90": 0.067946,
+     "n": 96
+    }
+   ],
+   "refs": {
+    "denver": [
+     2.2371,
+     1.4588,
+     1.934,
+     2.1219,
+     0.080202
+    ],
+    "seville": [
+     3.5526,
+     3.2799,
+     2.0231,
+     2.9514,
+     0.29637
+    ],
+    "helsinki": [
+     5.6291,
+     3.6085,
+     1.8321,
+     2.6711,
+     0.30554
+    ],
+    "palermo": [
+     3.2967,
+     3.9484,
+     1.6565,
+     2.3459,
+     0.29959
+    ],
+    "tirana": [
+     3.5564,
+     4.132,
+     1.856,
+     2.6464,
+     0.20663
+    ],
+    "nashville": [
+     2.7775,
+     3.0701,
+     1.8159,
+     2.4622,
+     0.12613
+    ],
+    "paris": [
+     3.3812,
+     3.2289,
+     1.7543,
+     2.444,
+     0.16493
+    ],
+    "barcelona": [
+     3.2738,
+     2.8339,
+     1.5749,
+     2.2528,
+     0.19509
+    ]
+   }
+  }
+ },
+ "fabricMix": {
+  "citygen": {
+   "strong_grid": 0.72145,
+   "mixed": 0.26529,
+   "irregular": 0.013255
+  },
+  "refs": {
+   "denver": {
+    "strong_grid": 0.87222,
+    "mixed": 0.12778,
+    "irregular": 0
+   },
+   "seville": {
+    "strong_grid": 0.082126,
+    "mixed": 0.77778,
+    "irregular": 0.1401
+   },
+   "helsinki": {
+    "strong_grid": 0.02,
+    "mixed": 0.7,
+    "irregular": 0.28
+   },
+   "palermo": {
+    "strong_grid": 0.052133,
+    "mixed": 0.78673,
+    "irregular": 0.16114
+   },
+   "tirana": {
+    "strong_grid": 0.075676,
+    "mixed": 0.53514,
+    "irregular": 0.38919
+   },
+   "nashville": {
+    "strong_grid": 0.18182,
+    "mixed": 0.74727,
+    "irregular": 0.070909
+   },
+   "paris": {
+    "strong_grid": 0.018405,
+    "mixed": 0.80982,
+    "irregular": 0.17178
+   },
+   "barcelona": {
+    "strong_grid": 0.24183,
+    "mixed": 0.55556,
+    "irregular": 0.20261
+   }
+  }
+ },
+ "byRing": {
+  "central": {
+   "intersectionDensity": {
+    "citygen": 146.43,
+    "refs": {
+     "denver": 65.142,
+     "seville": 166.01,
+     "helsinki": 61.787,
+     "palermo": 125.7,
+     "tirana": 137.55,
+     "nashville": 54.678,
+     "paris": 118.75,
+     "barcelona": 132.16
+    }
+   },
+   "fourWayShare": {
+    "citygen": 72.637,
+    "refs": {
+     "denver": 57.883,
+     "seville": 19.857,
+     "helsinki": 27.39,
+     "palermo": 11.665,
+     "tirana": 9.8829,
+     "nashville": 28.331,
+     "paris": 29.236,
+     "barcelona": 49.123
+    }
+   },
+   "deadEndShare": {
+    "citygen": 0,
+    "refs": {
+     "denver": 3.2935,
+     "seville": 8.2269,
+     "helsinki": 14.903,
+     "palermo": 16.436,
+     "tirana": 16.198,
+     "nashville": 8.9657,
+     "paris": 2.3973,
+     "barcelona": 3.239
+    }
+   },
+   "segmentLengthMedian": {
+    "citygen": 73.052,
+    "refs": {
+     "denver": 106.22,
+     "seville": 57.058,
+     "helsinki": 80.349,
+     "palermo": 68.209,
+     "tirana": 63.093,
+     "nashville": 120.12,
+     "paris": 73.218,
+     "barcelona": 80.898
+    }
+   },
+   "blockAreaMedian": {
+    "citygen": 0.52328,
+    "refs": {
+     "denver": 1.7955,
+     "seville": 0.56632,
+     "helsinki": 0.77886,
+     "palermo": 0.76523,
+     "tirana": 0.842,
+     "nashville": 2.0796,
+     "paris": 0.76798,
+     "barcelona": 0.92804
+    }
+   },
+   "orientationOrder": {
+    "citygen": 0.79576,
+    "refs": {
+     "denver": 0.79143,
+     "seville": 0.24041,
+     "helsinki": 0.22255,
+     "palermo": 0.35509,
+     "tirana": 0.36743,
+     "nashville": 0.59416,
+     "paris": 0.26232,
+     "barcelona": 0.73838
+    }
+   },
+   "majorRoadShare": {
+    "citygen": 9.5182,
+    "refs": {
+     "denver": 41.512,
+     "seville": 28.977,
+     "helsinki": 41.519,
+     "palermo": 6.3154,
+     "tirana": 25.249,
+     "nashville": 32.409,
+     "paris": 23.174,
+     "barcelona": 26.19
+    }
+   }
+  },
+  "inner": {
+   "intersectionDensity": {
+    "citygen": 89.286,
+    "refs": {
+     "denver": 60.361,
+     "seville": 126.11,
+     "helsinki": 54.206,
+     "palermo": 73.284,
+     "tirana": 79.082,
+     "nashville": 35.748,
+     "paris": 110.27,
+     "barcelona": 114.73
+    }
+   },
+   "fourWayShare": {
+    "citygen": 71.053,
+    "refs": {
+     "denver": 48.096,
+     "seville": 16.618,
+     "helsinki": 19.423,
+     "palermo": 6.9245,
+     "tirana": 5.5215,
+     "nashville": 17.045,
+     "paris": 26.495,
+     "barcelona": 33.322
+    }
+   },
+   "deadEndShare": {
+    "citygen": 0,
+    "refs": {
+     "denver": 4.677,
+     "seville": 7.6923,
+     "helsinki": 17.219,
+     "palermo": 15.623,
+     "tirana": 27.365,
+     "nashville": 15.385,
+     "paris": 4.9535,
+     "barcelona": 6.3728
+    }
+   },
+   "segmentLengthMedian": {
+    "citygen": 91.489,
+    "refs": {
+     "denver": 103.68,
+     "seville": 53.961,
+     "helsinki": 77.966,
+     "palermo": 70.579,
+     "tirana": 74.234,
+     "nashville": 125.23,
+     "paris": 76.111,
+     "barcelona": 75.734
+    }
+   },
+   "blockAreaMedian": {
+    "citygen": 0.96827,
+    "refs": {
+     "denver": 1.9342,
+     "seville": 0.54029,
+     "helsinki": 1.0853,
+     "palermo": 0.62808,
+     "tirana": 1.1395,
+     "nashville": 2.5848,
+     "paris": 0.91243,
+     "barcelona": 0.88393
+    }
+   },
+   "orientationOrder": {
+    "citygen": 0.7811,
+    "refs": {
+     "denver": 0.96118,
+     "seville": 0.29235,
+     "helsinki": 0.23316,
+     "palermo": 0.30306,
+     "tirana": 0.14907,
+     "nashville": 0.4732,
+     "paris": 0.20534,
+     "barcelona": 0.32734
+    }
+   },
+   "majorRoadShare": {
+    "citygen": 8.5302,
+    "refs": {
+     "denver": 17.547,
+     "seville": 29.44,
+     "helsinki": 39.093,
+     "palermo": 5.2269,
+     "tirana": 21.742,
+     "nashville": 24.36,
+     "paris": 25.269,
+     "barcelona": 19.228
+    }
+   }
+  },
+  "peripheral": {
+   "intersectionDensity": {
+    "citygen": 66.981,
+    "refs": {
+     "denver": 50,
+     "seville": 114,
+     "helsinki": 50,
+     "palermo": 51.875,
+     "tirana": 35.763,
+     "nashville": 22.679,
+     "paris": 83.541,
+     "barcelona": 73.295
+    }
+   },
+   "fourWayShare": {
+    "citygen": 69.307,
+    "refs": {
+     "denver": 23.289,
+     "seville": 11.538,
+     "helsinki": 18.017,
+     "palermo": 6.0606,
+     "tirana": 3.4935,
+     "nashville": 13.636,
+     "paris": 23.009,
+     "barcelona": 19.444
+    }
+   },
+   "deadEndShare": {
+    "citygen": 0,
+    "refs": {
+     "denver": 10.039,
+     "seville": 9.2437,
+     "helsinki": 21.762,
+     "palermo": 27.273,
+     "tirana": 30.736,
+     "nashville": 19.099,
+     "paris": 6.8182,
+     "barcelona": 6.9588
+    }
+   },
+   "segmentLengthMedian": {
+    "citygen": 108.03,
+    "refs": {
+     "denver": 101.5,
+     "seville": 53.594,
+     "helsinki": 72.581,
+     "palermo": 80.92,
+     "tirana": 90.538,
+     "nashville": 152.37,
+     "paris": 79.156,
+     "barcelona": 71.567
+    }
+   },
+   "blockAreaMedian": {
+    "citygen": 1.2215,
+    "refs": {
+     "denver": 1.9881,
+     "seville": 0.58367,
+     "helsinki": 1.0686,
+     "palermo": 0.87882,
+     "tirana": 1.4745,
+     "nashville": 3.8062,
+     "paris": 0.96555,
+     "barcelona": 0.78
+    }
+   },
+   "orientationOrder": {
+    "citygen": 0.81986,
+    "refs": {
+     "denver": 0.85025,
+     "seville": 0.26482,
+     "helsinki": 0.19197,
+     "palermo": 0.30689,
+     "tirana": 0.22162,
+     "nashville": 0.2958,
+     "paris": 0.27127,
+     "barcelona": 0.31438
+    }
+   },
+   "majorRoadShare": {
+    "citygen": 8.0809,
+    "refs": {
+     "denver": 21.8,
+     "seville": 20.574,
+     "helsinki": 34.587,
+     "palermo": 5.7523,
+     "tirana": 11.449,
+     "nashville": 20.145,
+     "paris": 39.68,
+     "barcelona": 23.716
+    }
+   }
+  }
+ },
+ "byPlanningProfile": {
+  "fourWayShare": {
+   "default": 72.506,
+   "strong_grid": 68.334,
+   "radial_formal": 66.468,
+   "organic": 54.132,
+   "polycentric": 73.308,
+   "centralised": 60.728,
+   "rugged": 71.875,
+   "flat_loose": 65.805
+  },
+  "deadEndShare": {
+   "default": 0.15495,
+   "strong_grid": 0.33163,
+   "radial_formal": 0.17803,
+   "organic": 0.41346,
+   "polycentric": 0.14615,
+   "centralised": 0.4466,
+   "rugged": 0.15712,
+   "flat_loose": 0.46825
+  },
+  "majorRoadSpacing": {
+   "default": 1297.5,
+   "strong_grid": 1106.4,
+   "radial_formal": 1261.7,
+   "organic": 1040.5,
+   "polycentric": 1502.9,
+   "centralised": 977.72,
+   "rugged": 1333.5,
+   "flat_loose": 1076.8
+  },
+  "majorRoadShare": {
+   "default": 10.146,
+   "strong_grid": 11.962,
+   "radial_formal": 10.418,
+   "organic": 14.632,
+   "polycentric": 8.3212,
+   "centralised": 15.915,
+   "rugged": 9.6749,
+   "flat_loose": 12.819
+  },
+  "shareConnector": {
+   "default": 11.219,
+   "strong_grid": 11.749,
+   "radial_formal": 11.427,
+   "organic": 10.482,
+   "polycentric": 14.024,
+   "centralised": 11.69,
+   "rugged": 11.966,
+   "flat_loose": 10.8
+  },
+  "orientationOrder": {
+   "default": 0.73263,
+   "strong_grid": 0.83578,
+   "radial_formal": 0.17417,
+   "organic": 0.071461,
+   "polycentric": 0.76384,
+   "centralised": 0.64977,
+   "rugged": 0.7508,
+   "flat_loose": 0.54489
+  },
+  "circuity": {
+   "default": 1.0221,
+   "strong_grid": 1.0252,
+   "radial_formal": 1.0248,
+   "organic": 1.0511,
+   "polycentric": 1.019,
+   "centralised": 1.0396,
+   "rugged": 1.0214,
+   "flat_loose": 1.0353
+  },
+  "segmentLengthMedian": {
+   "default": 87.183,
+   "strong_grid": 85.862,
+   "radial_formal": 90.806,
+   "organic": 87.459,
+   "polycentric": 88.146,
+   "centralised": 88.749,
+   "rugged": 88.3,
+   "flat_loose": 85.001
+  },
+  "intersectionDensity": {
+   "default": 79.645,
+   "strong_grid": 80.123,
+   "radial_formal": 75.165,
+   "organic": 67.605,
+   "polycentric": 83.335,
+   "centralised": 70.697,
+   "rugged": 80.861,
+   "flat_loose": 76.304
+  },
+  "blockAreaMedian": {
+   "default": 0.89419,
+   "strong_grid": 0.825,
+   "radial_formal": 1.0152,
+   "organic": 0.84842,
+   "polycentric": 0.90568,
+   "centralised": 0.92653,
+   "rugged": 0.96339,
+   "flat_loose": 0.83967
+  },
+  "corridorContinuity": {
+   "default": 0.55426,
+   "strong_grid": 0.62631,
+   "radial_formal": 0.49565,
+   "organic": 0.63401,
+   "polycentric": 0.40571,
+   "centralised": 0.52595,
+   "rugged": 0.46894,
+   "flat_loose": 0.53249
+  }
+ },
+ "tiers": {
+  "city": {
+   "upper": {
+    "citygen": {
+     "p10": 5.7157,
+     "p25": 6.9395,
+     "p50": 9.0886,
+     "p75": 15.885,
+     "p90": 22.987,
+     "n": 96
+    },
+    "refs": {
+     "denver": 15.691,
+     "seville": 17.582,
+     "helsinki": 23.508,
+     "palermo": 4.4312,
+     "tirana": 11.638,
+     "nashville": 20.794,
+     "paris": 23.084,
+     "barcelona": 12.578
+    }
+   },
+   "middle": {
+    "citygen": {
+     "p10": 7.7109,
+     "p25": 11.151,
+     "p50": 13.972,
+     "p75": 15.296,
+     "p90": 16.713,
+     "n": 96
+    },
+    "refs": {
+     "denver": 22.403,
+     "seville": 18.829,
+     "helsinki": 27.506,
+     "palermo": 23.922,
+     "tirana": 19.03,
+     "nashville": 17.877,
+     "paris": 20.329,
+     "barcelona": 24.845
+    }
+   },
+   "all above local": {
+    "citygen": {
+     "p10": 20.839,
+     "p25": 21.775,
+     "p50": 23.653,
+     "p75": 26.77,
+     "p90": 31.653,
+     "n": 96
+    },
+    "refs": {
+     "denver": 38.094,
+     "seville": 36.412,
+     "helsinki": 51.013,
+     "palermo": 28.353,
+     "tirana": 30.668,
+     "nashville": 38.671,
+     "paris": 43.413,
+     "barcelona": 37.423
+    }
+   }
+  },
+  "neighbourhood": {
+   "upper": {
+    "citygen": {
+     "p10": 4.4486,
+     "p25": 5.2679,
+     "p50": 6.7849,
+     "p75": 11.976,
+     "p90": 18.37,
+     "n": 96
+    },
+    "refs": {
+     "denver": 8.2479,
+     "seville": 10.457,
+     "helsinki": 11.067,
+     "palermo": 0,
+     "tirana": 1.5614,
+     "nashville": 5.7067,
+     "paris": 14.331,
+     "barcelona": 4.1424
+    }
+   },
+   "middle": {
+    "citygen": {
+     "p10": 7.5195,
+     "p25": 10.698,
+     "p50": 13.411,
+     "p75": 15.505,
+     "p90": 16.564,
+     "n": 96
+    },
+    "refs": {
+     "denver": 20.387,
+     "seville": 15.149,
+     "helsinki": 25.65,
+     "palermo": 19.306,
+     "tirana": 16.621,
+     "nashville": 15.826,
+     "paris": 20.072,
+     "barcelona": 23.993
+    }
+   },
+   "all above local": {
+    "citygen": {
+     "p10": 19.532,
+     "p25": 20.731,
+     "p50": 22.114,
+     "p75": 24.217,
+     "p90": 27.907,
+     "n": 96
+    },
+    "refs": {
+     "denver": 35.269,
+     "seville": 36.479,
+     "helsinki": 51.898,
+     "palermo": 28.091,
+     "tirana": 30.996,
+     "nashville": 36.63,
+     "paris": 40.263,
+     "barcelona": 38.035
+    }
+   }
+  }
+ },
+ "neighbourhoodByPlanningProfile": {
+  "orientationOrder": {
+   "default": 0.85703,
+   "strong_grid": 0.90328,
+   "radial_formal": 0.5388,
+   "organic": 0.26966,
+   "polycentric": 0.82499,
+   "centralised": 0.77274,
+   "rugged": 0.86116,
+   "flat_loose": 0.70712
+  },
+  "fourWayShare": {
+   "default": 72.988,
+   "strong_grid": 68.891,
+   "radial_formal": 66.786,
+   "organic": 55.664,
+   "polycentric": 73.445,
+   "centralised": 61.417,
+   "rugged": 72.834,
+   "flat_loose": 66.352
+  },
+  "deadEndShare": {
+   "default": 0,
+   "strong_grid": 0,
+   "radial_formal": 0,
+   "organic": 0,
+   "polycentric": 0,
+   "centralised": 0,
+   "rugged": 0,
+   "flat_loose": 0
+  },
+  "circuity": {
+   "default": 1.0179,
+   "strong_grid": 1.0221,
+   "radial_formal": 1.0192,
+   "organic": 1.0457,
+   "polycentric": 1.0134,
+   "centralised": 1.0307,
+   "rugged": 1.0173,
+   "flat_loose": 1.0263
+  },
+  "blockAspectMedian": {
+   "default": 1.4601,
+   "strong_grid": 1.488,
+   "radial_formal": 1.4592,
+   "organic": 1.4186,
+   "polycentric": 1.4637,
+   "centralised": 1.5028,
+   "rugged": 1.4696,
+   "flat_loose": 1.4417
+  }
+ },
+ "strongGridShareByProfile": {
+  "default": 88,
+  "strong_grid": 97,
+  "radial_formal": 38,
+  "organic": 9,
+  "polycentric": 86,
+  "centralised": 85,
+  "rugged": 86,
+  "flat_loose": 75
+ }
+}

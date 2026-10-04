@@ -11,6 +11,8 @@ import { contourSegments, chainSegments } from '../algorithms/PolygonUtils.js';
 import { BRIDGEABLE } from './RegionalPlanner.js';
 import { boxBlur } from '../core/Raster.js';
 import { REGIME } from './TerrainPlanner.js';
+import { TRANSPORT_PROFILES } from '../core/TransportProfiles.js';
+import { fitAlignment } from '../algorithms/Alignment.js';
 import { findCrossings, splitPolyline, cutsByRoad, isStrongRoad, isGradeSeparated } from '../algorithms/RoadCrossings.js';
 
 export const CLASS_RANK = { R3: 5, R1: 4, R2: 3, R4: 2, local: 1 };
@@ -287,14 +289,23 @@ export function routeMajorNetwork(model, ctx, edges) {
       if (visited.has(key)) break;
     }
     let pts = cells.map(pos);
-    if (first.cer) pts = chaikin(simplifyDP(pts, cell * 1.6), 3); // a ceremonial curve is drawn with few, broad bends
-    else if (!first.fixed) pts = chaikin(simplifyDP(pts, cell * 0.7), 2);
+    // Alignment continuity for important roads: the routed chain is fitted as a continuous curve
+    // with the minimum radius of its transport profile (junctions at both ends stay put). Straight
+    // and segmented formal alignments are deliberate and are left exactly as designed.
+    let alignment = null;
+    if (!first.fixed) {
+      const profile = TRANSPORT_PROFILES[first.cer ? 'GRAND_BOULEVARD' : first.cls === 'R1' ? (first.express ? 'URBAN_EXPRESSWAY' : 'REGIONAL_HIGHWAY') : 'METROPOLITAN_ARTERIAL'];
+      const routed = simplifyDP(pts, cell * (first.cer ? 1.6 : 0.7));
+      const fit = fitAlignment(routed, { minRadius: profile.minRadius, step: 30, maxShift: first.cer ? 160 : 100, ok: (p) => { const i = R.index(p.x, p.y); return i >= 0 && !(T.water[i] && T.landDist[i] > BRIDGEABLE); } });
+      if (fit.points !== routed) { pts = simplifyDP(fit.points, 0.6); alignment = { minRadius: profile.minRadius, minRadiusAchieved: Number.isFinite(fit.minRadiusAchieved) ? Math.round(fit.minRadiusAchieved) : null, shiftFromRoute: Math.round(fit.maxShift) }; }
+      else pts = chaikin(routed, first.cer ? 3 : 2); // too short to fit: round the corners
+    }
     const e = first.edge, A = anchorById.get(e.a), Bn = anchorById.get(e.b);
     const engineering = engineeringOf(cells, T, R);
     roads.push(record(ctx.id('road'), first.cls, e.reinforcement ? 'reinforcement' : STAGE, e.reinforcement ? e.reason : `connect_${A.type}_to_${Bn.type}`, {
       cls: first.cls, points: pts, demandId: e.id, ceremonial: first.fixed ? e.ceremonial : first.cer, alignment: first.fixed || first.cer ? e.alignment : null,
       demand: e.demand, ...(e.reinforcement ? { reinforcement: e.reinforcement } : {}),
-      bridge: cells.some((ci) => T.water[ci]), length: polylineLength(pts),
+      bridge: cells.some((ci) => T.water[ci]), length: polylineLength(pts), ...(alignment ? { fit: alignment } : {}),
       engineering, engineeringType: engineering.length ? engineering[0].type : 'NORMAL',
       ...(first.express && first.cls === 'R1' ? { urbanExpressway: true } : {}),
     }));

@@ -18,6 +18,16 @@ export const MAP_ROADS = {
   collector: { fill: '#ffffff', casing: '#aaa59b', low: '#bdb8ae', stops: [[0.05, 0.8], [0.1, 1.6], [0.3, 3.2]], physical: 11, label: 'collector street' },
   local: { fill: '#ffffff', casing: '#c4bfb5', low: '#cfcac0', stops: [[0.1, 0.8], [0.3, 2.4]], physical: 8, label: 'local street' },
 };
+// V3 hierarchy levels, from the top down: drawn instead of the classes when the plan has them
+export const MAP_HIERARCHY = {
+  REGIONAL: { ...MAP_ROADS.R1, label: 'regional' },
+  METROPOLITAN_ARTERIAL: { ...MAP_ROADS.R3, label: 'metropolitan arterial' },
+  PRIMARY_AVENUE: { ...MAP_ROADS.R2, label: 'primary avenue' },
+  SECONDARY_AVENUE: { ...MAP_ROADS.R4, stops: [[0.02, 0.8], [0.05, 1.5], [0.1, 2.7], [0.3, 4.4]], physical: 16, label: 'secondary avenue' },
+  DISTRICT_CONNECTOR: { fill: '#ffffff', casing: '#8f8a80', low: '#aaa59b', stops: [[0.05, 1.0], [0.1, 2.0], [0.3, 3.6]], physical: 12, label: 'district connector' },
+  LOCAL_HIGH_STREET: { fill: '#fff6e6', casing: '#b89f7a', low: '#c9b79a', stops: [[0.1, 1.3], [0.3, 3.0]], physical: 10, label: 'local high street' },
+  LOCAL: { ...MAP_ROADS.local, label: 'local street' },
+};
 const RAIL = { stops: [[0.02, 1], [0.05, 1.4], [0.1, 2.4], [0.3, 3.6]], physical: 5 };
 const INSTITUTION = {
   HOSPITAL_CAMPUS: '#f6dddd', CULTURAL_COMPLEX: '#e8dcee', MARKET_HALL_PRECINCT: '#f2e2c5', STADIUM: '#d5e8cb', RAIL_YARD: '#dbd5db',
@@ -97,34 +107,42 @@ export function drawMapStyle(ctx, view, layers, c, D) {
 
   // --- roads: all casings first, then all fills, so that junctions merge cleanly
   ctx.lineJoin = 'round'; ctx.lineCap = 'round';
-  const order = [];
-  if (layers.local && D.local) order.push(['local', tiles ? tiles.map((t) => c.tiles.local[t]).filter(Boolean) : [c.roadPaths.local], D.localAlpha]);
-  if (layers.major) {
-    if (D.minorMajorRoads) order.push(['collector', [c.roadPaths.collector], 1], ['R4', [c.roadPaths.R4], 1]);
-    order.push(['R2', [c.roadPaths.R2], 1]);
-    if (D.minorMajorRoads) order.push(['R3', [c.roadPaths.R3], 1]);
-    order.push(['R1', [c.roadPaths.R1], 1]);
+  const order = [], H = c.hierPaths, styles = H ? MAP_HIERARCHY : MAP_ROADS;
+  if (H) {
+    const tiled = (lvl) => (tiles ? tiles.map((t) => c.tiles.hier[lvl][t]).filter(Boolean) : H[lvl] ? [H[lvl]] : []);
+    if (layers.local && D.local) order.push(['LOCAL', tiled('LOCAL'), D.localAlpha], ['LOCAL_HIGH_STREET', tiled('LOCAL_HIGH_STREET'), D.localAlpha]);
+    if (layers.major) for (const lvl of D.minorMajorRoads ? ['DISTRICT_CONNECTOR', 'SECONDARY_AVENUE', 'PRIMARY_AVENUE', 'METROPOLITAN_ARTERIAL', 'REGIONAL'] : ['PRIMARY_AVENUE', 'METROPOLITAN_ARTERIAL', 'REGIONAL']) if (H[lvl]) order.push([lvl, [H[lvl]], 1]);
+  } else {
+    if (layers.local && D.local) order.push(['local', tiles ? tiles.map((t) => c.tiles.local[t]).filter(Boolean) : [c.roadPaths.local], D.localAlpha]);
+    if (layers.major) {
+      if (D.minorMajorRoads) order.push(['collector', [c.roadPaths.collector], 1], ['R4', [c.roadPaths.R4], 1]);
+      order.push(['R2', [c.roadPaths.R2], 1]);
+      if (D.minorMajorRoads) order.push(['R3', [c.roadPaths.R3], 1]);
+      order.push(['R1', [c.roadPaths.R1], 1]);
+    }
   }
-  const wOf = (cls) => widthPx(MAP_ROADS[cls].stops, MAP_ROADS[cls].physical, view.scale);
+  const sOf = (cls) => styles[cls] || MAP_ROADS[cls];
+  const wOf = (cls) => widthPx(sOf(cls).stops, sOf(cls).physical, view.scale);
   const cased = (cls) => wOf(cls) >= 2.4;
   for (const [cls, paths, alpha] of order) {
     if (!cased(cls)) continue;
-    ctx.globalAlpha = alpha; ctx.strokeStyle = MAP_ROADS[cls].casing; ctx.lineWidth = (wOf(cls) + (wOf(cls) > 5 ? 2 : 1.4)) * px;
+    ctx.globalAlpha = alpha; ctx.strokeStyle = sOf(cls).casing; ctx.lineWidth = (wOf(cls) + (wOf(cls) > 5 ? 2 : 1.4)) * px;
     for (const p of paths) ctx.stroke(p);
   }
   for (const [cls, paths, alpha] of order) {
-    ctx.globalAlpha = alpha; ctx.strokeStyle = cased(cls) ? MAP_ROADS[cls].fill : MAP_ROADS[cls].low; ctx.lineWidth = wOf(cls) * px;
+    ctx.globalAlpha = alpha; ctx.strokeStyle = cased(cls) ? sOf(cls).fill : sOf(cls).low; ctx.lineWidth = wOf(cls) * px;
     for (const p of paths) ctx.stroke(p);
   }
   ctx.globalAlpha = 1;
 
   if (layers.major) {
     // urban roundabouts: a dot when far out, ring and curved approaches when close
-    const ringW = (cls) => Math.max(8.5, wOf(cls) * px * 0.55);
+    const rW = (cls) => widthPx(MAP_ROADS[cls].stops, MAP_ROADS[cls].physical, view.scale);
+    const ringW = (cls) => Math.max(8.5, rW(cls) * px * 0.55);
     for (const nd of m.urbanNodes) {
       if (nd.form !== 'URBAN_ROUNDABOUT' || !nd.geometry) continue;
       ctx.beginPath(); ctx.arc(nd.position.x, nd.position.y, nd.geometry.outerRadius + 1.5, 0, Math.PI * 2);
-      ctx.fillStyle = D.roundaboutDetail ? MAP_COLORS.land : cased('R2') ? MAP_ROADS.R2.fill : MAP_ROADS.R2.low; ctx.fill();
+      ctx.fillStyle = D.roundaboutDetail ? MAP_COLORS.land : rW('R2') >= 2.4 ? MAP_ROADS.R2.fill : MAP_ROADS.R2.low; ctx.fill();
     }
     if (D.roundaboutDetail) {
       for (const cls of ['R4', 'R2', 'R3']) { ctx.strokeStyle = MAP_ROADS[cls].casing; ctx.lineWidth = ringW(cls) + 2 * px; ctx.stroke(c.roundaboutPaths[cls]); }

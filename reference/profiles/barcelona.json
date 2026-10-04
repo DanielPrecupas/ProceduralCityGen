@@ -1,0 +1,7589 @@
+{
+ "schema": "citygen-profile/1",
+ "name": "Barcelona",
+ "source": "osm:network",
+ "archetype": "GRID_METROPOLITAN",
+ "scales": {
+  "city": {
+   "scale": "city",
+   "sampleId": "city",
+   "windowKm": null,
+   "samples": 1,
+   "areaKm2": 85.76,
+   "extentKm": 16.177,
+   "bounds": [
+    423187,
+    -4590964,
+    435146,
+    -4574787
+   ],
+   "metrics": {
+    "intersectionDensity": 98.088,
+    "streetDensity": 16.745,
+    "segmentLengthMean": 99.891,
+    "segmentLengthMedian": 75.133,
+    "avgNodeDegree": 3.1655,
+    "threeWayShare": 62.226,
+    "fourWayShare": 30.232,
+    "deadEndShare": 7.3874,
+    "circuity": 1.0584,
+    "orientationEntropy": 3.4359,
+    "orientationOrder": 0.12986,
+    "dominantOrientations": 1,
+    "shareRegional": 6.8141,
+    "shareArterial": 5.7643,
+    "shareAvenue": 10.052,
+    "shareConnector": 14.793,
+    "shareLocal": 62.577,
+    "majorRoadShare": 22.63,
+    "majorRoadSpacing": 527.79,
+    "blockAreaMedian": 0.81242,
+    "blockAreaP25": 0.38215,
+    "blockAreaP75": 1.5911,
+    "blockAspectMedian": 1.677,
+    "blockAspectP75": 2.5827,
+    "corridorContinuity": 0.32636,
+    "majorCorridorLengthKm": 3.0223
+   },
+   "ranges": {},
+   "distributions": {
+    "segmentLength": {
+     "p10": 17.658,
+     "p25": 39.361,
+     "p50": 75.133,
+     "p75": 128.86,
+     "p90": 177.25,
+     "n": 14376
+    },
+    "blockArea": {
+     "p10": 0.16936,
+     "p25": 0.38215,
+     "p50": 0.81242,
+     "p75": 1.5911,
+     "p90": 2.4605,
+     "n": 4521
+    },
+    "blockAspect": {
+     "p10": 1.0379,
+     "p25": 1.2048,
+     "p50": 1.677,
+     "p75": 2.5827,
+     "p90": 5.4331,
+     "n": 4521
+    },
+    "blockAreaOver03ha": {
+     "p10": 0.42203,
+     "p25": 0.6147,
+     "p50": 1.0059,
+     "p75": 1.742,
+     "p90": 2.8796,
+     "n": 3639
+    },
+    "blockAspectOver03ha": {
+     "p10": 1.0337,
+     "p25": 1.175,
+     "p50": 1.5749,
+     "p75": 2.2528,
+     "p90": 3.6329,
+     "n": 3639
+    },
+    "smallFaceShare": 0.19509,
+    "nodeDegree": {
+     "p10": 3,
+     "p25": 3,
+     "p50": 3,
+     "p75": 4,
+     "p90": 4,
+     "n": 9083
+    }
+   }
+  },
+  "district": {
+   "scale": "district",
+   "windowKm": 6,
+   "samples": 9,
+   "areaKm2": null,
+   "extentKm": 6,
+   "metrics": {
+    "intersectionDensity": 112.67,
+    "streetDensity": 18.463,
+    "segmentLengthMean": 96.673,
+    "segmentLengthMedian": 76.321,
+    "avgNodeDegree": 3.2018,
+    "threeWayShare": 60.967,
+    "fourWayShare": 32.241,
+    "deadEndShare": 6.5521,
+    "circuity": 1.0425,
+    "orientationEntropy": 3.3588,
+    "orientationOrder": 0.19412,
+    "dominantOrientations": 1,
+    "shareRegional": 5.7327,
+    "shareArterial": 6.4538,
+    "shareAvenue": 10.164,
+    "shareConnector": 15.144,
+    "shareLocal": 62.748,
+    "majorRoadShare": 22.025,
+    "majorRoadSpacing": 503.19,
+    "blockAreaMedian": 0.81969,
+    "blockAreaP25": 0.41142,
+    "blockAreaP75": 1.5239,
+    "blockAspectMedian": 1.6254,
+    "blockAspectP75": 2.4471,
+    "corridorContinuity": null,
+    "majorCorridorLengthKm": null
+   },
+   "ranges": {
+    "intersectionDensity": [
+     105.75,
+     118.05
+    ],
+    "streetDensity": [
+     17.891,
+     18.63
+    ],
+    "segmentLengthMean": [
+     92.612,
+     98.456
+    ],
+    "segmentLengthMedian": [
+     72.822,
+     77.07
+    ],
+    "avgNodeDegree": [
+     3.124,
+     3.2694
+    ],
+    "threeWayShare": [
+     56.529,
+     65.596
+    ],
+    "fourWayShare": [
+     26.056,
+     37.694
+    ],
+    "deadEndShare": [
+     6.1562,
+     7.5831
+    ],
+    "circuity": [
+     1.0313,
+     1.0639
+    ],
+    "orientationEntropy": [
+     3.222,
+     3.4575
+    ],
+    "orientationOrder": [
+     0.11142,
+     0.30203
+    ],
+    "dominantOrientations": [
+     1,
+     1
+    ],
+    "shareRegional": [
+     3.1256,
+     7.2108
+    ],
+    "shareArterial": [
+     5.4195,
+     8.6098
+    ],
+    "shareAvenue": [
+     7.7801,
+     10.912
+    ],
+    "shareConnector": [
+     14.452,
+     15.92
+    ],
+    "shareLocal": [
+     61.075,
+     63.802
+    ],
+    "majorRoadShare": [
+     21.166,
+     22.647
+    ],
+    "majorRoadSpacing": [
+     476.02,
+     556.64
+    ],
+    "blockAreaMedian": [
+     0.77607,
+     0.83373
+    ],
+    "blockAreaP25": [
+     0.40237,
+     0.42209
+    ],
+    "blockAreaP75": [
+     1.4463,
+     1.5709
+    ],
+    "blockAspectMedian": [
+     1.605,
+     1.6498
+    ],
+    "blockAspectP75": [
+     2.3839,
+     2.5912
+    ]
+   },
+   "distributions": {
+    "intersectionDensity": {
+     "p10": 92.254,
+     "p25": 105.75,
+     "p50": 112.67,
+     "p75": 118.05,
+     "p90": 120.08,
+     "n": 9
+    },
+    "streetDensity": {
+     "p10": 16.54,
+     "p25": 17.891,
+     "p50": 18.463,
+     "p75": 18.63,
+     "p90": 19.329,
+     "n": 9
+    },
+    "segmentLengthMean": {
+     "p10": 91.322,
+     "p25": 92.612,
+     "p50": 96.673,
+     "p75": 98.456,
+     "p90": 101.19,
+     "n": 9
+    },
+    "segmentLengthMedian": {
+     "p10": 71.527,
+     "p25": 72.822,
+     "p50": 76.321,
+     "p75": 77.07,
+     "p90": 78.614,
+     "n": 9
+    },
+    "avgNodeDegree": {
+     "p10": 3.0511,
+     "p25": 3.124,
+     "p50": 3.2018,
+     "p75": 3.2694,
+     "p90": 3.2854,
+     "n": 9
+    },
+    "threeWayShare": {
+     "p10": 55.273,
+     "p25": 56.529,
+     "p50": 60.967,
+     "p75": 65.596,
+     "p90": 67.925,
+     "n": 9
+    },
+    "fourWayShare": {
+     "p10": 25.116,
+     "p25": 26.056,
+     "p50": 32.241,
+     "p75": 37.694,
+     "p90": 38.58,
+     "n": 9
+    },
+    "deadEndShare": {
+     "p10": 5.6742,
+     "p25": 6.1562,
+     "p50": 6.5521,
+     "p75": 7.5831,
+     "p90": 9.6339,
+     "n": 9
+    },
+    "circuity": {
+     "p10": 1.0304,
+     "p25": 1.0313,
+     "p50": 1.0425,
+     "p75": 1.0639,
+     "p90": 1.0843,
+     "n": 9
+    },
+    "orientationEntropy": {
+     "p10": 3.1658,
+     "p25": 3.222,
+     "p50": 3.3588,
+     "p75": 3.4575,
+     "p90": 3.5488,
+     "n": 9
+    },
+    "orientationOrder": {
+     "p10": 0.031365,
+     "p25": 0.11142,
+     "p50": 0.19412,
+     "p75": 0.30203,
+     "p90": 0.34214,
+     "n": 9
+    },
+    "dominantOrientations": {
+     "p10": 0.8,
+     "p25": 1,
+     "p50": 1,
+     "p75": 1,
+     "p90": 1,
+     "n": 9
+    },
+    "shareRegional": {
+     "p10": 2.8147,
+     "p25": 3.1256,
+     "p50": 5.7327,
+     "p75": 7.2108,
+     "p90": 8.0314,
+     "n": 9
+    },
+    "shareArterial": {
+     "p10": 5.1479,
+     "p25": 5.4195,
+     "p50": 6.4538,
+     "p75": 8.6098,
+     "p90": 8.976,
+     "n": 9
+    },
+    "shareAvenue": {
+     "p10": 5.5235,
+     "p25": 7.7801,
+     "p50": 10.164,
+     "p75": 10.912,
+     "p90": 12.115,
+     "n": 9
+    },
+    "shareConnector": {
+     "p10": 11.904,
+     "p25": 14.452,
+     "p50": 15.144,
+     "p75": 15.92,
+     "p90": 16.872,
+     "n": 9
+    },
+    "shareLocal": {
+     "p10": 59.954,
+     "p25": 61.075,
+     "p50": 62.748,
+     "p75": 63.802,
+     "p90": 69.092,
+     "n": 9
+    },
+    "majorRoadShare": {
+     "p10": 19.005,
+     "p25": 21.166,
+     "p50": 22.025,
+     "p75": 22.647,
+     "p90": 24.081,
+     "n": 9
+    },
+    "majorRoadSpacing": {
+     "p10": 458.53,
+     "p25": 476.02,
+     "p50": 503.19,
+     "p75": 556.64,
+     "p90": 573.23,
+     "n": 9
+    },
+    "blockAreaMedian": {
+     "p10": 0.76047,
+     "p25": 0.77607,
+     "p50": 0.81969,
+     "p75": 0.83373,
+     "p90": 0.86946,
+     "n": 9
+    },
+    "blockAreaP25": {
+     "p10": 0.35515,
+     "p25": 0.40237,
+     "p50": 0.41142,
+     "p75": 0.42209,
+     "p90": 0.45476,
+     "n": 9
+    },
+    "blockAreaP75": {
+     "p10": 1.3687,
+     "p25": 1.4463,
+     "p50": 1.5239,
+     "p75": 1.5709,
+     "p90": 1.6408,
+     "n": 9
+    },
+    "blockAspectMedian": {
+     "p10": 1.5615,
+     "p25": 1.605,
+     "p50": 1.6254,
+     "p75": 1.6498,
+     "p90": 1.7994,
+     "n": 9
+    },
+    "blockAspectP75": {
+     "p10": 2.2669,
+     "p25": 2.3839,
+     "p50": 2.4471,
+     "p75": 2.5912,
+     "p90": 2.6468,
+     "n": 9
+    }
+   },
+   "sampleList": [
+    {
+     "sampleId": "d0-1-1",
+     "bounds": [
+      429187,
+      -4584964,
+      435187,
+      -4578964
+     ],
+     "areaKm2": 22.96,
+     "context": {
+      "ring": "inner",
+      "fabric": "mixed"
+     },
+     "metrics": {
+      "intersectionDensity": 105.75,
+      "streetDensity": 17.992,
+      "segmentLengthMean": 96.673,
+      "segmentLengthMedian": 81.345,
+      "avgNodeDegree": 3.3182,
+      "threeWayShare": 52.937,
+      "fourWayShare": 41.462,
+      "deadEndShare": 5.562,
+      "circuity": 1.0313,
+      "orientationEntropy": 2.9708,
+      "orientationOrder": 0.47996,
+      "dominantOrientations": 1,
+      "shareRegional": 5.8403,
+      "shareArterial": 4.66,
+      "shareAvenue": 14.781,
+      "shareConnector": 18.625,
+      "shareLocal": 56.093,
+      "majorRoadShare": 25.282,
+      "majorRoadSpacing": 439.7,
+      "blockAreaMedian": 0.8675,
+      "blockAreaP25": 0.36792,
+      "blockAreaP75": 1.7084,
+      "blockAspectMedian": 1.605,
+      "blockAspectP75": 2.6453,
+      "corridorContinuity": null,
+      "majorCorridorLengthKm": null
+     }
+    },
+    {
+     "sampleId": "d1-1-1",
+     "bounds": [
+      426187,
+      -4584964,
+      432187,
+      -4578964
+     ],
+     "areaKm2": 32.36,
+     "context": {
+      "ring": "central",
+      "fabric": "mixed"
+     },
+     "metrics": {
+      "intersectionDensity": 118.05,
+      "streetDensity": 18.552,
+      "segmentLengthMean": 90.454,
+      "segmentLengthMedian": 76.321,
+      "avgNodeDegree": 3.2772,
+      "threeWayShare": 56.529,
+      "fourWayShare": 37.694,
+      "deadEndShare": 5.7023,
+      "circuity": 1.0285,
+      "orientationEntropy": 3.222,
+      "orientationOrder": 0.30203,
+      "dominantOrientations": 1,
+      "shareRegional": 3.1256,
+      "shareArterial": 8.6098,
+      "shareAvenue": 10.912,
+      "shareConnector": 16.434,
+      "shareLocal": 60.919,
+      "majorRoadShare": 22.647,
+      "majorRoadSpacing": 476.02,
+      "blockAreaMedian": 0.81967,
+      "blockAreaP25": 0.40946,
+      "blockAreaP75": 1.5515,
+      "blockAspectMedian": 1.5547,
+      "blockAspectP75": 2.2865,
+      "corridorContinuity": null,
+      "majorCorridorLengthKm": null
+     }
+    },
+    {
+     "sampleId": "d3-1-2",
+     "bounds": [
+      426187,
+      -4581964,
+      432187,
+      -4575964
+     ],
+     "areaKm2": 21,
+     "context": {
+      "ring": "peripheral",
+      "fabric": "irregular"
+     },
+     "metrics": {
+      "intersectionDensity": 89.286,
+      "streetDensity": 14.883,
+      "segmentLengthMean": 99.918,
+      "segmentLengthMedian": 70.374,
+      "avgNodeDegree": 3.1416,
+      "threeWayShare": 67.818,
+      "fourWayShare": 25.826,
+      "deadEndShare": 6.1562,
+      "circuity": 1.0439,
+      "orientationEntropy": 3.4575,
+      "orientationOrder": 0.11142,
+      "dominantOrientations": 1,
+      "shareRegional": 8.0545,
+      "shareArterial": 5.2699,
+      "shareAvenue": 10.457,
+      "shareConnector": 15.144,
+      "shareLocal": 61.075,
+      "majorRoadShare": 23.781,
+      "majorRoadSpacing": 565.08,
+      "blockAreaMedian": 0.74029,
+      "blockAreaP25": 0.30405,
+      "blockAreaP75": 1.5239,
+      "blockAspectMedian": 1.6494,
+      "blockAspectP75": 2.5912,
+      "corridorContinuity": null,
+      "majorCorridorLengthKm": null
+     }
+    },
+    {
+     "sampleId": "d0-0-1",
+     "bounds": [
+      423187,
+      -4584964,
+      429187,
+      -4578964
+     ],
+     "areaKm2": 20.76,
+     "context": {
+      "ring": "inner",
+      "fabric": "mixed"
+     },
+     "metrics": {
+      "intersectionDensity": 112.67,
+      "streetDensity": 17.891,
+      "segmentLengthMean": 92.902,
+      "segmentLengthMedian": 76.514,
+      "avgNodeDegree": 3.2018,
+      "threeWayShare": 60.967,
+      "fourWayShare": 32.241,
+      "deadEndShare": 6.5521,
+      "circuity": 1.0425,
+      "orientationEntropy": 3.3556,
+      "orientationOrder": 0.19672,
+      "dominantOrientations": 1,
+      "shareRegional": 4.4343,
+      "shareArterial": 10.001,
+      "shareAvenue": 7.7801,
+      "shareConnector": 15.133,
+      "shareLocal": 62.651,
+      "majorRoadShare": 22.216,
+      "majorRoadSpacing": 503.19,
+      "blockAreaMedian": 0.83373,
+      "blockAreaP25": 0.45223,
+      "blockAreaP75": 1.4463,
+      "blockAspectMedian": 1.5632,
+      "blockAspectP75": 2.1886,
+      "corridorContinuity": null,
+      "majorCorridorLengthKm": null
+     }
+    },
+    {
+     "sampleId": "d2-1-1",
+     "bounds": [
+      429187,
+      -4587964,
+      435187,
+      -4581964
+     ],
+     "areaKm2": 29.64,
+     "context": {
+      "ring": "inner",
+      "fabric": "mixed"
+     },
+     "metrics": {
+      "intersectionDensity": 118.89,
+      "streetDensity": 19.197,
+      "segmentLengthMean": 92.612,
+      "segmentLengthMedian": 77.07,
+      "avgNodeDegree": 3.2694,
+      "threeWayShare": 55.857,
+      "fourWayShare": 37.859,
+      "deadEndShare": 6.1768,
+      "circuity": 1.0309,
+      "orientationEntropy": 3.2145,
+      "orientationOrder": 0.30769,
+      "dominantOrientations": 1,
+      "shareRegional": 2.6239,
+      "shareArterial": 7.0945,
+      "shareAvenue": 11.448,
+      "shareConnector": 15.92,
+      "shareLocal": 62.914,
+      "majorRoadShare": 21.166,
+      "majorRoadSpacing": 492.2,
+      "blockAreaMedian": 0.83046,
+      "blockAreaP25": 0.41142,
+      "blockAreaP75": 1.6239,
+      "blockAspectMedian": 1.6254,
+      "blockAspectP75": 2.4471,
+      "corridorContinuity": null,
+      "majorCorridorLengthKm": null
+     }
+    },
+    {
+     "sampleId": "d3-1-1",
+     "bounds": [
+      426187,
+      -4587964,
+      432187,
+      -4581964
+     ],
+     "areaKm2": 32.44,
+     "context": {
+      "ring": "inner",
+      "fabric": "mixed"
+     },
+     "metrics": {
+      "intersectionDensity": 124.85,
+      "streetDensity": 19.854,
+      "segmentLengthMean": 91.539,
+      "segmentLengthMedian": 75.397,
+      "avgNodeDegree": 3.2189,
+      "threeWayShare": 58.178,
+      "fourWayShare": 34.71,
+      "deadEndShare": 7.0888,
+      "circuity": 1.0402,
+      "orientationEntropy": 3.3588,
+      "orientationOrder": 0.19412,
+      "dominantOrientations": 1,
+      "shareRegional": 2.8624,
+      "shareArterial": 8.7196,
+      "shareAvenue": 10.164,
+      "shareConnector": 14.452,
+      "shareLocal": 63.802,
+      "majorRoadShare": 21.746,
+      "majorRoadSpacing": 463.23,
+      "blockAreaMedian": 0.81969,
+      "blockAreaP25": 0.42114,
+      "blockAreaP75": 1.4846,
+      "blockAspectMedian": 1.6187,
+      "blockAspectP75": 2.3839,
+      "corridorContinuity": null,
+      "majorCorridorLengthKm": null
+     }
+    },
+    {
+     "sampleId": "d2-0-1",
+     "bounds": [
+      423187,
+      -4587964,
+      429187,
+      -4581964
+     ],
+     "areaKm2": 21.56,
+     "context": {
+      "ring": "peripheral",
+      "fabric": "irregular"
+     },
+     "metrics": {
+      "intersectionDensity": 92.996,
+      "streetDensity": 16.954,
+      "segmentLengthMean": 106.26,
+      "segmentLengthMedian": 77.931,
+      "avgNodeDegree": 3.0534,
+      "threeWayShare": 62.961,
+      "fourWayShare": 26.056,
+      "deadEndShare": 10.849,
+      "circuity": 1.0946,
+      "orientationEntropy": 3.4464,
+      "orientationOrder": 0.1209,
+      "dominantOrientations": 1,
+      "shareRegional": 7.2108,
+      "shareArterial": 5.4195,
+      "shareAvenue": 9.3943,
+      "shareConnector": 15.228,
+      "shareLocal": 62.748,
+      "majorRoadShare": 22.025,
+      "majorRoadSpacing": 535.61,
+      "blockAreaMedian": 0.87728,
+      "blockAreaP25": 0.46487,
+      "blockAreaP75": 1.5709,
+      "blockAspectMedian": 1.6498,
+      "blockAspectP75": 2.4117,
+      "corridorContinuity": null,
+      "majorCorridorLengthKm": null
+     }
+    },
+    {
+     "sampleId": "d0-1-0",
+     "bounds": [
+      429187,
+      -4590964,
+      435187,
+      -4584964
+     ],
+     "areaKm2": 21.72,
+     "context": {
+      "ring": "peripheral",
+      "fabric": "irregular"
+     },
+     "metrics": {
+      "intersectionDensity": 113.9,
+      "streetDensity": 18.63,
+      "segmentLengthMean": 96.738,
+      "segmentLengthMedian": 72.822,
+      "avgNodeDegree": 3.124,
+      "threeWayShare": 65.596,
+      "fourWayShare": 26.672,
+      "deadEndShare": 7.5831,
+      "circuity": 1.0639,
+      "orientationEntropy": 3.5466,
+      "orientationOrder": 0.033304,
+      "dominantOrientations": 1,
+      "shareRegional": 8.0256,
+      "shareArterial": 6.4538,
+      "shareAvenue": 4.8063,
+      "shareConnector": 11.93,
+      "shareLocal": 68.784,
+      "majorRoadShare": 19.286,
+      "majorRoadSpacing": 556.64,
+      "blockAreaMedian": 0.76552,
+      "blockAreaP25": 0.40237,
+      "blockAreaP75": 1.3688,
+      "blockAspectMedian": 1.7933,
+      "blockAspectP75": 2.58,
+      "corridorContinuity": null,
+      "majorCorridorLengthKm": null
+     }
+    },
+    {
+     "sampleId": "d1-1-0",
+     "bounds": [
+      426187,
+      -4590964,
+      432187,
+      -4584964
+     ],
+     "areaKm2": 19.8,
+     "context": {
+      "ring": "peripheral",
+      "fabric": "irregular"
+     },
+     "metrics": {
+      "intersectionDensity": 111.41,
+      "streetDensity": 18.463,
+      "segmentLengthMean": 98.456,
+      "segmentLengthMedian": 71.816,
+      "avgNodeDegree": 3.0419,
+      "threeWayShare": 68.352,
+      "fourWayShare": 22.277,
+      "deadEndShare": 9.33,
+      "circuity": 1.0818,
+      "orientationEntropy": 3.5574,
+      "orientationOrder": 0.023607,
+      "dominantOrientations": 0,
+      "shareRegional": 5.7327,
+      "shareArterial": 6.4444,
+      "shareAvenue": 5.7028,
+      "shareConnector": 11.798,
+      "shareLocal": 70.323,
+      "majorRoadShare": 17.88,
+      "majorRoadSpacing": 605.85,
+      "blockAreaMedian": 0.77607,
+      "blockAreaP25": 0.42209,
+      "blockAreaP75": 1.3684,
+      "blockAspectMedian": 1.8234,
+      "blockAspectP75": 2.6528,
+      "corridorContinuity": null,
+      "majorCorridorLengthKm": null
+     }
+    }
+   ]
+  },
+  "neighbourhood": {
+   "scale": "neighbourhood",
+   "windowKm": 1.5,
+   "samples": 153,
+   "areaKm2": null,
+   "extentKm": 1.5,
+   "metrics": {
+    "intersectionDensity": 101.82,
+    "streetDensity": 17.808,
+    "segmentLengthMean": 98.371,
+    "segmentLengthMedian": 74.387,
+    "avgNodeDegree": 3.1456,
+    "threeWayShare": 64.368,
+    "fourWayShare": 26.667,
+    "deadEndShare": 6.135,
+    "circuity": 1.0382,
+    "orientationEntropy": 3.1542,
+    "orientationOrder": 0.35258,
+    "dominantOrientations": 1,
+    "shareRegional": 2.6149,
+    "shareArterial": 1.5275,
+    "shareAvenue": 8.5536,
+    "shareConnector": 15.439,
+    "shareLocal": 61.965,
+    "majorRoadShare": 21.506,
+    "majorRoadSpacing": 535.51,
+    "blockAreaMedian": 0.84358,
+    "blockAreaP25": 0.41739,
+    "blockAreaP75": 1.615,
+    "blockAspectMedian": 1.7347,
+    "blockAspectP75": 2.5708,
+    "corridorContinuity": null,
+    "majorCorridorLengthKm": null
+   },
+   "ranges": {
+    "intersectionDensity": [
+     70.139,
+     128.18
+    ],
+    "streetDensity": [
+     13.974,
+     20.355
+    ],
+    "segmentLengthMean": [
+     90.225,
+     114.14
+    ],
+    "segmentLengthMedian": [
+     66.914,
+     88.06
+    ],
+    "avgNodeDegree": [
+     2.9879,
+     3.2892
+    ],
+    "threeWayShare": [
+     55.985,
+     73.101
+    ],
+    "fourWayShare": [
+     15.385,
+     37.978
+    ],
+    "deadEndShare": [
+     3.7801,
+     9.8765
+    ],
+    "circuity": [
+     1.0228,
+     1.0715
+    ],
+    "orientationEntropy": [
+     2.7787,
+     3.3712
+    ],
+    "orientationOrder": [
+     0.18395,
+     0.59839
+    ],
+    "dominantOrientations": [
+     1,
+     1
+    ],
+    "shareRegional": [
+     0,
+     12.318
+    ],
+    "shareArterial": [
+     0,
+     8.7077
+    ],
+    "shareAvenue": [
+     3.1929,
+     15.578
+    ],
+    "shareConnector": [
+     9.3522,
+     20.114
+    ],
+    "shareLocal": [
+     54.913,
+     69.346
+    ],
+    "majorRoadShare": [
+     15.6,
+     29.693
+    ],
+    "majorRoadSpacing": [
+     413.43,
+     712.4
+    ],
+    "blockAreaMedian": [
+     0.66661,
+     1.0646
+    ],
+    "blockAreaP25": [
+     0.26562,
+     0.50316
+    ],
+    "blockAreaP75": [
+     1.2683,
+     1.8596
+    ],
+    "blockAspectMedian": [
+     1.5757,
+     2.0337
+    ],
+    "blockAspectP75": [
+     2.2538,
+     3.325
+    ]
+   },
+   "distributions": {
+    "intersectionDensity": {
+     "p10": 47.102,
+     "p25": 70.139,
+     "p50": 101.82,
+     "p75": 128.18,
+     "p90": 157.4,
+     "n": 153
+    },
+    "streetDensity": {
+     "p10": 11.053,
+     "p25": 13.974,
+     "p50": 17.808,
+     "p75": 20.355,
+     "p90": 22.524,
+     "n": 153
+    },
+    "segmentLengthMean": {
+     "p10": 84.006,
+     "p25": 90.225,
+     "p50": 98.371,
+     "p75": 114.14,
+     "p90": 142.06,
+     "n": 153
+    },
+    "segmentLengthMedian": {
+     "p10": 52.468,
+     "p25": 66.914,
+     "p50": 74.387,
+     "p75": 88.06,
+     "p90": 115.96,
+     "n": 153
+    },
+    "avgNodeDegree": {
+     "p10": 2.825,
+     "p25": 2.9879,
+     "p50": 3.1456,
+     "p75": 3.2892,
+     "p90": 3.4161,
+     "n": 153
+    },
+    "threeWayShare": {
+     "p10": 47.203,
+     "p25": 55.985,
+     "p50": 64.368,
+     "p75": 73.101,
+     "p90": 80.633,
+     "n": 153
+    },
+    "fourWayShare": {
+     "p10": 6.4722,
+     "p25": 15.385,
+     "p50": 26.667,
+     "p75": 37.978,
+     "p90": 47.852,
+     "n": 153
+    },
+    "deadEndShare": {
+     "p10": 2.3569,
+     "p25": 3.7801,
+     "p50": 6.135,
+     "p75": 9.8765,
+     "p90": 15.033,
+     "n": 153
+    },
+    "circuity": {
+     "p10": 1.014,
+     "p25": 1.0228,
+     "p50": 1.0382,
+     "p75": 1.0715,
+     "p90": 1.1746,
+     "n": 153
+    },
+    "orientationEntropy": {
+     "p10": 2.4722,
+     "p25": 2.7787,
+     "p50": 3.1542,
+     "p75": 3.3712,
+     "p90": 3.4759,
+     "n": 153
+    },
+    "orientationOrder": {
+     "p10": 0.095568,
+     "p25": 0.18395,
+     "p50": 0.35258,
+     "p75": 0.59839,
+     "p90": 0.75573,
+     "n": 153
+    },
+    "dominantOrientations": {
+     "p10": 1,
+     "p25": 1,
+     "p50": 1,
+     "p75": 1,
+     "p90": 2,
+     "n": 153
+    },
+    "shareRegional": {
+     "p10": 0,
+     "p25": 0,
+     "p50": 2.6149,
+     "p75": 12.318,
+     "p90": 19.657,
+     "n": 153
+    },
+    "shareArterial": {
+     "p10": 0,
+     "p25": 0,
+     "p50": 1.5275,
+     "p75": 8.7077,
+     "p90": 12.649,
+     "n": 153
+    },
+    "shareAvenue": {
+     "p10": 0,
+     "p25": 3.1929,
+     "p50": 8.5536,
+     "p75": 15.578,
+     "p90": 23.601,
+     "n": 153
+    },
+    "shareConnector": {
+     "p10": 2.8963,
+     "p25": 9.3522,
+     "p50": 15.439,
+     "p75": 20.114,
+     "p90": 24.061,
+     "n": 153
+    },
+    "shareLocal": {
+     "p10": 47.266,
+     "p25": 54.913,
+     "p50": 61.965,
+     "p75": 69.346,
+     "p90": 76.125,
+     "n": 153
+    },
+    "majorRoadShare": {
+     "p10": 9.8617,
+     "p25": 15.6,
+     "p50": 21.506,
+     "p75": 29.693,
+     "p90": 36.129,
+     "n": 153
+    },
+    "majorRoadSpacing": {
+     "p10": 322.86,
+     "p25": 413.43,
+     "p50": 535.51,
+     "p75": 712.4,
+     "p90": 1041.3,
+     "n": 150
+    },
+    "blockAreaMedian": {
+     "p10": 0.31158,
+     "p25": 0.66661,
+     "p50": 0.84358,
+     "p75": 1.0646,
+     "p90": 1.4031,
+     "n": 153
+    },
+    "blockAreaP25": {
+     "p10": 0.12448,
+     "p25": 0.26562,
+     "p50": 0.41739,
+     "p75": 0.50316,
+     "p90": 0.60934,
+     "n": 153
+    },
+    "blockAreaP75": {
+     "p10": 1.0154,
+     "p25": 1.2683,
+     "p50": 1.615,
+     "p75": 1.8596,
+     "p90": 2.9668,
+     "n": 153
+    },
+    "blockAspectMedian": {
+     "p10": 1.4869,
+     "p25": 1.5757,
+     "p50": 1.7347,
+     "p75": 2.0337,
+     "p90": 2.3134,
+     "n": 153
+    },
+    "blockAspectP75": {
+     "p10": 2.0891,
+     "p25": 2.2538,
+     "p50": 2.5708,
+     "p75": 3.325,
+     "p90": 4.4936,
+     "n": 153
+    }
+   },
+   "sampleList": [
+    {
+     "sampleId": "n2-5-7",
+     "bounds": [
+      430687,
+      -4581214,
+      432187,
+      -4579714
+     ],
+     "areaKm2": 1.64,
+     "context": {
+      "ring": "inner",
+      "fabric": "mixed"
+     },
+     "metrics": {
+      "intersectionDensity": 90.854,
+      "streetDensity": 15.693,
+      "segmentLengthMean": 109.51,
+      "segmentLengthMedian": 61.216,
+      "avgNodeDegree": 3.0573,
+      "threeWayShare": 78.981,
+      "fourWayShare": 15.924,
+      "deadEndShare": 5.0955,
+      "circuity": 1.0876,
+      "orientationEntropy": 3.226,
+      "orientationOrder": 0.29894,
+      "dominantOrientations": 1,
+      "shareRegional": 22.611,
+      "shareArterial": 0,
+      "shareAvenue": 13.442,
+      "shareConnector": 18.999,
+      "shareLocal": 44.948,
+      "majorRoadShare": 36.053,
+      "majorRoadSpacing": 353.51,
+      "blockAreaMedian": 0.46742,
+      "blockAreaP25": 0.25383,
+      "blockAreaP75": 1.0086,
+      "blockAspectMedian": 1.9827,
+      "blockAspectP75": 3.3888,
+      "corridorContinuity": null,
+      "majorCorridorLengthKm": null
+     }
+    },
+    {
+     "sampleId": "n0-5-6",
+     "bounds": [
+      430687,
+      -4581964,
+      432187,
+      -4580464
+     ],
+     "areaKm2": 2.28,
+     "context": {
+      "ring": "inner",
+      "fabric": "mixed"
+     },
+     "metrics": {
+      "intersectionDensity": 97.807,
+      "streetDensity": 14.546,
+      "segmentLengthMean": 88.913,
+      "segmentLengthMedian": 61.082,
+      "avgNodeDegree": 2.9724,
+      "threeWayShare": 66.929,
+      "fourWayShare": 20.866,
+      "deadEndShare": 12.205,
+      "circuity": 1.04,
+      "orientationEntropy": 3.2644,
+      "orientationOrder": 0.26935,
+      "dominantOrientations": 1,
+      "shareRegional": 14.115,
+      "shareArterial": 0,
+      "shareAvenue": 15.578,
+      "shareConnector": 14.122,
+      "shareLocal": 56.185,
+      "majorRoadShare": 29.693,
+      "majorRoadSpacing": 463.06,
+      "blockAreaMedian": 0.45724,
+      "blockAreaP25": 0.27153,
+      "blockAreaP75": 0.85915,
+      "blockAspectMedian": 1.9871,
+      "blockAspectP75": 3.2985,
+      "corridorContinuity": null,
+      "majorCorridorLengthKm": null
+     }
+    },
+    {
+     "sampleId": "n1-6-6",
+     "bounds": [
+      431437,
+      -4581964,
+      432937,
+      -4580464
+     ],
+     "areaKm2": 1.72,
+     "context": {
+      "ring": "inner",
+      "fabric": "mixed"
+     },
+     "metrics": {
+      "intersectionDensity": 106.4,
+      "streetDensity": 16.612,
+      "segmentLengthMean": 89.572,
+      "segmentLengthMedian": 60.645,
+      "avgNodeDegree": 3.2615,
+      "threeWayShare": 56.41,
+      "fourWayShare": 37.436,
+      "deadEndShare": 6.1538,
+      "circuity": 1.0319,
+      "orientationEntropy": 2.8184,
+      "orientationOrder": 0.57516,
+      "dominantOrientations": 2,
+      "shareRegional": 21.211,
+      "shareArterial": 0,
+      "shareAvenue": 13.06,
+      "shareConnector": 16.315,
+      "shareLocal": 49.414,
+      "majorRoadShare": 34.271,
+      "majorRoadSpacing": 351.3,
+      "blockAreaMedian": 0.27344,
+      "blockAreaP25": 0.14363,
+      "blockAreaP75": 0.48484,
+      "blockAspectMedian": 3.2739,
+      "blockAspectP75": 5.512,
+      "corridorContinuity": null,
+      "majorCorridorLengthKm": null
+     }
+    },
+    {
+     "sampleId": "n2-5-6",
+     "bounds": [
+      430687,
+      -4582714,
+      432187,
+      -4581214
+     ],
+     "areaKm2": 2.44,
+     "context": {
+      "ring": "inner",
+      "fabric": "mixed"
+     },
+     "metrics": {
+      "intersectionDensity": 90.164,
+      "streetDensity": 14.107,
+      "segmentLengthMean": 87.808,
+      "segmentLengthMedian": 70.941,
+      "avgNodeDegree": 3.1008,
+      "threeWayShare": 58.065,
+      "fourWayShare": 30.645,
+      "deadEndShare": 11.29,
+      "circuity": 1.0379,
+      "orientationEntropy": 3.1625,
+      "orientationOrder": 0.34655,
+      "dominantOrientations": 1,
+      "shareRegional": 4.7079,
+      "shareArterial": 0.98459,
+      "shareAvenue": 16.648,
+      "shareConnector": 20.012,
+      "shareLocal": 57.647,
+      "majorRoadShare": 22.341,
+      "majorRoadSpacing": 634.6,
+      "blockAreaMedian": 0.52199,
+      "blockAreaP25": 0.24486,
+      "blockAreaP75": 1.6038,
+      "blockAspectMedian": 1.6525,
+      "blockAspectP75": 3.3145,
+      "corridorContinuity": null,
+      "majorCorridorLengthKm": null
+     }
+    },
+    {
+     "sampleId": "n3-6-6",
+     "bounds": [
+      431437,
+      -4582714,
+      432937,
+      -4581214
+     ],
+     "areaKm2": 2.32,
+     "context": {
+      "ring": "inner",
+      "fabric": "mixed"
+     },
+     "metrics": {
+      "intersectionDensity": 92.241,
+      "streetDensity": 16.136,
+      "segmentLengthMean": 100.63,
+      "segmentLengthMedian": 81.017,
+      "avgNodeDegree": 3.3153,
+      "threeWayShare": 59.009,
+      "fourWayShare": 37.387,
+      "deadEndShare": 3.6036,
+      "circuity": 1.0482,
+      "orientationEntropy": 3.0874,
+      "orientationOrder": 0.40063,
+      "dominantOrientations": 1,
+      "shareRegional": 13.117,
+      "shareArterial": 0,
+      "shareAvenue": 13.063,
+      "shareConnector": 33.867,
+      "shareLocal": 39.954,
+      "majorRoadShare": 26.18,
+      "majorRoadSpacing": 473.44,
+      "blockAreaMedian": 0.468,
+      "blockAreaP25": 0.15221,
+      "blockAreaP75": 1.5901,
+      "blockAspectMedian": 2.2465,
+      "blockAspectP75": 6.1342,
+      "corridorContinuity": null,
+      "majorCorridorLengthKm": null
+     }
+    },
+    {
+     "sampleId": "n2-6-6",
+     "bounds": [
+      432187,
+      -4582714,
+      433687,
+      -4581214
+     ],
+     "areaKm2": 1.36,
+     "context": {
+      "ring": "peripheral",
+      "fabric": "mixed"
+     },
+     "metrics": {
+      "intersectionDensity": 69.853,
+      "streetDensity": 16.726,
+      "segmentLengthMean": 138.71,
+      "segmentLengthMedian": 107.88,
+      "avgNodeDegree": 3.4167,
+      "threeWayShare": 55.208,
+      "fourWayShare": 43.75,
+      "deadEndShare": 1.0417,
+      "circuity": 1.0427,
+      "orientationEntropy": 2.8571,
+      "orientationOrder": 0.55193,
+      "dominantOrientations": 1,
+      "shareRegional": 19.417,
+      "shareArterial": 0,
+      "shareAvenue": 17.618,
+      "shareConnector": 31.078,
+      "shareLocal": 31.887,
+      "majorRoadShare": 37.035,
+      "majorRoadSpacing": 322.86,
+      "blockAreaMedian": 0.67501,
+      "blockAreaP25": 0.16339,
+      "blockAreaP75": 1.969,
+      "blockAspectMedian": 3.4977,
+      "blockAspectP75": 6.2229,
+      "corridorContinuity": null,
+      "majorCorridorLengthKm": null
+     }
+    },
+    {
+     "sampleId": "n1-5-6",
+     "bounds": [
+      429937,
+      -4581964,
+      431437,
+      -4580464
+     ],
+     "areaKm2": 2.16,
+     "context": {
+      "ring": "inner",
+      "fabric": "mixed"
+     },
+     "metrics": {
+      "intersectionDensity": 127.31,
+      "streetDensity": 18,
+      "segmentLengthMean": 84.891,
+      "segmentLengthMedian": 71.173,
+      "avgNodeDegree": 2.9804,
+      "threeWayShare": 71.569,
+      "fourWayShare": 18.301,
+      "deadEndShare": 10.131,
+      "circuity": 1.0281,
+      "orientationEntropy": 3.3589,
+      "orientationOrder": 0.19398,
+      "dominantOrientations": 1,
+      "shareRegional": 2.332,
+      "shareArterial": 0.65603,
+      "shareAvenue": 15.485,
+      "shareConnector": 9.0657,
+      "shareLocal": 72.462,
+      "majorRoadShare": 18.473,
+      "majorRoadSpacing": 601.49,
+      "blockAreaMedian": 0.89155,
+      "blockAreaP25": 0.47357,
+      "blockAreaP75": 1.6336,
+      "blockAspectMedian": 1.6661,
+      "blockAspectP75": 2.6283,
+      "corridorContinuity": null,
+      "majorCorridorLengthKm": null
+     }
+    },
+    {
+     "sampleId": "n3-5-7",
+     "bounds": [
+      429937,
+      -4581214,
+      431437,
+      -4579714
+     ],
+     "areaKm2": 1.88,
+     "context": {
+      "ring": "inner",
+      "fabric": "mixed"
+     },
+     "metrics": {
+      "intersectionDensity": 130.32,
+      "streetDensity": 19.902,
+      "segmentLengthMean": 94.965,
+      "segmentLengthMedian": 66.524,
+      "avgNodeDegree": 3.0698,
+      "threeWayShare": 77.907,
+      "fourWayShare": 17.054,
+      "deadEndShare": 5.0388,
+      "circuity": 1.0827,
+      "orientationEntropy": 3.349,
+      "orientationOrder": 0.20208,
+      "dominantOrientations": 2,
+      "shareRegional": 9.7955,
+      "shareArterial": 0,
+      "shareAvenue": 13.165,
+      "shareConnector": 19.243,
+      "shareLocal": 57.796,
+      "majorRoadShare": 22.96,
+      "majorRoadSpacing": 437.67,
+      "blockAreaMedian": 0.89764,
+      "blockAreaP25": 0.38093,
+      "blockAreaP75": 1.5906,
+      "blockAspectMedian": 1.7528,
+      "blockAspectP75": 2.7182,
+      "corridorContinuity": null,
+      "majorCorridorLengthKm": null
+     }
+    },
+    {
+     "sampleId": "n0-2-10",
+     "bounds": [
+      426187,
+      -4575964,
+      427687,
+      -4574464
+     ],
+     "areaKm2": 1.36,
+     "context": {
+      "ring": "peripheral",
+      "fabric": "mixed"
+     },
+     "metrics": {
+      "intersectionDensity": 58.824,
+      "streetDensity": 8.8061,
+      "segmentLengthMean": 92.839,
+      "segmentLengthMedian": 41.267,
+      "avgNodeDegree": 3.225,
+      "threeWayShare": 81.25,
+      "fourWayShare": 18.75,
+      "deadEndShare": 0,
+      "circuity": 1.0122,
+      "orientationEntropy": 2.7771,
+      "orientationOrder": 0.59934,
+      "dominantOrientations": 1,
+      "shareRegional": 0,
+      "shareArterial": 0,
+      "shareAvenue": 34.471,
+      "shareConnector": 20.831,
+      "shareLocal": 44.698,
+      "majorRoadShare": 34.471,
+      "majorRoadSpacing": 658.86,
+      "blockAreaMedian": 0.22609,
+      "blockAreaP25": 0.066411,
+      "blockAreaP75": 1.0232,
+      "blockAspectMedian": 2.5763,
+      "blockAspectP75": 4.3824,
+      "corridorContinuity": null,
+      "majorCorridorLengthKm": null
+     }
+    },
+    {
+     "sampleId": "n2-2-10",
+     "bounds": [
+      426187,
+      -4576714,
+      427687,
+      -4575214
+     ],
+     "areaKm2": 1.72,
+     "context": {
+      "ring": "peripheral",
+      "fabric": "strong_grid"
+     },
+     "metrics": {
+      "intersectionDensity": 52.326,
+      "streetDensity": 10.354,
+      "segmentLengthMean": 118.72,
+      "segmentLengthMedian": 39.626,
+      "avgNodeDegree": 3.1538,
+      "threeWayShare": 83.516,
+      "fourWayShare": 15.385,
+      "deadEndShare": 1.0989,
+      "circuity": 1.0445,
+      "orientationEntropy": 2.4679,
+      "orientationOrder": 0.75766,
+      "dominantOrientations": 1,
+      "shareRegional": 0,
+      "shareArterial": 0,
+      "shareAvenue": 23.653,
+      "shareConnector": 33.385,
+      "shareLocal": 42.962,
+      "majorRoadShare": 23.653,
+      "majorRoadSpacing": 816.68,
+      "blockAreaMedian": 0.22609,
+      "blockAreaP25": 0.077186,
+      "blockAreaP75": 0.83078,
+      "blockAspectMedian": 3.6718,
+      "blockAspectP75": 5.999,
+      "corridorContinuity": null,
+      "majorCorridorLengthKm": null
+     }
+    },
+    {
+     "sampleId": "n3-2-10",
+     "bounds": [
+      425437,
+      -4576714,
+      426937,
+      -4575214
+     ],
+     "areaKm2": 1.6,
+     "context": {
+      "ring": "peripheral",
+      "fabric": "mixed"
+     },
+     "metrics": {
+      "intersectionDensity": 38.75,
+      "streetDensity": 8.176,
+      "segmentLengthMean": 130.82,
+      "segmentLengthMedian": 45.188,
+      "avgNodeDegree": 3.1094,
+      "threeWayShare": 84.375,
+      "fourWayShare": 12.5,
+      "deadEndShare": 3.125,
+      "circuity": 1.0839,
+      "orientationEntropy": 3.0515,
+      "orientationOrder": 0.42565,
+      "dominantOrientations": 1,
+      "shareRegional": 3.3408,
+      "shareArterial": 0,
+      "shareAvenue": 30.785,
+      "shareConnector": 30.544,
+      "shareLocal": 35.33,
+      "majorRoadShare": 34.126,
+      "majorRoadSpacing": 716.81,
+      "blockAreaMedian": 0.26379,
+      "blockAreaP25": 0.088776,
+      "blockAreaP75": 1.4018,
+      "blockAspectMedian": 2.1417,
+      "blockAspectP75": 4.5214,
+      "corridorContinuity": null,
+      "majorCorridorLengthKm": null
+     }
+    },
+    {
+     "sampleId": "n0-3-6",
+     "bounds": [
+      427687,
+      -4581964,
+      429187,
+      -4580464
+     ],
+     "areaKm2": 2.56,
+     "context": {
+      "ring": "inner",
+      "fabric": "mixed"
+     },
+     "metrics": {
+      "intersectionDensity": 110.94,
+      "streetDensity": 16.04,
+      "segmentLengthMean": 85.368,
+      "segmentLengthMedian": 75.865,
+      "avgNodeDegree": 3.3655,
+      "threeWayShare": 58.966,
+      "fourWayShare": 38.966,
+      "deadEndShare": 2.069,
+      "circuity": 1.0166,
+      "orientationEntropy": 3.1292,
+      "orientationOrder": 0.3708,
+      "dominantOrientations": 2,
+      "shareRegional": 0,
+      "shareArterial": 10.599,
+      "shareAvenue": 9.729,
+      "shareConnector": 15.164,
+      "shareLocal": 64.507,
+      "majorRoadShare": 20.328,
+      "majorRoadSpacing": 613.37,
+      "blockAreaMedian": 0.90123,
+      "blockAreaP25": 0.45424,
+      "blockAreaP75": 1.6808,
+      "blockAspectMedian": 1.4627,
+      "blockAspectP75": 2.1073,
+      "corridorContinuity": null,
+      "majorCorridorLengthKm": null
+     }
+    },
+    {
+     "sampleId": "n1-4-6",
+     "bounds": [
+      428437,
+      -4581964,
+      429937,
+      -4580464
+     ],
+     "areaKm2": 2.56,
+     "context": {
+      "ring": "inner",
+      "fabric": "mixed"
+     },
+     "metrics": {
+      "intersectionDensity": 98.047,
+      "streetDensity": 16.233,
+      "segmentLengthMean": 95.094,
+      "segmentLengthMedian": 111.76,
+      "avgNodeDegree": 3.4612,
+      "threeWayShare": 46.899,
+      "fourWayShare": 50.388,
+      "deadEndShare": 2.7132,
+      "circuity": 1.0196,
+      "orientationEntropy": 2.8477,
+      "orientationOrder": 0.55762,
+      "dominantOrientations": 1,
+      "shareRegional": 0,
+      "shareArterial": 12.525,
+      "shareAvenue": 11.523,
+      "shareConnector": 19.719,
+      "shareLocal": 56.233,
+      "majorRoadShare": 24.048,
+      "majorRoadSpacing": 512.34,
+      "blockAreaMedian": 1.0144,
+      "blockAreaP25": 0.42567,
+      "blockAreaP75": 1.7376,
+      "blockAspectMedian": 1.4848,
+      "blockAspectP75": 2.3315,
+      "corridorContinuity": null,
+      "majorCorridorLengthKm": null
+     }
+    },
+    {
+     "sampleId": "n2-3-7",
+     "bounds": [
+      427687,
+      -4581214,
+      429187,
+      -4579714
+     ],
+     "areaKm2": 2.24,
+     "context": {
+      "ring": "inner",
+      "fabric": "mixed"
+     },
+     "metrics": {
+      "intersectionDensity": 135.27,
+      "streetDensity": 19.21,
+      "segmentLengthMean": 85.38,
+      "segmentLengthMedian": 69.162,
+      "avgNodeDegree": 3.1551,
+      "threeWayShare": 73.101,
+      "fourWayShare": 22.785,
+      "deadEndShare": 4.1139,
+      "circuity": 1.0551,
+      "orientationEntropy": 3.3024,
+      "orientationOrder": 0.23952,
+      "dominantOrientations": 1,
+      "shareRegional": 2.8495,
+      "shareArterial": 9.6856,
+      "shareAvenue": 2.3555,
+      "shareConnector": 15.508,
+      "shareLocal": 69.601,
+      "majorRoadShare": 14.891,
+      "majorRoadSpacing": 699.17,
+      "blockAreaMedian": 0.74911,
+      "blockAreaP25": 0.3535,
+      "blockAreaP75": 1.2786,
+      "blockAspectMedian": 1.5586,
+      "blockAspectP75": 2.5708,
+      "corridorContinuity": null,
+      "majorCorridorLengthKm": null
+     }
+    },
+    {
+     "sampleId": "n3-4-7",
+     "bounds": [
+      428437,
+      -4581214,
+      429937,
+      -4579714
+     ],
+     "areaKm2": 2.24,
+     "context": {
+      "ring": "inner",
+      "fabric": "mixed"
+     },
+     "metrics": {
+      "intersectionDensity": 105.8,
+      "streetDensity": 17.001,
+      "segmentLengthMean": 92.207,
+      "segmentLengthMedian": 75.339,
+      "avgNodeDegree": 3.0763,
+      "threeWayShare": 64.504,
+      "fourWayShare": 25.954,
+      "deadEndShare": 9.542,
+      "circuity": 1.0494,
+      "orientationEntropy": 3.3159,
+      "orientationOrder": 0.22879,
+      "dominantOrientations": 1,
+      "shareRegional": 0,
+      "shareArterial": 8.606,
+      "shareAvenue": 7.3432,
+      "shareConnector": 23.195,
+      "shareLocal": 60.856,
+      "majorRoadShare": 15.949,
+      "majorRoadSpacing": 737.61,
+      "blockAreaMedian": 0.78224,
+      "blockAreaP25": 0.37772,
+      "blockAreaP75": 1.401,
+      "blockAspectMedian": 1.5933,
+      "blockAspectP75": 2.2944,
+      "corridorContinuity": null,
+      "majorCorridorLengthKm": null
+     }
+    },
+    {
+     "sampleId": "n3-5-6",
+     "bounds": [
+      429937,
+      -4582714,
+      431437,
+      -4581214
+     ],
+     "areaKm2": 2.16,
+     "context": {
+      "ring": "inner",
+      "fabric": "mixed"
+     },
+     "metrics": {
+      "intersectionDensity": 108.8,
+      "streetDensity": 17.566,
+      "segmentLengthMean": 88.653,
+      "segmentLengthMedian": 80.021,
+      "avgNodeDegree": 3.1885,
+      "threeWayShare": 54.615,
+      "fourWayShare": 35.769,
+      "deadEndShare": 9.6154,
+      "circuity": 1.0185,
+      "orientationEntropy": 2.9758,
+      "orientationOrder": 0.47669,
+      "dominantOrientations": 1,
+      "shareRegional": 0,
+      "shareArterial": 6.0668,
+      "shareAvenue": 17.497,
+      "shareConnector": 7.5337,
+      "shareLocal": 68.902,
+      "majorRoadShare": 23.564,
+      "majorRoadSpacing": 483.17,
+      "blockAreaMedian": 0.83507,
+      "blockAreaP25": 0.2771,
+      "blockAreaP75": 1.7821,
+      "blockAspectMedian": 1.6195,
+      "blockAspectP75": 3.0668,
+      "corridorContinuity": null,
+      "majorCorridorLengthKm": null
+     }
+    },
+    {
+     "sampleId": "n0-4-6",
+     "bounds": [
+      429187,
+      -4581964,
+      430687,
+      -4580464
+     ],
+     "areaKm2": 2.24,
+     "context": {
+      "ring": "inner",
+      "fabric": "mixed"
+     },
+     "metrics": {
+      "intersectionDensity": 125,
+      "streetDensity": 19.681,
+      "segmentLengthMean": 90.525,
+      "segmentLengthMedian": 85.775,
+      "avgNodeDegree": 3.3265,
+      "threeWayShare": 56.701,
+      "fourWayShare": 39.519,
+      "deadEndShare": 3.7801,
+      "circuity": 1.0218,
+      "orientationEntropy": 3.0439,
+      "orientationOrder": 0.43085,
+      "dominantOrientations": 1,
+      "shareRegional": 0,
+      "shareArterial": 4.9603,
+      "shareAvenue": 13.804,
+      "shareConnector": 15.211,
+      "shareLocal": 66.025,
+      "majorRoadShare": 18.764,
+      "majorRoadSpacing": 541.57,
+      "blockAreaMedian": 0.94352,
+      "blockAreaP25": 0.47221,
+      "blockAreaP75": 1.7156,
+      "blockAspectMedian": 1.6032,
+      "blockAspectP75": 2.4063,
+      "corridorContinuity": null,
+      "majorCorridorLengthKm": null
+     }
+    },
+    {
+     "sampleId": "n2-4-6",
+     "bounds": [
+      429187,
+      -4582714,
+      430687,
+      -4581214
+     ],
+     "areaKm2": 2.24,
+     "context": {
+      "ring": "central",
+      "fabric": "strong_grid"
+     },
+     "metrics": {
+      "intersectionDensity": 106.7,
+      "streetDensity": 18.482,
+      "segmentLengthMean": 95.611,
+      "segmentLengthMedian": 115.77,
+      "avgNodeDegree": 3.5082,
+      "threeWayShare": 45.082,
+      "fourWayShare": 52.869,
+      "deadEndShare": 2.0492,
+      "circuity": 1.0117,
+      "orientationEntropy": 2.586,
+      "orientationOrder": 0.70189,
+      "dominantOrientations": 1,
+      "shareRegional": 0,
+      "shareArterial": 10.395,
+      "shareAvenue": 18.94,
+      "shareConnector": 15.439,
+      "shareLocal": 55.226,
+      "majorRoadShare": 29.335,
+      "majorRoadSpacing": 368.89,
+      "blockAreaMedian": 1.512,
+      "blockAreaP25": 0.33164,
+      "blockAreaP75": 1.7828,
+      "blockAspectMedian": 1.3289,
+      "blockAspectP75": 2.786,
+      "corridorContinuity": null,
+      "majorCorridorLengthKm": null
+     }
+    },
+    {
+     "sampleId": "n0-4-5",
+     "bounds": [
+      429187,
+      -4583464,
+      430687,
+      -4581964
+     ],
+     "areaKm2": 1.96,
+     "context": {
+      "ring": "central",
+      "fabric": "strong_grid"
+     },
+     "metrics": {
+      "intersectionDensity": 134.69,
+      "streetDensity": 23.031,
+      "segmentLengthMean": 92.314,
+      "segmentLengthMedian": 107.5,
+      "avgNodeDegree": 3.5678,
+      "threeWayShare": 36.996,
+      "fourWayShare": 59.707,
+      "deadEndShare": 3.2967,
+      "circuity": 1.0096,
+      "orientationEntropy": 2.4715,
+      "orientationOrder": 0.75606,
+      "dominantOrientations": 1,
+      "shareRegional": 0,
+      "shareArterial": 6.4765,
+      "shareAvenue": 26.111,
+      "shareConnector": 22.082,
+      "shareLocal": 45.33,
+      "majorRoadShare": 32.588,
+      "majorRoadSpacing": 266.47,
+      "blockAreaMedian": 1.1104,
+      "blockAreaP25": 0.25033,
+      "blockAreaP75": 1.7971,
+      "blockAspectMedian": 1.5465,
+      "blockAspectP75": 5.5191,
+      "corridorContinuity": null,
+      "majorCorridorLengthKm": null
+     }
+    },
+    {
+     "sampleId": "n1-5-5",
+     "bounds": [
+      429937,
+      -4583464,
+      431437,
+      -4581964
+     ],
+     "areaKm2": 1.96,
+     "context": {
+      "ring": "central",
+      "fabric": "strong_grid"
+     },
+     "metrics": {
+      "intersectionDensity": 118.88,
+      "streetDensity": 22.318,
+      "segmentLengthMean": 97.422,
+      "segmentLengthMedian": 118.76,
+      "avgNodeDegree": 3.6611,
+      "threeWayShare": 31.381,
+      "fourWayShare": 66.109,
+      "deadEndShare": 2.5105,
+      "circuity": 1.0162,
+      "orientationEntropy": 2.535,
+      "orientationOrder": 0.72667,
+      "dominantOrientations": 1,
+      "shareRegional": 0,
+      "shareArterial": 9.9359,
+      "shareAvenue": 18.532,
+      "shareConnector": 18.332,
+      "shareLocal": 53.201,
+      "majorRoadShare": 28.468,
+      "majorRoadSpacing": 314.8,
+      "blockAreaMedian": 1.1538,
+      "blockAreaP25": 0.2509,
+      "blockAreaP75": 1.7762,
+      "blockAspectMedian": 1.4962,
+      "blockAspectP75": 6.3122,
+      "corridorContinuity": null,
+      "majorCorridorLengthKm": null
+     }
+    },
+    {
+     "sampleId": "n0-5-5",
+     "bounds": [
+      430687,
+      -4583464,
+      432187,
+      -4581964
+     ],
+     "areaKm2": 2.2,
+     "context": {
+      "ring": "inner",
+      "fabric": "strong_grid"
+     },
+     "metrics": {
+      "intersectionDensity": 97.273,
+      "streetDensity": 17.808,
+      "segmentLengthMean": 98.192,
+      "segmentLengthMedian": 119.06,
+      "avgNodeDegree": 3.5682,
+      "threeWayShare": 39.545,
+      "fourWayShare": 57.727,
+      "deadEndShare": 2.7273,
+      "circuity": 1.0193,
+      "orientationEntropy": 2.6221,
+      "orientationOrder": 0.68365,
+      "dominantOrientations": 1,
+      "shareRegional": 0,
+      "shareArterial": 6.8213,
+      "shareAvenue": 9.9543,
+      "shareConnector": 28.836,
+      "shareLocal": 54.388,
+      "majorRoadShare": 16.776,
+      "majorRoadSpacing": 669.46,
+      "blockAreaMedian": 1.0793,
+      "blockAreaP25": 0.27225,
+      "blockAreaP75": 1.7137,
+      "blockAspectMedian": 1.3842,
+      "blockAspectP75": 4.1998,
+      "corridorContinuity": null,
+      "majorCorridorLengthKm": null
+     }
+    },
+    {
+     "sampleId": "n3-4-6",
+     "bounds": [
+      428437,
+      -4582714,
+      429937,
+      -4581214
+     ],
+     "areaKm2": 2.56,
+     "context": {
+      "ring": "central",
+      "fabric": "strong_grid"
+     },
+     "metrics": {
+      "intersectionDensity": 75.781,
+      "streetDensity": 14.419,
+      "segmentLengthMean": 108.25,
+      "segmentLengthMedian": 131.11,
+      "avgNodeDegree": 3.6327,
+      "threeWayShare": 34.694,
+      "fourWayShare": 64.286,
+      "deadEndShare": 1.0204,
+      "circuity": 1.0155,
+      "orientationEntropy": 2.3284,
+      "orientationOrder": 0.81616,
+      "dominantOrientations": 1,
+      "shareRegional": 0,
+      "shareArterial": 10.254,
+      "shareAvenue": 19.001,
+      "shareConnector": 20.97,
+      "shareLocal": 49.775,
+      "majorRoadShare": 29.254,
+      "majorRoadSpacing": 474.15,
+      "blockAreaMedian": 1.7296,
+      "blockAreaP25": 0.85166,
+      "blockAreaP75": 1.7909,
+      "blockAspectMedian": 1.0487,
+      "blockAspectP75": 1.8093,
+      "corridorContinuity": null,
+      "majorCorridorLengthKm": null
+     }
+    },
+    {
+     "sampleId": "n2-4-7",
+     "bounds": [
+      429187,
+      -4581214,
+      430687,
+      -4579714
+     ],
+     "areaKm2": 1.96,
+     "context": {
+      "ring": "inner",
+      "fabric": "mixed"
+     },
+     "metrics": {
+      "intersectionDensity": 125,
+      "streetDensity": 18.864,
+      "segmentLengthMean": 87.613,
+      "segmentLengthMedian": 73.876,
+      "avgNodeDegree": 3.1353,
+      "threeWayShare": 63.534,
+      "fourWayShare": 28.571,
+      "deadEndShare": 7.8947,
+      "circuity": 1.0467,
+      "orientationEntropy": 3.3378,
+      "orientationOrder": 0.21114,
+      "dominantOrientations": 1,
+      "shareRegional": 0,
+      "shareArterial": 0.72624,
+      "shareAvenue": 10.622,
+      "shareConnector": 22.262,
+      "shareLocal": 66.39,
+      "majorRoadShare": 11.348,
+      "majorRoadSpacing": 934.29,
+      "blockAreaMedian": 0.826,
+      "blockAreaP25": 0.40012,
+      "blockAreaP75": 1.517,
+      "blockAspectMedian": 1.6779,
+      "blockAspectP75": 2.2741,
+      "corridorContinuity": null,
+      "majorCorridorLengthKm": null
+     }
+    },
+    {
+     "sampleId": "n0-4-7",
+     "bounds": [
+      429187,
+      -4580464,
+      430687,
+      -4578964
+     ],
+     "areaKm2": 1.76,
+     "context": {
+      "ring": "peripheral",
+      "fabric": "irregular"
+     },
+     "metrics": {
+      "intersectionDensity": 73.295,
+      "streetDensity": 12.919,
+      "segmentLengthMean": 104.78,
+      "segmentLengthMedian": 57.554,
+      "avgNodeDegree": 2.8836,
+      "threeWayShare": 76.712,
+      "fourWayShare": 11.644,
+      "deadEndShare": 11.644,
+      "circuity": 1.0777,
+      "orientationEntropy": 3.4163,
+      "orientationOrder": 0.14642,
+      "dominantOrientations": 0,
+      "shareRegional": 15.452,
+      "shareArterial": 0,
+      "shareAvenue": 0,
+      "shareConnector": 25.676,
+      "shareLocal": 58.872,
+      "majorRoadShare": 15.452,
+      "majorRoadSpacing": 1001.9,
+      "blockAreaMedian": 0.53487,
+      "blockAreaP25": 0.17723,
+      "blockAreaP75": 1.2565,
+      "blockAspectMedian": 1.7366,
+      "blockAspectP75": 1.9587,
+      "corridorContinuity": null,
+      "majorCorridorLengthKm": null
+     }
+    },
+    {
+     "sampleId": "n1-4-7",
+     "bounds": [
+      428437,
+      -4580464,
+      429937,
+      -4578964
+     ],
+     "areaKm2": 2.12,
+     "context": {
+      "ring": "peripheral",
+      "fabric": "irregular"
+     },
+     "metrics": {
+      "intersectionDensity": 71.226,
+      "streetDensity": 11.35,
+      "segmentLengthMean": 96.252,
+      "segmentLengthMedian": 52.859,
+      "avgNodeDegree": 2.8547,
+      "threeWayShare": 78.488,
+      "fourWayShare": 9.3023,
+      "deadEndShare": 12.209,
+      "circuity": 1.1084,
+      "orientationEntropy": 3.4933,
+      "orientationOrder": 0.0804,
+      "dominantOrientations": 2,
+      "shareRegional": 0,
+      "shareArterial": 1.1341,
+      "shareAvenue": 0,
+      "shareConnector": 32.239,
+      "shareLocal": 66.627,
+      "majorRoadShare": 1.1341,
+      "majorRoadSpacing": 15537,
+      "blockAreaMedian": 0.54702,
+      "blockAreaP25": 0.12277,
+      "blockAreaP75": 1.35,
+      "blockAspectMedian": 1.6943,
+      "blockAspectP75": 2.065,
+      "corridorContinuity": null,
+      "majorCorridorLengthKm": null
+     }
+    },
+    {
+     "sampleId": "n1-5-7",
+     "bounds": [
+      429937,
+      -4580464,
+      431437,
+      -4578964
+     ],
+     "areaKm2": 1.44,
+     "context": {
+      "ring": "peripheral",
+      "fabric": "mixed"
+     },
+     "metrics": {
+      "intersectionDensity": 76.389,
+      "streetDensity": 15.916,
+      "segmentLengthMean": 128.76,
+      "segmentLengthMedian": 57.459,
+      "avgNodeDegree": 3.0439,
+      "threeWayShare": 85.088,
+      "fourWayShare": 11.404,
+      "deadEndShare": 3.5088,
+      "circuity": 1.1271,
+      "orientationEntropy": 3.239,
+      "orientationOrder": 0.28898,
+      "dominantOrientations": 1,
+      "shareRegional": 27.364,
+      "shareArterial": 0,
+      "shareAvenue": 2.0725,
+      "shareConnector": 24.583,
+      "shareLocal": 45.98,
+      "majorRoadShare": 29.437,
+      "majorRoadSpacing": 426.87,
+      "blockAreaMedian": 0.39438,
+      "blockAreaP25": 0.12971,
+      "blockAreaP75": 1.1056,
+      "blockAspectMedian": 1.7557,
+      "blockAspectP75": 2.2323,
+      "corridorContinuity": null,
+      "majorCorridorLengthKm": null
+     }
+    },
+    {
+     "sampleId": "n0-2-6",
+     "bounds": [
+      426187,
+      -4581964,
+      427687,
+      -4580464
+     ],
+     "areaKm2": 2.08,
+     "context": {
+      "ring": "inner",
+      "fabric": "mixed"
+     },
+     "metrics": {
+      "intersectionDensity": 130.77,
+      "streetDensity": 19.225,
+      "segmentLengthMean": 88.665,
+      "segmentLengthMedian": 74.555,
+      "avgNodeDegree": 3.257,
+      "threeWayShare": 60.211,
+      "fourWayShare": 34.859,
+      "deadEndShare": 4.2254,
+      "circuity": 1.0111,
+      "orientationEntropy": 2.993,
+      "orientationOrder": 0.46529,
+      "dominantOrientations": 1,
+      "shareRegional": 0,
+      "shareArterial": 15.105,
+      "shareAvenue": 7.0999,
+      "shareConnector": 12.416,
+      "shareLocal": 65.379,
+      "majorRoadShare": 22.205,
+      "majorRoadSpacing": 468.5,
+      "blockAreaMedian": 0.73346,
+      "blockAreaP25": 0.45599,
+      "blockAreaP75": 1.1643,
+      "blockAspectMedian": 1.5709,
+      "blockAspectP75": 2.0559,
+      "corridorContinuity": null,
+      "majorCorridorLengthKm": null
+     }
+    },
+    {
+     "sampleId": "n1-2-6",
+     "bounds": [
+      425437,
+      -4581964,
+      426937,
+      -4580464
+     ],
+     "areaKm2": 1.96,
+     "context": {
+      "ring": "peripheral",
+      "fabric": "mixed"
+     },
+     "metrics": {
+      "intersectionDensity": 74.49,
+      "streetDensity": 11.27,
+      "segmentLengthMean": 94.396,
+      "segmentLengthMedian": 79.107,
+      "avgNodeDegree": 3.1104,
+      "threeWayShare": 70.779,
+      "fourWayShare": 22.727,
+      "deadEndShare": 5.1948,
+      "circuity": 1.0427,
+      "orientationEntropy": 3.2226,
+      "orientationOrder": 0.30156,
+      "dominantOrientations": 2,
+      "shareRegional": 0,
+      "shareArterial": 12.328,
+      "shareAvenue": 4.7687,
+      "shareConnector": 22.108,
+      "shareLocal": 60.795,
+      "majorRoadShare": 17.097,
+      "majorRoadSpacing": 1038,
+      "blockAreaMedian": 0.79062,
+      "blockAreaP25": 0.25596,
+      "blockAreaP75": 1.4931,
+      "blockAspectMedian": 1.6663,
+      "blockAspectP75": 3.0055,
+      "corridorContinuity": null,
+      "majorCorridorLengthKm": null
+     }
+    },
+    {
+     "sampleId": "n2-2-7",
+     "bounds": [
+      426187,
+      -4581214,
+      427687,
+      -4579714
+     ],
+     "areaKm2": 1.28,
+     "context": {
+      "ring": "peripheral",
+      "fabric": "mixed"
+     },
+     "metrics": {
+      "intersectionDensity": 159.38,
+      "streetDensity": 24.253,
+      "segmentLengthMean": 88.949,
+      "segmentLengthMedian": 71.676,
+      "avgNodeDegree": 3.2315,
+      "threeWayShare": 58.333,
+      "fourWayShare": 35.185,
+      "deadEndShare": 5.5556,
+      "circuity": 1.0106,
+      "orientationEntropy": 3.0767,
+      "orientationOrder": 0.4081,
+      "dominantOrientations": 2,
+      "shareRegional": 0,
+      "shareArterial": 12.515,
+      "shareAvenue": 3.3946,
+      "shareConnector": 19.091,
+      "shareLocal": 64.999,
+      "majorRoadShare": 15.909,
+      "majorRoadSpacing": 518.34,
+      "blockAreaMedian": 0.68773,
+      "blockAreaP25": 0.46271,
+      "blockAreaP75": 0.97647,
+      "blockAspectMedian": 1.5965,
+      "blockAspectP75": 2.1601,
+      "corridorContinuity": null,
+      "majorCorridorLengthKm": null
+     }
+    },
+    {
+     "sampleId": "n1-3-7",
+     "bounds": [
+      426937,
+      -4580464,
+      428437,
+      -4578964
+     ],
+     "areaKm2": 1.48,
+     "context": {
+      "ring": "peripheral",
+      "fabric": "mixed"
+     },
+     "metrics": {
+      "intersectionDensity": 125.68,
+      "streetDensity": 20.501,
+      "segmentLengthMean": 95.714,
+      "segmentLengthMedian": 79.393,
+      "avgNodeDegree": 3.1287,
+      "threeWayShare": 64.356,
+      "fourWayShare": 27.228,
+      "deadEndShare": 7.9208,
+      "circuity": 1.0508,
+      "orientationEntropy": 3.2033,
+      "orientationOrder": 0.31618,
+      "dominantOrientations": 2,
+      "shareRegional": 4.0412,
+      "shareArterial": 11.926,
+      "shareAvenue": 5.4139,
+      "shareConnector": 17.981,
+      "shareLocal": 60.638,
+      "majorRoadShare": 21.381,
+      "majorRoadSpacing": 456.27,
+      "blockAreaMedian": 0.84358,
+      "blockAreaP25": 0.47245,
+      "blockAreaP75": 1.5761,
+      "blockAspectMedian": 1.7207,
+      "blockAspectP75": 2.9504,
+      "corridorContinuity": null,
+      "majorCorridorLengthKm": null
+     }
+    },
+    {
+     "sampleId": "n3-3-7",
+     "bounds": [
+      426937,
+      -4581214,
+      428437,
+      -4579714
+     ],
+     "areaKm2": 1.88,
+     "context": {
+      "ring": "inner",
+      "fabric": "mixed"
+     },
+     "metrics": {
+      "intersectionDensity": 182.98,
+      "streetDensity": 25.639,
+      "segmentLengthMean": 83.104,
+      "segmentLengthMedian": 69.449,
+      "avgNodeDegree": 3.2676,
+      "threeWayShare": 64.789,
+      "fourWayShare": 32.113,
+      "deadEndShare": 3.0986,
+      "circuity": 1.0304,
+      "orientationEntropy": 3.228,
+      "orientationOrder": 0.29744,
+      "dominantOrientations": 1,
+      "shareRegional": 2.5439,
+      "shareArterial": 10.465,
+      "shareAvenue": 0.54425,
+      "shareConnector": 14.952,
+      "shareLocal": 71.495,
+      "majorRoadShare": 13.553,
+      "majorRoadSpacing": 575.58,
+      "blockAreaMedian": 0.66661,
+      "blockAreaP25": 0.42891,
+      "blockAreaP75": 0.97465,
+      "blockAspectMedian": 1.5741,
+      "blockAspectP75": 2.2009,
+      "corridorContinuity": null,
+      "majorCorridorLengthKm": null
+     }
+    },
+    {
+     "sampleId": "n1-3-6",
+     "bounds": [
+      426937,
+      -4581964,
+      428437,
+      -4580464
+     ],
+     "areaKm2": 2.24,
+     "context": {
+      "ring": "inner",
+      "fabric": "mixed"
+     },
+     "metrics": {
+      "intersectionDensity": 158.48,
+      "streetDensity": 22.516,
+      "segmentLengthMean": 83.503,
+      "segmentLengthMedian": 72.193,
+      "avgNodeDegree": 3.3306,
+      "threeWayShare": 59.016,
+      "fourWayShare": 37.978,
+      "deadEndShare": 3.0055,
+      "circuity": 1.0124,
+      "orientationEntropy": 3.0834,
+      "orientationOrder": 0.40343,
+      "dominantOrientations": 1,
+      "shareRegional": 0,
+      "shareArterial": 13.672,
+      "shareAvenue": 7.8345,
+      "shareConnector": 8.5671,
+      "shareLocal": 69.927,
+      "majorRoadShare": 21.506,
+      "majorRoadSpacing": 413.02,
+      "blockAreaMedian": 0.72307,
+      "blockAreaP25": 0.45759,
+      "blockAreaP75": 1.1679,
+      "blockAspectMedian": 1.53,
+      "blockAspectP75": 1.9938,
+      "corridorContinuity": null,
+      "majorCorridorLengthKm": null
+     }
+    },
+    {
+     "sampleId": "n2-2-6",
+     "bounds": [
+      426187,
+      -4582714,
+      427687,
+      -4581214
+     ],
+     "areaKm2": 2.2,
+     "context": {
+      "ring": "inner",
+      "fabric": "mixed"
+     },
+     "metrics": {
+      "intersectionDensity": 117.73,
+      "streetDensity": 19.606,
+      "segmentLengthMean": 98.479,
+      "segmentLengthMedian": 80.163,
+      "avgNodeDegree": 3.1848,
+      "threeWayShare": 64.13,
+      "fourWayShare": 29.71,
+      "deadEndShare": 6.1594,
+      "circuity": 1.0169,
+      "orientationEntropy": 3.0672,
+      "orientationOrder": 0.41473,
+      "dominantOrientations": 1,
+      "shareRegional": 0,
+      "shareArterial": 32.178,
+      "shareAvenue": 7.9561,
+      "shareConnector": 11.087,
+      "shareLocal": 48.779,
+      "majorRoadShare": 40.134,
+      "majorRoadSpacing": 254.17,
+      "blockAreaMedian": 1.0528,
+      "blockAreaP25": 0.4855,
+      "blockAreaP75": 1.6996,
+      "blockAspectMedian": 1.5224,
+      "blockAspectP75": 2.1461,
+      "corridorContinuity": null,
+      "majorCorridorLengthKm": null
+     }
+    },
+    {
+     "sampleId": "n3-3-6",
+     "bounds": [
+      426937,
+      -4582714,
+      428437,
+      -4581214
+     ],
+     "areaKm2": 2.24,
+     "context": {
+      "ring": "inner",
+      "fabric": "mixed"
+     },
+     "metrics": {
+      "intersectionDensity": 135.71,
+      "streetDensity": 22.768,
+      "segmentLengthMean": 96.407,
+      "segmentLengthMedian": 79.417,
+      "avgNodeDegree": 3.3846,
+      "threeWayShare": 56.731,
+      "fourWayShare": 40.705,
+      "deadEndShare": 2.5641,
+      "circuity": 1.0133,
+      "orientationEntropy": 3.1967,
+      "orientationOrder": 0.32113,
+      "dominantOrientations": 2,
+      "shareRegional": 0,
+      "shareArterial": 25.583,
+      "shareAvenue": 20.267,
+      "shareConnector": 3.6188,
+      "shareLocal": 50.531,
+      "majorRoadShare": 45.85,
+      "majorRoadSpacing": 191.59,
+      "blockAreaMedian": 0.97143,
+      "blockAreaP25": 0.48154,
+      "blockAreaP75": 1.5179,
+      "blockAspectMedian": 1.6073,
+      "blockAspectP75": 2.2012,
+      "corridorContinuity": null,
+      "majorCorridorLengthKm": null
+     }
+    },
+    {
+     "sampleId": "n2-3-6",
+     "bounds": [
+      427687,
+      -4582714,
+      429187,
+      -4581214
+     ],
+     "areaKm2": 2.56,
+     "context": {
+      "ring": "inner",
+      "fabric": "mixed"
+     },
+     "metrics": {
+      "intersectionDensity": 91.406,
+      "streetDensity": 15.458,
+      "segmentLengthMean": 96.991,
+      "segmentLengthMedian": 99.789,
+      "avgNodeDegree": 3.5593,
+      "threeWayShare": 44.915,
+      "fourWayShare": 54.237,
+      "deadEndShare": 0.84746,
+      "circuity": 1.014,
+      "orientationEntropy": 2.9716,
+      "orientationOrder": 0.47944,
+      "dominantOrientations": 1,
+      "shareRegional": 0,
+      "shareArterial": 8.6631,
+      "shareAvenue": 24.561,
+      "shareConnector": 12.176,
+      "shareLocal": 54.6,
+      "majorRoadShare": 33.224,
+      "majorRoadSpacing": 389.43,
+      "blockAreaMedian": 1.1758,
+      "blockAreaP25": 0.53126,
+      "blockAreaP75": 1.7629,
+      "blockAspectMedian": 1.4848,
+      "blockAspectP75": 2.134,
+      "corridorContinuity": null,
+      "majorCorridorLengthKm": null
+     }
+    },
+    {
+     "sampleId": "n0-3-5",
+     "bounds": [
+      427687,
+      -4583464,
+      429187,
+      -4581964
+     ],
+     "areaKm2": 2.24,
+     "context": {
+      "ring": "central",
+      "fabric": "mixed"
+     },
+     "metrics": {
+      "intersectionDensity": 125,
+      "streetDensity": 19.701,
+      "segmentLengthMean": 89.332,
+      "segmentLengthMedian": 84.961,
+      "avgNodeDegree": 3.4807,
+      "threeWayShare": 48.07,
+      "fourWayShare": 50.175,
+      "deadEndShare": 1.7544,
+      "circuity": 1.0037,
+      "orientationEntropy": 2.9622,
+      "orientationOrder": 0.48562,
+      "dominantOrientations": 1,
+      "shareRegional": 0,
+      "shareArterial": 4.1055,
+      "shareAvenue": 21.21,
+      "shareConnector": 19.086,
+      "shareLocal": 55.599,
+      "majorRoadShare": 25.315,
+      "majorRoadSpacing": 401.01,
+      "blockAreaMedian": 0.91238,
+      "blockAreaP25": 0.54184,
+      "blockAreaP75": 1.5586,
+      "blockAspectMedian": 1.5206,
+      "blockAspectP75": 2.1324,
+      "corridorContinuity": null,
+      "majorCorridorLengthKm": null
+     }
+    },
+    {
+     "sampleId": "n1-3-5",
+     "bounds": [
+      426937,
+      -4583464,
+      428437,
+      -4581964
+     ],
+     "areaKm2": 1.96,
+     "context": {
+      "ring": "inner",
+      "fabric": "mixed"
+     },
+     "metrics": {
+      "intersectionDensity": 173.47,
+      "streetDensity": 26.971,
+      "segmentLengthMean": 89.903,
+      "segmentLengthMedian": 78.169,
+      "avgNodeDegree": 3.3707,
+      "threeWayShare": 58.621,
+      "fourWayShare": 39.08,
+      "deadEndShare": 2.2989,
+      "circuity": 1.0141,
+      "orientationEntropy": 3.2232,
+      "orientationOrder": 0.30111,
+      "dominantOrientations": 2,
+      "shareRegional": 0,
+      "shareArterial": 21.263,
+      "shareAvenue": 14.419,
+      "shareConnector": 9.7673,
+      "shareLocal": 54.551,
+      "majorRoadShare": 35.682,
+      "majorRoadSpacing": 207.82,
+      "blockAreaMedian": 0.88004,
+      "blockAreaP25": 0.47581,
+      "blockAreaP75": 1.3469,
+      "blockAspectMedian": 1.5305,
+      "blockAspectP75": 2.2833,
+      "corridorContinuity": null,
+      "majorCorridorLengthKm": null
+     }
+    },
+    {
+     "sampleId": "n0-2-5",
+     "bounds": [
+      426187,
+      -4583464,
+      427687,
+      -4581964
+     ],
+     "areaKm2": 1.96,
+     "context": {
+      "ring": "inner",
+      "fabric": "mixed"
+     },
+     "metrics": {
+      "intersectionDensity": 168.37,
+      "streetDensity": 25.587,
+      "segmentLengthMean": 88.447,
+      "segmentLengthMedian": 75.603,
+      "avgNodeDegree": 3.2213,
+      "threeWayShare": 64.368,
+      "fourWayShare": 30.46,
+      "deadEndShare": 5.1724,
+      "circuity": 1.0206,
+      "orientationEntropy": 3.18,
+      "orientationOrder": 0.33355,
+      "dominantOrientations": 2,
+      "shareRegional": 0,
+      "shareArterial": 26.429,
+      "shareAvenue": 3.5836,
+      "shareConnector": 12.853,
+      "shareLocal": 57.135,
+      "majorRoadShare": 30.012,
+      "majorRoadSpacing": 260.45,
+      "blockAreaMedian": 0.96778,
+      "blockAreaP25": 0.46211,
+      "blockAreaP75": 1.4544,
+      "blockAspectMedian": 1.6146,
+      "blockAspectP75": 2.159,
+      "corridorContinuity": null,
+      "majorCorridorLengthKm": null
+     }
+    },
+    {
+     "sampleId": "n1-4-5",
+     "bounds": [
+      428437,
+      -4583464,
+      429937,
+      -4581964
+     ],
+     "areaKm2": 2.24,
+     "context": {
+      "ring": "central",
+      "fabric": "strong_grid"
+     },
+     "metrics": {
+      "intersectionDensity": 120.09,
+      "streetDensity": 19.264,
+      "segmentLengthMean": 91.039,
+      "segmentLengthMedian": 90.688,
+      "avgNodeDegree": 3.4784,
+      "threeWayShare": 43.165,
+      "fourWayShare": 53.597,
+      "deadEndShare": 3.2374,
+      "circuity": 1.0074,
+      "orientationEntropy": 2.418,
+      "orientationOrder": 0.77951,
+      "dominantOrientations": 1,
+      "shareRegional": 0,
+      "shareArterial": 3.6714,
+      "shareAvenue": 23.393,
+      "shareConnector": 25.166,
+      "shareLocal": 47.77,
+      "majorRoadShare": 27.065,
+      "majorRoadSpacing": 383.59,
+      "blockAreaMedian": 1.0118,
+      "blockAreaP25": 0.42379,
+      "blockAreaP75": 1.7755,
+      "blockAspectMedian": 1.4367,
+      "blockAspectP75": 2.3302,
+      "corridorContinuity": null,
+      "majorCorridorLengthKm": null
+     }
+    },
+    {
+     "sampleId": "n2-3-5",
+     "bounds": [
+      427687,
+      -4584214,
+      429187,
+      -4582714
+     ],
+     "areaKm2": 2.24,
+     "context": {
+      "ring": "central",
+      "fabric": "mixed"
+     },
+     "metrics": {
+      "intersectionDensity": 161.16,
+      "streetDensity": 22.481,
+      "segmentLengthMean": 79.554,
+      "segmentLengthMedian": 74.207,
+      "avgNodeDegree": 3.4336,
+      "threeWayShare": 50.949,
+      "fourWayShare": 46.883,
+      "deadEndShare": 2.168,
+      "circuity": 1.0076,
+      "orientationEntropy": 3.1415,
+      "orientationOrder": 0.36189,
+      "dominantOrientations": 1,
+      "shareRegional": 0,
+      "shareArterial": 5.5695,
+      "shareAvenue": 11.015,
+      "shareConnector": 18.519,
+      "shareLocal": 64.897,
+      "majorRoadShare": 16.585,
+      "majorRoadSpacing": 536.42,
+      "blockAreaMedian": 0.76541,
+      "blockAreaP25": 0.46091,
+      "blockAreaP75": 1.0477,
+      "blockAspectMedian": 1.5128,
+      "blockAspectP75": 2.0386,
+      "corridorContinuity": null,
+      "majorCorridorLengthKm": null
+     }
+    },
+    {
+     "sampleId": "n3-4-5",
+     "bounds": [
+      428437,
+      -4584214,
+      429937,
+      -4582714
+     ],
+     "areaKm2": 2.24,
+     "context": {
+      "ring": "central",
+      "fabric": "strong_grid"
+     },
+     "metrics": {
+      "intersectionDensity": 186.61,
+      "streetDensity": 24.383,
+      "segmentLengthMean": 74.615,
+      "segmentLengthMedian": 67.324,
+      "avgNodeDegree": 3.4051,
+      "threeWayShare": 50.463,
+      "fourWayShare": 46.296,
+      "deadEndShare": 3.2407,
+      "circuity": 1.0124,
+      "orientationEntropy": 2.5658,
+      "orientationOrder": 0.71184,
+      "dominantOrientations": 1,
+      "shareRegional": 0,
+      "shareArterial": 1.2816,
+      "shareAvenue": 13.31,
+      "shareConnector": 16.808,
+      "shareLocal": 68.601,
+      "majorRoadShare": 14.591,
+      "majorRoadSpacing": 562.14,
+      "blockAreaMedian": 0.63566,
+      "blockAreaP25": 0.37426,
+      "blockAreaP75": 1.0377,
+      "blockAspectMedian": 1.575,
+      "blockAspectP75": 2.2522,
+      "corridorContinuity": null,
+      "majorCorridorLengthKm": null
+     }
+    },
+    {
+     "sampleId": "n2-4-5",
+     "bounds": [
+      429187,
+      -4584214,
+      430687,
+      -4582714
+     ],
+     "areaKm2": 1.96,
+     "context": {
+      "ring": "central",
+      "fabric": "strong_grid"
+     },
+     "metrics": {
+      "intersectionDensity": 186.73,
+      "streetDensity": 26.278,
+      "segmentLengthMean": 78.994,
+      "segmentLengthMedian": 67.392,
+      "avgNodeDegree": 3.4042,
+      "threeWayShare": 49.081,
+      "fourWayShare": 46.982,
+      "deadEndShare": 3.937,
+      "circuity": 1.0115,
+      "orientationEntropy": 2.2883,
+      "orientationOrder": 0.83149,
+      "dominantOrientations": 1,
+      "shareRegional": 0,
+      "shareArterial": 1.0454,
+      "shareAvenue": 17.302,
+      "shareConnector": 18.299,
+      "shareLocal": 63.353,
+      "majorRoadShare": 18.348,
+      "majorRoadSpacing": 414.82,
+      "blockAreaMedian": 0.67099,
+      "blockAreaP25": 0.3562,
+      "blockAreaP75": 1.2775,
+      "blockAspectMedian": 1.6429,
+      "blockAspectP75": 2.5677,
+      "corridorContinuity": null,
+      "majorCorridorLengthKm": null
+     }
+    },
+    {
+     "sampleId": "n0-2-4",
+     "bounds": [
+      426187,
+      -4584964,
+      427687,
+      -4583464
+     ],
+     "areaKm2": 2.12,
+     "context": {
+      "ring": "inner",
+      "fabric": "mixed"
+     },
+     "metrics": {
+      "intersectionDensity": 112.26,
+      "streetDensity": 19.46,
+      "segmentLengthMean": 97.994,
+      "segmentLengthMedian": 79.557,
+      "avgNodeDegree": 3.1115,
+      "threeWayShare": 55.39,
+      "fourWayShare": 33.086,
+      "deadEndShare": 11.524,
+      "circuity": 1.0382,
+      "orientationEntropy": 2.9575,
+      "orientationOrder": 0.48864,
+      "dominantOrientations": 1,
+      "shareRegional": 15.962,
+      "shareArterial": 0.62599,
+      "shareAvenue": 0.71058,
+      "shareConnector": 18.501,
+      "shareLocal": 64.2,
+      "majorRoadShare": 17.299,
+      "majorRoadSpacing": 594.11,
+      "blockAreaMedian": 0.82186,
+      "blockAreaP25": 0.44127,
+      "blockAreaP75": 1.3007,
+      "blockAspectMedian": 1.5118,
+      "blockAspectP75": 1.9516,
+      "corridorContinuity": null,
+      "majorCorridorLengthKm": null
+     }
+    },
+    {
+     "sampleId": "n1-3-4",
+     "bounds": [
+      426937,
+      -4584964,
+      428437,
+      -4583464
+     ],
+     "areaKm2": 2.24,
+     "context": {
+      "ring": "inner",
+      "fabric": "mixed"
+     },
+     "metrics": {
+      "intersectionDensity": 122.32,
+      "streetDensity": 18.112,
+      "segmentLengthMean": 86.505,
+      "segmentLengthMedian": 76.26,
+      "avgNodeDegree": 3.2,
+      "threeWayShare": 59.322,
+      "fourWayShare": 33.559,
+      "deadEndShare": 7.1186,
+      "circuity": 1.0177,
+      "orientationEntropy": 3.2483,
+      "orientationOrder": 0.28184,
+      "dominantOrientations": 1,
+      "shareRegional": 2.9099,
+      "shareArterial": 5.7721,
+      "shareAvenue": 3.2123,
+      "shareConnector": 16.077,
+      "shareLocal": 72.028,
+      "majorRoadShare": 11.894,
+      "majorRoadSpacing": 928.37,
+      "blockAreaMedian": 0.83712,
+      "blockAreaP25": 0.54062,
+      "blockAreaP75": 1.2809,
+      "blockAspectMedian": 1.506,
+      "blockAspectP75": 1.9398,
+      "corridorContinuity": null,
+      "majorCorridorLengthKm": null
+     }
+    },
+    {
+     "sampleId": "n2-2-4",
+     "bounds": [
+      426187,
+      -4585714,
+      427687,
+      -4584214
+     ],
+     "areaKm2": 1.64,
+     "context": {
+      "ring": "inner",
+      "fabric": "mixed"
+     },
+     "metrics": {
+      "intersectionDensity": 79.268,
+      "streetDensity": 16.03,
+      "segmentLengthMean": 117.89,
+      "segmentLengthMedian": 79.378,
+      "avgNodeDegree": 2.8889,
+      "threeWayShare": 66.667,
+      "fourWayShare": 18.301,
+      "deadEndShare": 15.033,
+      "circuity": 1.1102,
+      "orientationEntropy": 3.2668,
+      "orientationOrder": 0.26749,
+      "dominantOrientations": 1,
+      "shareRegional": 18.09,
+      "shareArterial": 0,
+      "shareAvenue": 0,
+      "shareConnector": 19.225,
+      "shareLocal": 62.686,
+      "majorRoadShare": 18.09,
+      "majorRoadSpacing": 689.72,
+      "blockAreaMedian": 1.0416,
+      "blockAreaP25": 0.40244,
+      "blockAreaP75": 2.3283,
+      "blockAspectMedian": 1.8031,
+      "blockAspectP75": 2.3692,
+      "corridorContinuity": null,
+      "majorCorridorLengthKm": null
+     }
+    },
+    {
+     "sampleId": "n3-3-4",
+     "bounds": [
+      426937,
+      -4585714,
+      428437,
+      -4584214
+     ],
+     "areaKm2": 2.24,
+     "context": {
+      "ring": "inner",
+      "fabric": "irregular"
+     },
+     "metrics": {
+      "intersectionDensity": 99.107,
+      "streetDensity": 16.652,
+      "segmentLengthMean": 101.64,
+      "segmentLengthMedian": 74.232,
+      "avgNodeDegree": 2.9879,
+      "threeWayShare": 71.66,
+      "fourWayShare": 18.219,
+      "deadEndShare": 10.121,
+      "circuity": 1.0715,
+      "orientationEntropy": 3.4692,
+      "orientationOrder": 0.10139,
+      "dominantOrientations": 1,
+      "shareRegional": 10.642,
+      "shareArterial": 0,
+      "shareAvenue": 4.9665,
+      "shareConnector": 23.806,
+      "shareLocal": 60.585,
+      "majorRoadShare": 15.609,
+      "majorRoadSpacing": 769.47,
+      "blockAreaMedian": 1.0205,
+      "blockAreaP25": 0.50512,
+      "blockAreaP75": 2.2714,
+      "blockAspectMedian": 1.7347,
+      "blockAspectP75": 2.6909,
+      "corridorContinuity": null,
+      "majorCorridorLengthKm": null
+     }
+    },
+    {
+     "sampleId": "n2-2-5",
+     "bounds": [
+      426187,
+      -4584214,
+      427687,
+      -4582714
+     ],
+     "areaKm2": 1.96,
+     "context": {
+      "ring": "inner",
+      "fabric": "mixed"
+     },
+     "metrics": {
+      "intersectionDensity": 164.29,
+      "streetDensity": 24.44,
+      "segmentLengthMean": 85.386,
+      "segmentLengthMedian": 77.008,
+      "avgNodeDegree": 3.2727,
+      "threeWayShare": 57.771,
+      "fourWayShare": 36.657,
+      "deadEndShare": 5.5718,
+      "circuity": 1.0237,
+      "orientationEntropy": 2.895,
+      "orientationOrder": 0.5285,
+      "dominantOrientations": 1,
+      "shareRegional": 6.0266,
+      "shareArterial": 7.5244,
+      "shareAvenue": 0.92662,
+      "shareConnector": 16.812,
+      "shareLocal": 68.71,
+      "majorRoadShare": 14.478,
+      "majorRoadSpacing": 565.25,
+      "blockAreaMedian": 0.82198,
+      "blockAreaP25": 0.46773,
+      "blockAreaP75": 1.2683,
+      "blockAspectMedian": 1.5264,
+      "blockAspectP75": 1.9871,
+      "corridorContinuity": null,
+      "majorCorridorLengthKm": null
+     }
+    },
+    {
+     "sampleId": "n3-3-5",
+     "bounds": [
+      426937,
+      -4584214,
+      428437,
+      -4582714
+     ],
+     "areaKm2": 1.96,
+     "context": {
+      "ring": "inner",
+      "fabric": "mixed"
+     },
+     "metrics": {
+      "intersectionDensity": 166.84,
+      "streetDensity": 24.357,
+      "segmentLengthMean": 83.902,
+      "segmentLengthMedian": 77.008,
+      "avgNodeDegree": 3.349,
+      "threeWayShare": 53.959,
+      "fourWayShare": 41.935,
+      "deadEndShare": 4.1056,
+      "circuity": 1.0139,
+      "orientationEntropy": 3.1053,
+      "orientationOrder": 0.3879,
+      "dominantOrientations": 1,
+      "shareRegional": 0,
+      "shareArterial": 11.232,
+      "shareAvenue": 3.5689,
+      "shareConnector": 15.854,
+      "shareLocal": 69.346,
+      "majorRoadShare": 14.8,
+      "majorRoadSpacing": 554.79,
+      "blockAreaMedian": 0.85037,
+      "blockAreaP25": 0.53031,
+      "blockAreaP75": 1.2218,
+      "blockAspectMedian": 1.4684,
+      "blockAspectP75": 1.9125,
+      "corridorContinuity": null,
+      "majorCorridorLengthKm": null
+     }
+    },
+    {
+     "sampleId": "n0-3-4",
+     "bounds": [
+      427687,
+      -4584964,
+      429187,
+      -4583464
+     ],
+     "areaKm2": 2.56,
+     "context": {
+      "ring": "central",
+      "fabric": "mixed"
+     },
+     "metrics": {
+      "intersectionDensity": 133.2,
+      "streetDensity": 18.572,
+      "segmentLengthMean": 80.995,
+      "segmentLengthMedian": 72.929,
+      "avgNodeDegree": 3.2674,
+      "threeWayShare": 59.053,
+      "fourWayShare": 35.933,
+      "deadEndShare": 5.0139,
+      "circuity": 1.0209,
+      "orientationEntropy": 3.2772,
+      "orientationOrder": 0.25937,
+      "dominantOrientations": 1,
+      "shareRegional": 0,
+      "shareArterial": 8.7077,
+      "shareAvenue": 10.288,
+      "shareConnector": 10.843,
+      "shareLocal": 70.161,
+      "majorRoadShare": 18.995,
+      "majorRoadSpacing": 566.93,
+      "blockAreaMedian": 0.75416,
+      "blockAreaP25": 0.45253,
+      "blockAreaP75": 1.1158,
+      "blockAspectMedian": 1.5701,
+      "blockAspectP75": 2.1889,
+      "corridorContinuity": null,
+      "majorCorridorLengthKm": null
+     }
+    },
+    {
+     "sampleId": "n2-3-4",
+     "bounds": [
+      427687,
+      -4585714,
+      429187,
+      -4584214
+     ],
+     "areaKm2": 2.52,
+     "context": {
+      "ring": "inner",
+      "fabric": "irregular"
+     },
+     "metrics": {
+      "intersectionDensity": 103.57,
+      "streetDensity": 17.142,
+      "segmentLengthMean": 97.074,
+      "segmentLengthMedian": 72.797,
+      "avgNodeDegree": 2.9599,
+      "threeWayShare": 66.221,
+      "fourWayShare": 21.07,
+      "deadEndShare": 12.709,
+      "circuity": 1.0495,
+      "orientationEntropy": 3.4254,
+      "orientationOrder": 0.13875,
+      "dominantOrientations": 1,
+      "shareRegional": 4.0096,
+      "shareArterial": 3.0913,
+      "shareAvenue": 7.51,
+      "shareConnector": 16.147,
+      "shareLocal": 69.242,
+      "majorRoadShare": 14.611,
+      "majorRoadSpacing": 798.53,
+      "blockAreaMedian": 0.98579,
+      "blockAreaP25": 0.49849,
+      "blockAreaP75": 1.6996,
+      "blockAspectMedian": 1.9012,
+      "blockAspectP75": 2.9136,
+      "corridorContinuity": null,
+      "majorCorridorLengthKm": null
+     }
+    },
+    {
+     "sampleId": "n1-4-4",
+     "bounds": [
+      428437,
+      -4584964,
+      429937,
+      -4583464
+     ],
+     "areaKm2": 2.56,
+     "context": {
+      "ring": "central",
+      "fabric": "mixed"
+     },
+     "metrics": {
+      "intersectionDensity": 163.28,
+      "streetDensity": 21.643,
+      "segmentLengthMean": 75.074,
+      "segmentLengthMedian": 65.611,
+      "avgNodeDegree": 3.3295,
+      "threeWayShare": 52.955,
+      "fourWayShare": 42.045,
+      "deadEndShare": 5,
+      "circuity": 1.0172,
+      "orientationEntropy": 2.817,
+      "orientationOrder": 0.57599,
+      "dominantOrientations": 1,
+      "shareRegional": 0,
+      "shareArterial": 7.4415,
+      "shareAvenue": 6.4757,
+      "shareConnector": 7.2693,
+      "shareLocal": 78.813,
+      "majorRoadShare": 13.917,
+      "majorRoadSpacing": 664,
+      "blockAreaMedian": 0.61742,
+      "blockAreaP25": 0.39169,
+      "blockAreaP75": 0.96644,
+      "blockAspectMedian": 1.5458,
+      "blockAspectP75": 2.0823,
+      "corridorContinuity": null,
+      "majorCorridorLengthKm": null
+     }
+    },
+    {
+     "sampleId": "n3-5-5",
+     "bounds": [
+      429937,
+      -4584214,
+      431437,
+      -4582714
+     ],
+     "areaKm2": 1.96,
+     "context": {
+      "ring": "central",
+      "fabric": "strong_grid"
+     },
+     "metrics": {
+      "intersectionDensity": 131.12,
+      "streetDensity": 22.759,
+      "segmentLengthMean": 94.109,
+      "segmentLengthMedian": 112.88,
+      "avgNodeDegree": 3.613,
+      "threeWayShare": 37.548,
+      "fourWayShare": 60.92,
+      "deadEndShare": 1.5326,
+      "circuity": 1.0154,
+      "orientationEntropy": 2.3161,
+      "orientationOrder": 0.82091,
+      "dominantOrientations": 1,
+      "shareRegional": 0,
+      "shareArterial": 7.1242,
+      "shareAvenue": 20.7,
+      "shareConnector": 21.893,
+      "shareLocal": 50.282,
+      "majorRoadShare": 27.824,
+      "majorRoadSpacing": 315.83,
+      "blockAreaMedian": 0.98145,
+      "blockAreaP25": 0.37007,
+      "blockAreaP75": 1.7295,
+      "blockAspectMedian": 1.4963,
+      "blockAspectP75": 2.4873,
+      "corridorContinuity": null,
+      "majorCorridorLengthKm": null
+     }
+    },
+    {
+     "sampleId": "n2-5-5",
+     "bounds": [
+      430687,
+      -4584214,
+      432187,
+      -4582714
+     ],
+     "areaKm2": 2.2,
+     "context": {
+      "ring": "inner",
+      "fabric": "strong_grid"
+     },
+     "metrics": {
+      "intersectionDensity": 101.82,
+      "streetDensity": 19.296,
+      "segmentLengthMean": 104.3,
+      "segmentLengthMedian": 125.67,
+      "avgNodeDegree": 3.6078,
+      "threeWayShare": 33.621,
+      "fourWayShare": 62.931,
+      "deadEndShare": 3.4483,
+      "circuity": 1.0129,
+      "orientationEntropy": 2.404,
+      "orientationOrder": 0.78545,
+      "dominantOrientations": 1,
+      "shareRegional": 0,
+      "shareArterial": 16.785,
+      "shareAvenue": 11.196,
+      "shareConnector": 20.542,
+      "shareLocal": 51.478,
+      "majorRoadShare": 27.981,
+      "majorRoadSpacing": 370.42,
+      "blockAreaMedian": 1.3278,
+      "blockAreaP25": 0.38574,
+      "blockAreaP75": 1.7567,
+      "blockAspectMedian": 1.2804,
+      "blockAspectP75": 2.3858,
+      "corridorContinuity": null,
+      "majorCorridorLengthKm": null
+     }
+    },
+    {
+     "sampleId": "n1-6-5",
+     "bounds": [
+      431437,
+      -4583464,
+      432937,
+      -4581964
+     ],
+     "areaKm2": 2.16,
+     "context": {
+      "ring": "inner",
+      "fabric": "strong_grid"
+     },
+     "metrics": {
+      "intersectionDensity": 88.889,
+      "streetDensity": 17.768,
+      "segmentLengthMean": 108.72,
+      "segmentLengthMedian": 124.89,
+      "avgNodeDegree": 3.6256,
+      "threeWayShare": 35.897,
+      "fourWayShare": 62.564,
+      "deadEndShare": 1.5385,
+      "circuity": 1.0319,
+      "orientationEntropy": 2.5632,
+      "orientationOrder": 0.7131,
+      "dominantOrientations": 1,
+      "shareRegional": 2.6149,
+      "shareArterial": 1.4922,
+      "shareAvenue": 7.5938,
+      "shareConnector": 38.718,
+      "shareLocal": 49.582,
+      "majorRoadShare": 11.701,
+      "majorRoadSpacing": 961.99,
+      "blockAreaMedian": 1.1304,
+      "blockAreaP25": 0.36503,
+      "blockAreaP75": 1.7692,
+      "blockAspectMedian": 1.2728,
+      "blockAspectP75": 3.4695,
+      "corridorContinuity": null,
+      "majorCorridorLengthKm": null
+     }
+    },
+    {
+     "sampleId": "n3-6-5",
+     "bounds": [
+      431437,
+      -4584214,
+      432937,
+      -4582714
+     ],
+     "areaKm2": 2.2,
+     "context": {
+      "ring": "inner",
+      "fabric": "strong_grid"
+     },
+     "metrics": {
+      "intersectionDensity": 87.273,
+      "streetDensity": 18.205,
+      "segmentLengthMean": 113.78,
+      "segmentLengthMedian": 128.06,
+      "avgNodeDegree": 3.5423,
+      "threeWayShare": 35.323,
+      "fourWayShare": 60.199,
+      "deadEndShare": 4.4776,
+      "circuity": 1.0145,
+      "orientationEntropy": 2.4372,
+      "orientationOrder": 0.77123,
+      "dominantOrientations": 1,
+      "shareRegional": 0,
+      "shareArterial": 11.2,
+      "shareAvenue": 5.5472,
+      "shareConnector": 24.789,
+      "shareLocal": 58.463,
+      "majorRoadShare": 16.747,
+      "majorRoadSpacing": 655.97,
+      "blockAreaMedian": 1.6387,
+      "blockAreaP25": 0.6568,
+      "blockAreaP75": 1.7777,
+      "blockAspectMedian": 1.2803,
+      "blockAspectP75": 2.2239,
+      "corridorContinuity": null,
+      "majorCorridorLengthKm": null
+     }
+    },
+    {
+     "sampleId": "n0-5-4",
+     "bounds": [
+      430687,
+      -4584964,
+      432187,
+      -4583464
+     ],
+     "areaKm2": 2.52,
+     "context": {
+      "ring": "inner",
+      "fabric": "strong_grid"
+     },
+     "metrics": {
+      "intersectionDensity": 98.81,
+      "streetDensity": 17.103,
+      "segmentLengthMean": 99.077,
+      "segmentLengthMedian": 89.658,
+      "avgNodeDegree": 3.3088,
+      "threeWayShare": 45.221,
+      "fourWayShare": 46.324,
+      "deadEndShare": 8.4559,
+      "circuity": 1.0378,
+      "orientationEntropy": 2.5379,
+      "orientationOrder": 0.7253,
+      "dominantOrientations": 1,
+      "shareRegional": 0,
+      "shareArterial": 15.078,
+      "shareAvenue": 21.065,
+      "shareConnector": 7.0058,
+      "shareLocal": 56.851,
+      "majorRoadShare": 36.143,
+      "majorRoadSpacing": 323.55,
+      "blockAreaMedian": 1.0646,
+      "blockAreaP25": 0.64732,
+      "blockAreaP75": 1.7444,
+      "blockAspectMedian": 1.4079,
+      "blockAspectP75": 2.0843,
+      "corridorContinuity": null,
+      "majorCorridorLengthKm": null
+     }
+    },
+    {
+     "sampleId": "n1-5-4",
+     "bounds": [
+      429937,
+      -4584964,
+      431437,
+      -4583464
+     ],
+     "areaKm2": 2.24,
+     "context": {
+      "ring": "central",
+      "fabric": "strong_grid"
+     },
+     "metrics": {
+      "intersectionDensity": 121.43,
+      "streetDensity": 19.817,
+      "segmentLengthMean": 90.225,
+      "segmentLengthMedian": 76.835,
+      "avgNodeDegree": 3.414,
+      "threeWayShare": 47.368,
+      "fourWayShare": 48.07,
+      "deadEndShare": 4.5614,
+      "circuity": 1.0335,
+      "orientationEntropy": 2.4424,
+      "orientationOrder": 0.76899,
+      "dominantOrientations": 1,
+      "shareRegional": 0,
+      "shareArterial": 5.5195,
+      "shareAvenue": 24.467,
+      "shareConnector": 10.681,
+      "shareLocal": 59.333,
+      "majorRoadShare": 29.986,
+      "majorRoadSpacing": 336.56,
+      "blockAreaMedian": 0.9437,
+      "blockAreaP25": 0.61123,
+      "blockAreaP75": 1.6479,
+      "blockAspectMedian": 1.46,
+      "blockAspectP75": 2.0428,
+      "corridorContinuity": null,
+      "majorCorridorLengthKm": null
+     }
+    },
+    {
+     "sampleId": "n1-6-4",
+     "bounds": [
+      431437,
+      -4584964,
+      432937,
+      -4583464
+     ],
+     "areaKm2": 2.52,
+     "context": {
+      "ring": "inner",
+      "fabric": "strong_grid"
+     },
+     "metrics": {
+      "intersectionDensity": 98.413,
+      "streetDensity": 17.734,
+      "segmentLengthMean": 104.9,
+      "segmentLengthMedian": 93.508,
+      "avgNodeDegree": 3.2612,
+      "threeWayShare": 52.612,
+      "fourWayShare": 39.925,
+      "deadEndShare": 7.4627,
+      "circuity": 1.0292,
+      "orientationEntropy": 2.6531,
+      "orientationOrder": 0.66762,
+      "dominantOrientations": 1,
+      "shareRegional": 3.4922,
+      "shareArterial": 14.597,
+      "shareAvenue": 8.2196,
+      "shareConnector": 14.724,
+      "shareLocal": 58.967,
+      "majorRoadShare": 26.308,
+      "majorRoadSpacing": 428.68,
+      "blockAreaMedian": 1.0575,
+      "blockAreaP25": 0.5783,
+      "blockAreaP75": 1.7463,
+      "blockAspectMedian": 1.5808,
+      "blockAspectP75": 2.372,
+      "corridorContinuity": null,
+      "majorCorridorLengthKm": null
+     }
+    },
+    {
+     "sampleId": "n0-4-4",
+     "bounds": [
+      429187,
+      -4584964,
+      430687,
+      -4583464
+     ],
+     "areaKm2": 2.24,
+     "context": {
+      "ring": "central",
+      "fabric": "strong_grid"
+     },
+     "metrics": {
+      "intersectionDensity": 173.66,
+      "streetDensity": 23.618,
+      "segmentLengthMean": 76.231,
+      "segmentLengthMedian": 65.872,
+      "avgNodeDegree": 3.3627,
+      "threeWayShare": 51.225,
+      "fourWayShare": 44.118,
+      "deadEndShare": 4.6569,
+      "circuity": 1.0088,
+      "orientationEntropy": 2.4847,
+      "orientationOrder": 0.75008,
+      "dominantOrientations": 1,
+      "shareRegional": 0,
+      "shareArterial": 6.9165,
+      "shareAvenue": 7.9323,
+      "shareConnector": 9.9958,
+      "shareLocal": 75.155,
+      "majorRoadShare": 14.849,
+      "majorRoadSpacing": 570.29,
+      "blockAreaMedian": 0.67157,
+      "blockAreaP25": 0.41381,
+      "blockAreaP75": 1.0074,
+      "blockAspectMedian": 1.5333,
+      "blockAspectP75": 2.0292,
+      "corridorContinuity": null,
+      "majorCorridorLengthKm": null
+     }
+    },
+    {
+     "sampleId": "n2-4-4",
+     "bounds": [
+      429187,
+      -4585714,
+      430687,
+      -4584214
+     ],
+     "areaKm2": 2.2,
+     "context": {
+      "ring": "inner",
+      "fabric": "mixed"
+     },
+     "metrics": {
+      "intersectionDensity": 121.82,
+      "streetDensity": 20.453,
+      "segmentLengthMean": 94.53,
+      "segmentLengthMedian": 71.871,
+      "avgNodeDegree": 3.1424,
+      "threeWayShare": 54.967,
+      "fourWayShare": 33.775,
+      "deadEndShare": 11.258,
+      "circuity": 1.052,
+      "orientationEntropy": 3.0996,
+      "orientationOrder": 0.39194,
+      "dominantOrientations": 1,
+      "shareRegional": 0,
+      "shareArterial": 16.019,
+      "shareAvenue": 3.0872,
+      "shareConnector": 13.581,
+      "shareLocal": 67.314,
+      "majorRoadShare": 19.106,
+      "majorRoadSpacing": 511.81,
+      "blockAreaMedian": 0.67999,
+      "blockAreaP25": 0.41739,
+      "blockAreaP75": 1.1359,
+      "blockAspectMedian": 1.5757,
+      "blockAspectP75": 2.113,
+      "corridorContinuity": null,
+      "majorCorridorLengthKm": null
+     }
+    },
+    {
+     "sampleId": "n3-4-4",
+     "bounds": [
+      428437,
+      -4585714,
+      429937,
+      -4584214
+     ],
+     "areaKm2": 2.48,
+     "context": {
+      "ring": "inner",
+      "fabric": "mixed"
+     },
+     "metrics": {
+      "intersectionDensity": 109.68,
+      "streetDensity": 17.986,
+      "segmentLengthMean": 93.512,
+      "segmentLengthMedian": 70.094,
+      "avgNodeDegree": 3.0481,
+      "threeWayShare": 57.372,
+      "fourWayShare": 29.808,
+      "deadEndShare": 12.821,
+      "circuity": 1.0687,
+      "orientationEntropy": 3.2518,
+      "orientationOrder": 0.27917,
+      "dominantOrientations": 1,
+      "shareRegional": 0,
+      "shareArterial": 7.6739,
+      "shareAvenue": 3.1198,
+      "shareConnector": 11.265,
+      "shareLocal": 77.941,
+      "majorRoadShare": 10.794,
+      "majorRoadSpacing": 1030.2,
+      "blockAreaMedian": 0.66828,
+      "blockAreaP25": 0.40418,
+      "blockAreaP75": 1.1844,
+      "blockAspectMedian": 1.7389,
+      "blockAspectP75": 2.7372,
+      "corridorContinuity": null,
+      "majorCorridorLengthKm": null
+     }
+    },
+    {
+     "sampleId": "n3-5-4",
+     "bounds": [
+      429937,
+      -4585714,
+      431437,
+      -4584214
+     ],
+     "areaKm2": 2.24,
+     "context": {
+      "ring": "inner",
+      "fabric": "mixed"
+     },
+     "metrics": {
+      "intersectionDensity": 121.43,
+      "streetDensity": 20.049,
+      "segmentLengthMean": 92.219,
+      "segmentLengthMedian": 75.341,
+      "avgNodeDegree": 3.2148,
+      "threeWayShare": 55.034,
+      "fourWayShare": 36.242,
+      "deadEndShare": 8.7248,
+      "circuity": 1.0382,
+      "orientationEntropy": 3.0883,
+      "orientationOrder": 0.39999,
+      "dominantOrientations": 1,
+      "shareRegional": 0,
+      "shareArterial": 14.942,
+      "shareAvenue": 11.228,
+      "shareConnector": 6.9889,
+      "shareLocal": 66.841,
+      "majorRoadShare": 26.17,
+      "majorRoadSpacing": 381.18,
+      "blockAreaMedian": 0.88782,
+      "blockAreaP25": 0.48264,
+      "blockAreaP75": 1.3503,
+      "blockAspectMedian": 1.5925,
+      "blockAspectP75": 2.0131,
+      "corridorContinuity": null,
+      "majorCorridorLengthKm": null
+     }
+    },
+    {
+     "sampleId": "n2-5-4",
+     "bounds": [
+      430687,
+      -4585714,
+      432187,
+      -4584214
+     ],
+     "areaKm2": 2.56,
+     "context": {
+      "ring": "inner",
+      "fabric": "mixed"
+     },
+     "metrics": {
+      "intersectionDensity": 127.34,
+      "streetDensity": 18.328,
+      "segmentLengthMean": 83.486,
+      "segmentLengthMedian": 73.532,
+      "avgNodeDegree": 3.2336,
+      "threeWayShare": 55.556,
+      "fourWayShare": 37.322,
+      "deadEndShare": 7.1225,
+      "circuity": 1.0311,
+      "orientationEntropy": 2.9116,
+      "orientationOrder": 0.51811,
+      "dominantOrientations": 1,
+      "shareRegional": 0,
+      "shareArterial": 10.319,
+      "shareAvenue": 15.173,
+      "shareConnector": 5.9602,
+      "shareLocal": 68.548,
+      "majorRoadShare": 25.492,
+      "majorRoadSpacing": 428.07,
+      "blockAreaMedian": 0.8098,
+      "blockAreaP25": 0.48891,
+      "blockAreaP75": 1.329,
+      "blockAspectMedian": 1.6291,
+      "blockAspectP75": 2.1711,
+      "corridorContinuity": null,
+      "majorCorridorLengthKm": null
+     }
+    },
+    {
+     "sampleId": "n0-6-5",
+     "bounds": [
+      432187,
+      -4583464,
+      433687,
+      -4581964
+     ],
+     "areaKm2": 1.72,
+     "context": {
+      "ring": "inner",
+      "fabric": "strong_grid"
+     },
+     "metrics": {
+      "intersectionDensity": 104.65,
+      "streetDensity": 21.342,
+      "segmentLengthMean": 116.9,
+      "segmentLengthMedian": 116,
+      "avgNodeDegree": 3.4973,
+      "threeWayShare": 45.355,
+      "fourWayShare": 53.005,
+      "deadEndShare": 1.6393,
+      "circuity": 1.0299,
+      "orientationEntropy": 2.4575,
+      "orientationOrder": 0.7623,
+      "dominantOrientations": 1,
+      "shareRegional": 11.614,
+      "shareArterial": 0,
+      "shareAvenue": 15.547,
+      "shareConnector": 25.73,
+      "shareLocal": 47.108,
+      "majorRoadShare": 27.162,
+      "majorRoadSpacing": 345.02,
+      "blockAreaMedian": 0.97699,
+      "blockAreaP25": 0.44196,
+      "blockAreaP75": 1.7775,
+      "blockAspectMedian": 1.5593,
+      "blockAspectP75": 2.4433,
+      "corridorContinuity": null,
+      "majorCorridorLengthKm": null
+     }
+    },
+    {
+     "sampleId": "n3-6-4",
+     "bounds": [
+      431437,
+      -4585714,
+      432937,
+      -4584214
+     ],
+     "areaKm2": 2.52,
+     "context": {
+      "ring": "inner",
+      "fabric": "mixed"
+     },
+     "metrics": {
+      "intersectionDensity": 121.43,
+      "streetDensity": 19.018,
+      "segmentLengthMean": 91.81,
+      "segmentLengthMedian": 79.474,
+      "avgNodeDegree": 3.2791,
+      "threeWayShare": 54.908,
+      "fourWayShare": 38.957,
+      "deadEndShare": 6.135,
+      "circuity": 1.0256,
+      "orientationEntropy": 2.8412,
+      "orientationOrder": 0.56157,
+      "dominantOrientations": 1,
+      "shareRegional": 3.2564,
+      "shareArterial": 8.6696,
+      "shareAvenue": 11.91,
+      "shareConnector": 13.485,
+      "shareLocal": 62.679,
+      "majorRoadShare": 23.836,
+      "majorRoadSpacing": 441.2,
+      "blockAreaMedian": 0.82369,
+      "blockAreaP25": 0.48201,
+      "blockAreaP75": 1.402,
+      "blockAspectMedian": 1.7265,
+      "blockAspectP75": 2.5683,
+      "corridorContinuity": null,
+      "majorCorridorLengthKm": null
+     }
+    },
+    {
+     "sampleId": "n0-6-4",
+     "bounds": [
+      432187,
+      -4584964,
+      433687,
+      -4583464
+     ],
+     "areaKm2": 2.24,
+     "context": {
+      "ring": "inner",
+      "fabric": "strong_grid"
+     },
+     "metrics": {
+      "intersectionDensity": 106.7,
+      "streetDensity": 19.483,
+      "segmentLengthMean": 105.16,
+      "segmentLengthMedian": 100.76,
+      "avgNodeDegree": 3.2892,
+      "threeWayShare": 60.241,
+      "fourWayShare": 35.743,
+      "deadEndShare": 4.0161,
+      "circuity": 1.0401,
+      "orientationEntropy": 2.4902,
+      "orientationOrder": 0.7476,
+      "dominantOrientations": 1,
+      "shareRegional": 7.1467,
+      "shareArterial": 3.0005,
+      "shareAvenue": 10.506,
+      "shareConnector": 19.085,
+      "shareLocal": 60.262,
+      "majorRoadShare": 20.653,
+      "majorRoadSpacing": 497.03,
+      "blockAreaMedian": 1.0723,
+      "blockAreaP25": 0.57569,
+      "blockAreaP75": 1.7587,
+      "blockAspectMedian": 1.6803,
+      "blockAspectP75": 2.5885,
+      "corridorContinuity": null,
+      "majorCorridorLengthKm": null
+     }
+    },
+    {
+     "sampleId": "n2-6-4",
+     "bounds": [
+      432187,
+      -4585714,
+      433687,
+      -4584214
+     ],
+     "areaKm2": 2.2,
+     "context": {
+      "ring": "peripheral",
+      "fabric": "strong_grid"
+     },
+     "metrics": {
+      "intersectionDensity": 106.36,
+      "streetDensity": 20.024,
+      "segmentLengthMean": 107.97,
+      "segmentLengthMedian": 106.98,
+      "avgNodeDegree": 3.3603,
+      "threeWayShare": 49.798,
+      "fourWayShare": 44.939,
+      "deadEndShare": 5.2632,
+      "circuity": 1.034,
+      "orientationEntropy": 2.399,
+      "orientationOrder": 0.78756,
+      "dominantOrientations": 1,
+      "shareRegional": 7.0801,
+      "shareArterial": 6.2698,
+      "shareAvenue": 7.6819,
+      "shareConnector": 19.481,
+      "shareLocal": 59.487,
+      "majorRoadShare": 21.032,
+      "majorRoadSpacing": 474.9,
+      "blockAreaMedian": 1.1541,
+      "blockAreaP25": 0.58372,
+      "blockAreaP75": 1.6935,
+      "blockAspectMedian": 1.7144,
+      "blockAspectP75": 3.0966,
+      "corridorContinuity": null,
+      "majorCorridorLengthKm": null
+     }
+    },
+    {
+     "sampleId": "n0-6-3",
+     "bounds": [
+      432187,
+      -4586464,
+      433687,
+      -4584964
+     ],
+     "areaKm2": 1.92,
+     "context": {
+      "ring": "peripheral",
+      "fabric": "mixed"
+     },
+     "metrics": {
+      "intersectionDensity": 128.65,
+      "streetDensity": 20.405,
+      "segmentLengthMean": 91.323,
+      "segmentLengthMedian": 75.03,
+      "avgNodeDegree": 3.3156,
+      "threeWayShare": 52.091,
+      "fourWayShare": 41.825,
+      "deadEndShare": 6.0837,
+      "circuity": 1.0246,
+      "orientationEntropy": 2.8217,
+      "orientationOrder": 0.57321,
+      "dominantOrientations": 1,
+      "shareRegional": 0,
+      "shareArterial": 3.7077,
+      "shareAvenue": 7.9262,
+      "shareConnector": 24.998,
+      "shareLocal": 63.368,
+      "majorRoadShare": 11.634,
+      "majorRoadSpacing": 842.5,
+      "blockAreaMedian": 0.78466,
+      "blockAreaP25": 0.33896,
+      "blockAreaP75": 1.6002,
+      "blockAspectMedian": 1.7979,
+      "blockAspectP75": 3.6507,
+      "corridorContinuity": null,
+      "majorCorridorLengthKm": null
+     }
+    },
+    {
+     "sampleId": "n1-6-3",
+     "bounds": [
+      431437,
+      -4586464,
+      432937,
+      -4584964
+     ],
+     "areaKm2": 2.2,
+     "context": {
+      "ring": "inner",
+      "fabric": "mixed"
+     },
+     "metrics": {
+      "intersectionDensity": 128.18,
+      "streetDensity": 19.265,
+      "segmentLengthMean": 86.144,
+      "segmentLengthMedian": 76.196,
+      "avgNodeDegree": 3.3121,
+      "threeWayShare": 54.362,
+      "fourWayShare": 40.268,
+      "deadEndShare": 5.3691,
+      "circuity": 1.0199,
+      "orientationEntropy": 3.1153,
+      "orientationOrder": 0.38081,
+      "dominantOrientations": 2,
+      "shareRegional": 0,
+      "shareArterial": 6.5273,
+      "shareAvenue": 10.179,
+      "shareConnector": 15.682,
+      "shareLocal": 67.611,
+      "majorRoadShare": 16.707,
+      "majorRoadSpacing": 621.4,
+      "blockAreaMedian": 0.79443,
+      "blockAreaP25": 0.47028,
+      "blockAreaP75": 1.3072,
+      "blockAspectMedian": 1.6467,
+      "blockAspectP75": 2.4502,
+      "corridorContinuity": null,
+      "majorCorridorLengthKm": null
+     }
+    },
+    {
+     "sampleId": "n1-7-3",
+     "bounds": [
+      432937,
+      -4586464,
+      434437,
+      -4584964
+     ],
+     "areaKm2": 1.8,
+     "context": {
+      "ring": "peripheral",
+      "fabric": "strong_grid"
+     },
+     "metrics": {
+      "intersectionDensity": 130,
+      "streetDensity": 20.699,
+      "segmentLengthMean": 91.767,
+      "segmentLengthMedian": 76.962,
+      "avgNodeDegree": 3.1583,
+      "threeWayShare": 55.985,
+      "fourWayShare": 33.977,
+      "deadEndShare": 9.6525,
+      "circuity": 1.0328,
+      "orientationEntropy": 2.5065,
+      "orientationOrder": 0.74006,
+      "dominantOrientations": 1,
+      "shareRegional": 0,
+      "shareArterial": 7.0484,
+      "shareAvenue": 10.864,
+      "shareConnector": 17.313,
+      "shareLocal": 64.774,
+      "majorRoadShare": 17.913,
+      "majorRoadSpacing": 539.43,
+      "blockAreaMedian": 0.98129,
+      "blockAreaP25": 0.37762,
+      "blockAreaP75": 1.615,
+      "blockAspectMedian": 1.6529,
+      "blockAspectP75": 3.7117,
+      "corridorContinuity": null,
+      "majorCorridorLengthKm": null
+     }
+    },
+    {
+     "sampleId": "n3-7-4",
+     "bounds": [
+      432937,
+      -4585714,
+      434437,
+      -4584214
+     ],
+     "areaKm2": 2.24,
+     "context": {
+      "ring": "peripheral",
+      "fabric": "strong_grid"
+     },
+     "metrics": {
+      "intersectionDensity": 92.411,
+      "streetDensity": 18.68,
+      "segmentLengthMean": 110.4,
+      "segmentLengthMedian": 111.74,
+      "avgNodeDegree": 3.2402,
+      "threeWayShare": 47.162,
+      "fourWayShare": 43.231,
+      "deadEndShare": 9.607,
+      "circuity": 1.03,
+      "orientationEntropy": 2.2058,
+      "orientationOrder": 0.8609,
+      "dominantOrientations": 1,
+      "shareRegional": 3.7244,
+      "shareArterial": 6.4823,
+      "shareAvenue": 9.8882,
+      "shareConnector": 22.317,
+      "shareLocal": 57.588,
+      "majorRoadShare": 20.095,
+      "majorRoadSpacing": 532.8,
+      "blockAreaMedian": 1.4237,
+      "blockAreaP25": 0.77903,
+      "blockAreaP75": 1.7951,
+      "blockAspectMedian": 1.5194,
+      "blockAspectP75": 2.682,
+      "corridorContinuity": null,
+      "majorCorridorLengthKm": null
+     }
+    },
+    {
+     "sampleId": "n2-6-3",
+     "bounds": [
+      432187,
+      -4587214,
+      433687,
+      -4585714
+     ],
+     "areaKm2": 1.96,
+     "context": {
+      "ring": "peripheral",
+      "fabric": "mixed"
+     },
+     "metrics": {
+      "intersectionDensity": 119.9,
+      "streetDensity": 17.289,
+      "segmentLengthMean": 84.502,
+      "segmentLengthMedian": 63.648,
+      "avgNodeDegree": 3.1706,
+      "threeWayShare": 63.492,
+      "fourWayShare": 29.365,
+      "deadEndShare": 6.746,
+      "circuity": 1.0429,
+      "orientationEntropy": 3.4083,
+      "orientationOrder": 0.15315,
+      "dominantOrientations": 2,
+      "shareRegional": 0,
+      "shareArterial": 0,
+      "shareAvenue": 9.662,
+      "shareConnector": 22.097,
+      "shareLocal": 68.241,
+      "majorRoadShare": 9.662,
+      "majorRoadSpacing": 1197.3,
+      "blockAreaMedian": 0.51833,
+      "blockAreaP25": 0.29078,
+      "blockAreaP75": 1.0142,
+      "blockAspectMedian": 2.01,
+      "blockAspectP75": 2.835,
+      "corridorContinuity": null,
+      "majorCorridorLengthKm": null
+     }
+    },
+    {
+     "sampleId": "n3-7-3",
+     "bounds": [
+      432937,
+      -4587214,
+      434437,
+      -4585714
+     ],
+     "areaKm2": 1.32,
+     "context": {
+      "ring": "peripheral",
+      "fabric": "mixed"
+     },
+     "metrics": {
+      "intersectionDensity": 100.76,
+      "streetDensity": 15.854,
+      "segmentLengthMean": 92.597,
+      "segmentLengthMedian": 66.976,
+      "avgNodeDegree": 3.0612,
+      "threeWayShare": 65.306,
+      "fourWayShare": 23.81,
+      "deadEndShare": 9.5238,
+      "circuity": 1.0582,
+      "orientationEntropy": 3.1273,
+      "orientationOrder": 0.37217,
+      "dominantOrientations": 2,
+      "shareRegional": 0,
+      "shareArterial": 1.5275,
+      "shareAvenue": 10.621,
+      "shareConnector": 21.631,
+      "shareLocal": 66.221,
+      "majorRoadShare": 12.148,
+      "majorRoadSpacing": 1038.5,
+      "blockAreaMedian": 0.52778,
+      "blockAreaP25": 0.3155,
+      "blockAreaP75": 1.2709,
+      "blockAspectMedian": 2.2318,
+      "blockAspectP75": 3.8627,
+      "corridorContinuity": null,
+      "majorCorridorLengthKm": null
+     }
+    },
+    {
+     "sampleId": "n0-5-3",
+     "bounds": [
+      430687,
+      -4586464,
+      432187,
+      -4584964
+     ],
+     "areaKm2": 2.24,
+     "context": {
+      "ring": "inner",
+      "fabric": "mixed"
+     },
+     "metrics": {
+      "intersectionDensity": 161.61,
+      "streetDensity": 22.217,
+      "segmentLengthMean": 79.497,
+      "segmentLengthMedian": 73.427,
+      "avgNodeDegree": 3.3102,
+      "threeWayShare": 60.16,
+      "fourWayShare": 36.631,
+      "deadEndShare": 3.2086,
+      "circuity": 1.0153,
+      "orientationEntropy": 3.2614,
+      "orientationOrder": 0.27173,
+      "dominantOrientations": 2,
+      "shareRegional": 0,
+      "shareArterial": 11.057,
+      "shareAvenue": 8.04,
+      "shareConnector": 7.1838,
+      "shareLocal": 73.72,
+      "majorRoadShare": 19.097,
+      "majorRoadSpacing": 471.41,
+      "blockAreaMedian": 0.74401,
+      "blockAreaP25": 0.47151,
+      "blockAreaP75": 1.0203,
+      "blockAspectMedian": 1.6123,
+      "blockAspectP75": 2.2621,
+      "corridorContinuity": null,
+      "majorCorridorLengthKm": null
+     }
+    },
+    {
+     "sampleId": "n3-2-6",
+     "bounds": [
+      425437,
+      -4582714,
+      426937,
+      -4581214
+     ],
+     "areaKm2": 2.36,
+     "context": {
+      "ring": "inner",
+      "fabric": "mixed"
+     },
+     "metrics": {
+      "intersectionDensity": 68.644,
+      "streetDensity": 11.868,
+      "segmentLengthMean": 104.51,
+      "segmentLengthMedian": 91.491,
+      "avgNodeDegree": 3.1494,
+      "threeWayShare": 64.943,
+      "fourWayShare": 28.161,
+      "deadEndShare": 6.8966,
+      "circuity": 1.0271,
+      "orientationEntropy": 3.139,
+      "orientationOrder": 0.36369,
+      "dominantOrientations": 2,
+      "shareRegional": 3.2057,
+      "shareArterial": 17.462,
+      "shareAvenue": 0.93503,
+      "shareConnector": 23.847,
+      "shareLocal": 54.55,
+      "majorRoadShare": 21.603,
+      "majorRoadSpacing": 780.11,
+      "blockAreaMedian": 1.2345,
+      "blockAreaP25": 0.50316,
+      "blockAreaP75": 2.7828,
+      "blockAspectMedian": 1.6729,
+      "blockAspectP75": 3.3466,
+      "corridorContinuity": null,
+      "majorCorridorLengthKm": null
+     }
+    },
+    {
+     "sampleId": "n1-2-9",
+     "bounds": [
+      425437,
+      -4577464,
+      426937,
+      -4575964
+     ],
+     "areaKm2": 1.16,
+     "context": {
+      "ring": "peripheral",
+      "fabric": "mixed"
+     },
+     "metrics": {
+      "intersectionDensity": 62.069,
+      "streetDensity": 10.697,
+      "segmentLengthMean": 112.81,
+      "segmentLengthMedian": 46.529,
+      "avgNodeDegree": 3.04,
+      "threeWayShare": 84,
+      "fourWayShare": 10.667,
+      "deadEndShare": 4,
+      "circuity": 1.1872,
+      "orientationEntropy": 3.1114,
+      "orientationOrder": 0.38361,
+      "dominantOrientations": 1,
+      "shareRegional": 13.179,
+      "shareArterial": 0,
+      "shareAvenue": 21.446,
+      "shareConnector": 43.25,
+      "shareLocal": 22.125,
+      "majorRoadShare": 34.625,
+      "majorRoadSpacing": 539.96,
+      "blockAreaMedian": 0.29696,
+      "blockAreaP25": 0.10055,
+      "blockAreaP75": 1.1106,
+      "blockAspectMedian": 2.0975,
+      "blockAspectP75": 4.7209,
+      "corridorContinuity": null,
+      "majorCorridorLengthKm": null
+     }
+    },
+    {
+     "sampleId": "n0-3-8",
+     "bounds": [
+      427687,
+      -4578964,
+      429187,
+      -4577464
+     ],
+     "areaKm2": 2.12,
+     "context": {
+      "ring": "peripheral",
+      "fabric": "mixed"
+     },
+     "metrics": {
+      "intersectionDensity": 57.075,
+      "streetDensity": 12.971,
+      "segmentLengthMean": 134.14,
+      "segmentLengthMedian": 88.525,
+      "avgNodeDegree": 3.1328,
+      "threeWayShare": 70.313,
+      "fourWayShare": 24.219,
+      "deadEndShare": 5.4688,
+      "circuity": 1.0251,
+      "orientationEntropy": 3.1057,
+      "orientationOrder": 0.38765,
+      "dominantOrientations": 1,
+      "shareRegional": 22.065,
+      "shareArterial": 0,
+      "shareAvenue": 17.489,
+      "shareConnector": 3.9511,
+      "shareLocal": 56.495,
+      "majorRoadShare": 39.554,
+      "majorRoadSpacing": 389.82,
+      "blockAreaMedian": 1.1417,
+      "blockAreaP25": 0.18289,
+      "blockAreaP75": 2.9421,
+      "blockAspectMedian": 2.0337,
+      "blockAspectP75": 3.7204,
+      "corridorContinuity": null,
+      "majorCorridorLengthKm": null
+     }
+    },
+    {
+     "sampleId": "n1-3-8",
+     "bounds": [
+      426937,
+      -4578964,
+      428437,
+      -4577464
+     ],
+     "areaKm2": 1.32,
+     "context": {
+      "ring": "peripheral",
+      "fabric": "strong_grid"
+     },
+     "metrics": {
+      "intersectionDensity": 43.182,
+      "streetDensity": 10.053,
+      "segmentLengthMean": 136.81,
+      "segmentLengthMedian": 130.8,
+      "avgNodeDegree": 3.1667,
+      "threeWayShare": 68.333,
+      "fourWayShare": 26.667,
+      "deadEndShare": 5,
+      "circuity": 1.0314,
+      "orientationEntropy": 2.7337,
+      "orientationOrder": 0.62394,
+      "dominantOrientations": 1,
+      "shareRegional": 4.2728,
+      "shareArterial": 0,
+      "shareAvenue": 12.626,
+      "shareConnector": 9.1615,
+      "shareLocal": 73.94,
+      "majorRoadShare": 16.899,
+      "majorRoadSpacing": 1177.2,
+      "blockAreaMedian": 2.1006,
+      "blockAreaP25": 0.3782,
+      "blockAreaP75": 3.7921,
+      "blockAspectMedian": 1.7636,
+      "blockAspectP75": 2.1757,
+      "corridorContinuity": null,
+      "majorCorridorLengthKm": null
+     }
+    },
+    {
+     "sampleId": "n2-3-9",
+     "bounds": [
+      427687,
+      -4578214,
+      429187,
+      -4576714
+     ],
+     "areaKm2": 1.68,
+     "context": {
+      "ring": "peripheral",
+      "fabric": "mixed"
+     },
+     "metrics": {
+      "intersectionDensity": 74.405,
+      "streetDensity": 13.156,
+      "segmentLengthMean": 110.51,
+      "segmentLengthMedian": 63.526,
+      "avgNodeDegree": 3.1875,
+      "threeWayShare": 75.781,
+      "fourWayShare": 21.875,
+      "deadEndShare": 2.3438,
+      "circuity": 1.029,
+      "orientationEntropy": 3.128,
+      "orientationOrder": 0.37168,
+      "dominantOrientations": 2,
+      "shareRegional": 27.452,
+      "shareArterial": 0,
+      "shareAvenue": 19.633,
+      "shareConnector": 0.35406,
+      "shareLocal": 52.561,
+      "majorRoadShare": 47.085,
+      "majorRoadSpacing": 322.86,
+      "blockAreaMedian": 0.89548,
+      "blockAreaP25": 0.12437,
+      "blockAreaP75": 2.6072,
+      "blockAspectMedian": 2.2245,
+      "blockAspectP75": 4.932,
+      "corridorContinuity": null,
+      "majorCorridorLengthKm": null
+     }
+    },
+    {
+     "sampleId": "n3-3-9",
+     "bounds": [
+      426937,
+      -4578214,
+      428437,
+      -4576714
+     ],
+     "areaKm2": 1.2,
+     "context": {
+      "ring": "peripheral",
+      "fabric": "strong_grid"
+     },
+     "metrics": {
+      "intersectionDensity": 72.5,
+      "streetDensity": 13.725,
+      "segmentLengthMean": 118.49,
+      "segmentLengthMedian": 40.225,
+      "avgNodeDegree": 3.0879,
+      "threeWayShare": 80.22,
+      "fourWayShare": 15.385,
+      "deadEndShare": 4.3956,
+      "circuity": 1.0238,
+      "orientationEntropy": 2.7518,
+      "orientationOrder": 0.6138,
+      "dominantOrientations": 2,
+      "shareRegional": 26.283,
+      "shareArterial": 0,
+      "shareAvenue": 1.6106,
+      "shareConnector": 0.47515,
+      "shareLocal": 71.631,
+      "majorRoadShare": 27.894,
+      "majorRoadSpacing": 522.41,
+      "blockAreaMedian": 1.1321,
+      "blockAreaP25": 0.15763,
+      "blockAreaP75": 2.9729,
+      "blockAspectMedian": 2.1836,
+      "blockAspectP75": 5.1828,
+      "corridorContinuity": null,
+      "majorCorridorLengthKm": null
+     }
+    },
+    {
+     "sampleId": "n0-3-9",
+     "bounds": [
+      427687,
+      -4577464,
+      429187,
+      -4575964
+     ],
+     "areaKm2": 1.24,
+     "context": {
+      "ring": "peripheral",
+      "fabric": "strong_grid"
+     },
+     "metrics": {
+      "intersectionDensity": 66.129,
+      "streetDensity": 9.3926,
+      "segmentLengthMean": 93.174,
+      "segmentLengthMedian": 41.781,
+      "avgNodeDegree": 3.0814,
+      "threeWayShare": 80.233,
+      "fourWayShare": 15.116,
+      "deadEndShare": 4.6512,
+      "circuity": 1.0187,
+      "orientationEntropy": 2.5146,
+      "orientationOrder": 0.73632,
+      "dominantOrientations": 1,
+      "shareRegional": 0,
+      "shareArterial": 0,
+      "shareAvenue": 38.285,
+      "shareConnector": 0,
+      "shareLocal": 61.715,
+      "majorRoadShare": 38.285,
+      "majorRoadSpacing": 556.19,
+      "blockAreaMedian": 0.17244,
+      "blockAreaP25": 0.093055,
+      "blockAreaP75": 1.8574,
+      "blockAspectMedian": 2.2653,
+      "blockAspectP75": 3.325,
+      "corridorContinuity": null,
+      "majorCorridorLengthKm": null
+     }
+    },
+    {
+     "sampleId": "n1-3-9",
+     "bounds": [
+      426937,
+      -4577464,
+      428437,
+      -4575964
+     ],
+     "areaKm2": 1.56,
+     "context": {
+      "ring": "peripheral",
+      "fabric": "mixed"
+     },
+     "metrics": {
+      "intersectionDensity": 77.564,
+      "streetDensity": 14.194,
+      "segmentLengthMean": 114.14,
+      "segmentLengthMedian": 39.017,
+      "avgNodeDegree": 3.0078,
+      "threeWayShare": 84.375,
+      "fourWayShare": 10.156,
+      "deadEndShare": 5.4688,
+      "circuity": 1.0286,
+      "orientationEntropy": 2.8242,
+      "orientationOrder": 0.57172,
+      "dominantOrientations": 2,
+      "shareRegional": 16.989,
+      "shareArterial": 0,
+      "shareAvenue": 25.222,
+      "shareConnector": 0.14555,
+      "shareLocal": 57.644,
+      "majorRoadShare": 42.211,
+      "majorRoadSpacing": 333.81,
+      "blockAreaMedian": 0.17404,
+      "blockAreaP25": 0.12495,
+      "blockAreaP75": 0.80505,
+      "blockAspectMedian": 2.2843,
+      "blockAspectP75": 7.1851,
+      "corridorContinuity": null,
+      "majorCorridorLengthKm": null
+     }
+    },
+    {
+     "sampleId": "n1-4-8",
+     "bounds": [
+      428437,
+      -4578964,
+      429937,
+      -4577464
+     ],
+     "areaKm2": 1.48,
+     "context": {
+      "ring": "peripheral",
+      "fabric": "mixed"
+     },
+     "metrics": {
+      "intersectionDensity": 68.919,
+      "streetDensity": 14.118,
+      "segmentLengthMean": 125.87,
+      "segmentLengthMedian": 66.704,
+      "avgNodeDegree": 3.0273,
+      "threeWayShare": 76.364,
+      "fourWayShare": 16.364,
+      "deadEndShare": 7.2727,
+      "circuity": 1.032,
+      "orientationEntropy": 3.238,
+      "orientationOrder": 0.28974,
+      "dominantOrientations": 1,
+      "shareRegional": 35.741,
+      "shareArterial": 0,
+      "shareAvenue": 14.998,
+      "shareConnector": 0,
+      "shareLocal": 49.262,
+      "majorRoadShare": 50.738,
+      "majorRoadSpacing": 279.2,
+      "blockAreaMedian": 0.19469,
+      "blockAreaP25": 0.10873,
+      "blockAreaP75": 1.3918,
+      "blockAspectMedian": 2.7947,
+      "blockAspectP75": 4.932,
+      "corridorContinuity": null,
+      "majorCorridorLengthKm": null
+     }
+    },
+    {
+     "sampleId": "n3-4-9",
+     "bounds": [
+      428437,
+      -4578214,
+      429937,
+      -4576714
+     ],
+     "areaKm2": 1.16,
+     "context": {
+      "ring": "peripheral",
+      "fabric": "mixed"
+     },
+     "metrics": {
+      "intersectionDensity": 87.069,
+      "streetDensity": 16.397,
+      "segmentLengthMean": 118.14,
+      "segmentLengthMedian": 63.968,
+      "avgNodeDegree": 3.1456,
+      "threeWayShare": 80.583,
+      "fourWayShare": 17.476,
+      "deadEndShare": 1.9417,
+      "circuity": 1.0324,
+      "orientationEntropy": 3.1272,
+      "orientationOrder": 0.37222,
+      "dominantOrientations": 2,
+      "shareRegional": 33.38,
+      "shareArterial": 0,
+      "shareAvenue": 21.42,
+      "shareConnector": 0,
+      "shareLocal": 45.2,
+      "majorRoadShare": 54.8,
+      "majorRoadSpacing": 222.58,
+      "blockAreaMedian": 0.15964,
+      "blockAreaP25": 0.085154,
+      "blockAreaP75": 0.41164,
+      "blockAspectMedian": 3.2058,
+      "blockAspectP75": 5.0625,
+      "corridorContinuity": null,
+      "majorCorridorLengthKm": null
+     }
+    },
+    {
+     "sampleId": "n2-6-5",
+     "bounds": [
+      432187,
+      -4584214,
+      433687,
+      -4582714
+     ],
+     "areaKm2": 1.96,
+     "context": {
+      "ring": "inner",
+      "fabric": "strong_grid"
+     },
+     "metrics": {
+      "intersectionDensity": 123.98,
+      "streetDensity": 21.669,
+      "segmentLengthMean": 99.7,
+      "segmentLengthMedian": 97.423,
+      "avgNodeDegree": 3.3735,
+      "threeWayShare": 55.823,
+      "fourWayShare": 41.767,
+      "deadEndShare": 2.4096,
+      "circuity": 1.0182,
+      "orientationEntropy": 2.4644,
+      "orientationOrder": 0.75926,
+      "dominantOrientations": 1,
+      "shareRegional": 5.0215,
+      "shareArterial": 0,
+      "shareAvenue": 12.891,
+      "shareConnector": 20.622,
+      "shareLocal": 61.466,
+      "majorRoadShare": 17.912,
+      "majorRoadSpacing": 515.27,
+      "blockAreaMedian": 1.0117,
+      "blockAreaP25": 0.56561,
+      "blockAreaP75": 1.7433,
+      "blockAspectMedian": 1.473,
+      "blockAspectP75": 2.1837,
+      "corridorContinuity": null,
+      "majorCorridorLengthKm": null
+     }
+    },
+    {
+     "sampleId": "n3-7-5",
+     "bounds": [
+      432937,
+      -4584214,
+      434437,
+      -4582714
+     ],
+     "areaKm2": 1.64,
+     "context": {
+      "ring": "peripheral",
+      "fabric": "strong_grid"
+     },
+     "metrics": {
+      "intersectionDensity": 133.54,
+      "streetDensity": 22.193,
+      "segmentLengthMean": 98.371,
+      "segmentLengthMedian": 73.881,
+      "avgNodeDegree": 3.2731,
+      "threeWayShare": 62.996,
+      "fourWayShare": 33.48,
+      "deadEndShare": 3.5242,
+      "circuity": 1.0248,
+      "orientationEntropy": 2.4752,
+      "orientationOrder": 0.75441,
+      "dominantOrientations": 1,
+      "shareRegional": 14.344,
+      "shareArterial": 0,
+      "shareAvenue": 21.532,
+      "shareConnector": 17.049,
+      "shareLocal": 47.074,
+      "majorRoadShare": 35.877,
+      "majorRoadSpacing": 251.18,
+      "blockAreaMedian": 0.88942,
+      "blockAreaP25": 0.44648,
+      "blockAreaP75": 1.7285,
+      "blockAspectMedian": 1.576,
+      "blockAspectP75": 2.2679,
+      "corridorContinuity": null,
+      "majorCorridorLengthKm": null
+     }
+    },
+    {
+     "sampleId": "n0-7-4",
+     "bounds": [
+      433687,
+      -4584964,
+      435187,
+      -4583464
+     ],
+     "areaKm2": 1.88,
+     "context": {
+      "ring": "peripheral",
+      "fabric": "strong_grid"
+     },
+     "metrics": {
+      "intersectionDensity": 56.915,
+      "streetDensity": 13.261,
+      "segmentLengthMean": 129.85,
+      "segmentLengthMedian": 128.05,
+      "avgNodeDegree": 3.3772,
+      "threeWayShare": 43.86,
+      "fourWayShare": 49.123,
+      "deadEndShare": 6.1404,
+      "circuity": 1.0345,
+      "orientationEntropy": 2.4352,
+      "orientationOrder": 0.77213,
+      "dominantOrientations": 1,
+      "shareRegional": 9.1793,
+      "shareArterial": 0,
+      "shareAvenue": 28.865,
+      "shareConnector": 29.791,
+      "shareLocal": 32.165,
+      "majorRoadShare": 38.044,
+      "majorRoadSpacing": 396.42,
+      "blockAreaMedian": 1.7291,
+      "blockAreaP25": 0.7092,
+      "blockAreaP75": 1.8587,
+      "blockAspectMedian": 1.3398,
+      "blockAspectP75": 2.2781,
+      "corridorContinuity": null,
+      "majorCorridorLengthKm": null
+     }
+    },
+    {
+     "sampleId": "n1-7-4",
+     "bounds": [
+      432937,
+      -4584964,
+      434437,
+      -4583464
+     ],
+     "areaKm2": 2.2,
+     "context": {
+      "ring": "peripheral",
+      "fabric": "strong_grid"
+     },
+     "metrics": {
+      "intersectionDensity": 95.909,
+      "streetDensity": 18.497,
+      "segmentLengthMean": 107.94,
+      "segmentLengthMedian": 103.49,
+      "avgNodeDegree": 3.35,
+      "threeWayShare": 53.636,
+      "fourWayShare": 42.273,
+      "deadEndShare": 4.0909,
+      "circuity": 1.0354,
+      "orientationEntropy": 2.3992,
+      "orientationOrder": 0.78747,
+      "dominantOrientations": 1,
+      "shareRegional": 8.4317,
+      "shareArterial": 0.99767,
+      "shareAvenue": 15.981,
+      "shareConnector": 24.114,
+      "shareLocal": 50.476,
+      "majorRoadShare": 25.41,
+      "majorRoadSpacing": 425.52,
+      "blockAreaMedian": 1.1507,
+      "blockAreaP25": 0.56203,
+      "blockAreaP75": 1.8026,
+      "blockAspectMedian": 1.4954,
+      "blockAspectP75": 2.4202,
+      "corridorContinuity": null,
+      "majorCorridorLengthKm": null
+     }
+    },
+    {
+     "sampleId": "n2-7-4",
+     "bounds": [
+      433687,
+      -4585714,
+      435187,
+      -4584214
+     ],
+     "areaKm2": 1.96,
+     "context": {
+      "ring": "peripheral",
+      "fabric": "strong_grid"
+     },
+     "metrics": {
+      "intersectionDensity": 64.286,
+      "streetDensity": 13.475,
+      "segmentLengthMean": 113.84,
+      "segmentLengthMedian": 104.24,
+      "avgNodeDegree": 3.1329,
+      "threeWayShare": 48.951,
+      "fourWayShare": 37.762,
+      "deadEndShare": 11.888,
+      "circuity": 1.0307,
+      "orientationEntropy": 2.4217,
+      "orientationOrder": 0.77795,
+      "dominantOrientations": 1,
+      "shareRegional": 0,
+      "shareArterial": 3.2329,
+      "shareAvenue": 24.334,
+      "shareConnector": 21.926,
+      "shareLocal": 50.507,
+      "majorRoadShare": 27.567,
+      "majorRoadSpacing": 538.42,
+      "blockAreaMedian": 1.4211,
+      "blockAreaP25": 0.78667,
+      "blockAreaP75": 1.8021,
+      "blockAspectMedian": 1.6726,
+      "blockAspectP75": 2.5986,
+      "corridorContinuity": null,
+      "majorCorridorLengthKm": null
+     }
+    },
+    {
+     "sampleId": "n1-5-3",
+     "bounds": [
+      429937,
+      -4586464,
+      431437,
+      -4584964
+     ],
+     "areaKm2": 1.96,
+     "context": {
+      "ring": "inner",
+      "fabric": "irregular"
+     },
+     "metrics": {
+      "intersectionDensity": 134.18,
+      "streetDensity": 21.833,
+      "segmentLengthMean": 93.842,
+      "segmentLengthMedian": 76.801,
+      "avgNodeDegree": 3.1498,
+      "threeWayShare": 61.672,
+      "fourWayShare": 29.965,
+      "deadEndShare": 8.3624,
+      "circuity": 1.041,
+      "orientationEntropy": 3.4612,
+      "orientationOrder": 0.10823,
+      "dominantOrientations": 2,
+      "shareRegional": 0,
+      "shareArterial": 14.686,
+      "shareAvenue": 1.8744,
+      "shareConnector": 7.2075,
+      "shareLocal": 76.232,
+      "majorRoadShare": 16.561,
+      "majorRoadSpacing": 553.16,
+      "blockAreaMedian": 0.77469,
+      "blockAreaP25": 0.48583,
+      "blockAreaP75": 1.0997,
+      "blockAspectMedian": 1.6519,
+      "blockAspectP75": 2.3133,
+      "corridorContinuity": null,
+      "majorCorridorLengthKm": null
+     }
+    },
+    {
+     "sampleId": "n0-4-3",
+     "bounds": [
+      429187,
+      -4586464,
+      430687,
+      -4584964
+     ],
+     "areaKm2": 1.92,
+     "context": {
+      "ring": "inner",
+      "fabric": "irregular"
+     },
+     "metrics": {
+      "intersectionDensity": 100.52,
+      "streetDensity": 19.888,
+      "segmentLengthMean": 116.78,
+      "segmentLengthMedian": 80.753,
+      "avgNodeDegree": 2.8596,
+      "threeWayShare": 70.175,
+      "fourWayShare": 14.474,
+      "deadEndShare": 15.351,
+      "circuity": 1.1085,
+      "orientationEntropy": 3.4621,
+      "orientationOrder": 0.10749,
+      "dominantOrientations": 1,
+      "shareRegional": 0,
+      "shareArterial": 10.661,
+      "shareAvenue": 0,
+      "shareConnector": 12.522,
+      "shareLocal": 76.818,
+      "majorRoadShare": 10.661,
+      "majorRoadSpacing": 943.29,
+      "blockAreaMedian": 1.0928,
+      "blockAreaP25": 0.67171,
+      "blockAreaP75": 1.4911,
+      "blockAspectMedian": 1.8264,
+      "blockAspectP75": 2.7046,
+      "corridorContinuity": null,
+      "majorCorridorLengthKm": null
+     }
+    },
+    {
+     "sampleId": "n0-3-3",
+     "bounds": [
+      427687,
+      -4586464,
+      429187,
+      -4584964
+     ],
+     "areaKm2": 2.16,
+     "context": {
+      "ring": "inner",
+      "fabric": "irregular"
+     },
+     "metrics": {
+      "intersectionDensity": 120.37,
+      "streetDensity": 20.524,
+      "segmentLengthMean": 102.15,
+      "segmentLengthMedian": 67.984,
+      "avgNodeDegree": 2.8725,
+      "threeWayShare": 67.974,
+      "fourWayShare": 16.993,
+      "deadEndShare": 15.033,
+      "circuity": 1.0563,
+      "orientationEntropy": 3.4675,
+      "orientationOrder": 0.10284,
+      "dominantOrientations": 1,
+      "shareRegional": 8.6455,
+      "shareArterial": 0,
+      "shareAvenue": 4.3519,
+      "shareConnector": 19.926,
+      "shareLocal": 67.077,
+      "majorRoadShare": 12.997,
+      "majorRoadSpacing": 749.73,
+      "blockAreaMedian": 0.90341,
+      "blockAreaP25": 0.42653,
+      "blockAreaP75": 1.9902,
+      "blockAspectMedian": 2.2198,
+      "blockAspectP75": 4.3532,
+      "corridorContinuity": null,
+      "majorCorridorLengthKm": null
+     }
+    },
+    {
+     "sampleId": "n1-4-3",
+     "bounds": [
+      428437,
+      -4586464,
+      429937,
+      -4584964
+     ],
+     "areaKm2": 2.16,
+     "context": {
+      "ring": "inner",
+      "fabric": "irregular"
+     },
+     "metrics": {
+      "intersectionDensity": 108.8,
+      "streetDensity": 19.203,
+      "segmentLengthMean": 104.48,
+      "segmentLengthMedian": 75.33,
+      "avgNodeDegree": 2.8495,
+      "threeWayShare": 68.817,
+      "fourWayShare": 15.412,
+      "deadEndShare": 15.771,
+      "circuity": 1.0968,
+      "orientationEntropy": 3.5069,
+      "orientationOrder": 0.068519,
+      "dominantOrientations": 1,
+      "shareRegional": 0,
+      "shareArterial": 1.259,
+      "shareAvenue": 0,
+      "shareConnector": 15.715,
+      "shareLocal": 83.026,
+      "majorRoadShare": 1.259,
+      "majorRoadSpacing": 8272.1,
+      "blockAreaMedian": 0.98472,
+      "blockAreaP25": 0.52767,
+      "blockAreaP75": 1.6005,
+      "blockAspectMedian": 2.0015,
+      "blockAspectP75": 3.4991,
+      "corridorContinuity": null,
+      "majorCorridorLengthKm": null
+     }
+    },
+    {
+     "sampleId": "n1-3-3",
+     "bounds": [
+      426937,
+      -4586464,
+      428437,
+      -4584964
+     ],
+     "areaKm2": 1.76,
+     "context": {
+      "ring": "inner",
+      "fabric": "irregular"
+     },
+     "metrics": {
+      "intersectionDensity": 96.591,
+      "streetDensity": 18.189,
+      "segmentLengthMean": 114.74,
+      "segmentLengthMedian": 67.368,
+      "avgNodeDegree": 2.9016,
+      "threeWayShare": 74.093,
+      "fourWayShare": 13.99,
+      "deadEndShare": 11.917,
+      "circuity": 1.1119,
+      "orientationEntropy": 3.4546,
+      "orientationOrder": 0.11387,
+      "dominantOrientations": 1,
+      "shareRegional": 15.274,
+      "shareArterial": 0,
+      "shareAvenue": 6.0267,
+      "shareConnector": 23.719,
+      "shareLocal": 54.98,
+      "majorRoadShare": 21.301,
+      "majorRoadSpacing": 516.2,
+      "blockAreaMedian": 0.96041,
+      "blockAreaP25": 0.28542,
+      "blockAreaP75": 2.6961,
+      "blockAspectMedian": 2.2886,
+      "blockAspectP75": 3.5862,
+      "corridorContinuity": null,
+      "majorCorridorLengthKm": null
+     }
+    },
+    {
+     "sampleId": "n2-3-3",
+     "bounds": [
+      427687,
+      -4587214,
+      429187,
+      -4585714
+     ],
+     "areaKm2": 2.08,
+     "context": {
+      "ring": "inner",
+      "fabric": "mixed"
+     },
+     "metrics": {
+      "intersectionDensity": 115.38,
+      "streetDensity": 21.514,
+      "segmentLengthMean": 113,
+      "segmentLengthMedian": 64.495,
+      "avgNodeDegree": 2.8736,
+      "threeWayShare": 72.924,
+      "fourWayShare": 13.718,
+      "deadEndShare": 13.357,
+      "circuity": 1.1277,
+      "orientationEntropy": 3.2904,
+      "orientationOrder": 0.24899,
+      "dominantOrientations": 1,
+      "shareRegional": 10.534,
+      "shareArterial": 0.090569,
+      "shareAvenue": 15.307,
+      "shareConnector": 17.418,
+      "shareLocal": 56.65,
+      "majorRoadShare": 25.932,
+      "majorRoadSpacing": 358.49,
+      "blockAreaMedian": 0.87364,
+      "blockAreaP25": 0.3554,
+      "blockAreaP75": 1.9043,
+      "blockAspectMedian": 2.3196,
+      "blockAspectP75": 3.8897,
+      "corridorContinuity": null,
+      "majorCorridorLengthKm": null
+     }
+    },
+    {
+     "sampleId": "n3-4-3",
+     "bounds": [
+      428437,
+      -4587214,
+      429937,
+      -4585714
+     ],
+     "areaKm2": 2.2,
+     "context": {
+      "ring": "inner",
+      "fabric": "irregular"
+     },
+     "metrics": {
+      "intersectionDensity": 142.27,
+      "streetDensity": 22.13,
+      "segmentLengthMean": 92.382,
+      "segmentLengthMedian": 67.707,
+      "avgNodeDegree": 2.9459,
+      "threeWayShare": 73.789,
+      "fourWayShare": 15.385,
+      "deadEndShare": 10.826,
+      "circuity": 1.0394,
+      "orientationEntropy": 3.4776,
+      "orientationOrder": 0.094112,
+      "dominantOrientations": 1,
+      "shareRegional": 5.3675,
+      "shareArterial": 5.7326,
+      "shareAvenue": 0,
+      "shareConnector": 19.003,
+      "shareLocal": 69.897,
+      "majorRoadShare": 11.1,
+      "majorRoadSpacing": 814.2,
+      "blockAreaMedian": 0.86761,
+      "blockAreaP25": 0.49636,
+      "blockAreaP75": 1.6848,
+      "blockAspectMedian": 1.9365,
+      "blockAspectP75": 2.9102,
+      "corridorContinuity": null,
+      "majorCorridorLengthKm": null
+     }
+    },
+    {
+     "sampleId": "n2-4-3",
+     "bounds": [
+      429187,
+      -4587214,
+      430687,
+      -4585714
+     ],
+     "areaKm2": 1.96,
+     "context": {
+      "ring": "inner",
+      "fabric": "irregular"
+     },
+     "metrics": {
+      "intersectionDensity": 146.43,
+      "streetDensity": 22.568,
+      "segmentLengthMean": 92.154,
+      "segmentLengthMedian": 72.769,
+      "avgNodeDegree": 2.9937,
+      "threeWayShare": 72.013,
+      "fourWayShare": 18.239,
+      "deadEndShare": 9.7484,
+      "circuity": 1.0566,
+      "orientationEntropy": 3.5337,
+      "orientationOrder": 0.044805,
+      "dominantOrientations": 0,
+      "shareRegional": 0,
+      "shareArterial": 6.2178,
+      "shareAvenue": 0,
+      "shareConnector": 11.597,
+      "shareLocal": 82.185,
+      "majorRoadShare": 6.2178,
+      "majorRoadSpacing": 1425.3,
+      "blockAreaMedian": 0.94936,
+      "blockAreaP25": 0.56261,
+      "blockAreaP75": 1.4721,
+      "blockAspectMedian": 1.7661,
+      "blockAspectP75": 2.4489,
+      "corridorContinuity": null,
+      "majorCorridorLengthKm": null
+     }
+    },
+    {
+     "sampleId": "n0-4-2",
+     "bounds": [
+      429187,
+      -4587964,
+      430687,
+      -4586464
+     ],
+     "areaKm2": 2.24,
+     "context": {
+      "ring": "peripheral",
+      "fabric": "irregular"
+     },
+     "metrics": {
+      "intersectionDensity": 159.82,
+      "streetDensity": 22.642,
+      "segmentLengthMean": 84.673,
+      "segmentLengthMedian": 67.148,
+      "avgNodeDegree": 3.0436,
+      "threeWayShare": 71.026,
+      "fourWayShare": 20.769,
+      "deadEndShare": 8.2051,
+      "circuity": 1.0348,
+      "orientationEntropy": 3.4937,
+      "orientationOrder": 0.080074,
+      "dominantOrientations": 1,
+      "shareRegional": 6.9145,
+      "shareArterial": 8.5839,
+      "shareAvenue": 3.1929,
+      "shareConnector": 13.199,
+      "shareLocal": 68.11,
+      "majorRoadShare": 18.691,
+      "majorRoadSpacing": 472.57,
+      "blockAreaMedian": 0.71455,
+      "blockAreaP25": 0.32467,
+      "blockAreaP75": 1.3382,
+      "blockAspectMedian": 1.8145,
+      "blockAspectP75": 2.4279,
+      "corridorContinuity": null,
+      "majorCorridorLengthKm": null
+     }
+    },
+    {
+     "sampleId": "n1-4-2",
+     "bounds": [
+      428437,
+      -4587964,
+      429937,
+      -4586464
+     ],
+     "areaKm2": 2.4,
+     "context": {
+      "ring": "peripheral",
+      "fabric": "irregular"
+     },
+     "metrics": {
+      "intersectionDensity": 121.67,
+      "streetDensity": 18.905,
+      "segmentLengthMean": 95.721,
+      "segmentLengthMedian": 73.012,
+      "avgNodeDegree": 2.9905,
+      "threeWayShare": 79.048,
+      "fourWayShare": 13.651,
+      "deadEndShare": 7.3016,
+      "circuity": 1.0382,
+      "orientationEntropy": 3.4128,
+      "orientationOrder": 0.14935,
+      "dominantOrientations": 2,
+      "shareRegional": 14.105,
+      "shareArterial": 10.177,
+      "shareAvenue": 0,
+      "shareConnector": 20.805,
+      "shareLocal": 54.913,
+      "majorRoadShare": 24.282,
+      "majorRoadSpacing": 435.68,
+      "blockAreaMedian": 0.90425,
+      "blockAreaP25": 0.48955,
+      "blockAreaP75": 1.7963,
+      "blockAspectMedian": 1.8769,
+      "blockAspectP75": 2.4475,
+      "corridorContinuity": null,
+      "majorCorridorLengthKm": null
+     }
+    },
+    {
+     "sampleId": "n1-5-2",
+     "bounds": [
+      429937,
+      -4587964,
+      431437,
+      -4586464
+     ],
+     "areaKm2": 2.2,
+     "context": {
+      "ring": "peripheral",
+      "fabric": "irregular"
+     },
+     "metrics": {
+      "intersectionDensity": 164.09,
+      "streetDensity": 20.62,
+      "segmentLengthMean": 75.231,
+      "segmentLengthMedian": 66.914,
+      "avgNodeDegree": 3.134,
+      "threeWayShare": 65.979,
+      "fourWayShare": 27.062,
+      "deadEndShare": 6.9588,
+      "circuity": 1.0228,
+      "orientationEntropy": 3.4494,
+      "orientationOrder": 0.11831,
+      "dominantOrientations": 1,
+      "shareRegional": 1.2359,
+      "shareArterial": 3.569,
+      "shareAvenue": 9.6236,
+      "shareConnector": 9.8735,
+      "shareLocal": 75.698,
+      "majorRoadShare": 14.428,
+      "majorRoadSpacing": 672.23,
+      "blockAreaMedian": 0.64507,
+      "blockAreaP25": 0.31505,
+      "blockAreaP75": 1.1997,
+      "blockAspectMedian": 1.6302,
+      "blockAspectP75": 2.2538,
+      "corridorContinuity": null,
+      "majorCorridorLengthKm": null
+     }
+    },
+    {
+     "sampleId": "n2-4-2",
+     "bounds": [
+      429187,
+      -4588714,
+      430687,
+      -4587214
+     ],
+     "areaKm2": 1.84,
+     "context": {
+      "ring": "peripheral",
+      "fabric": "mixed"
+     },
+     "metrics": {
+      "intersectionDensity": 129.35,
+      "streetDensity": 19.783,
+      "segmentLengthMean": 92.861,
+      "segmentLengthMedian": 63.319,
+      "avgNodeDegree": 3.0385,
+      "threeWayShare": 71.154,
+      "fourWayShare": 20.385,
+      "deadEndShare": 8.4615,
+      "circuity": 1.0442,
+      "orientationEntropy": 3.3444,
+      "orientationOrder": 0.20579,
+      "dominantOrientations": 2,
+      "shareRegional": 15.682,
+      "shareArterial": 5.8391,
+      "shareAvenue": 4.9846,
+      "shareConnector": 13.756,
+      "shareLocal": 59.739,
+      "majorRoadShare": 26.505,
+      "majorRoadSpacing": 381.41,
+      "blockAreaMedian": 0.66159,
+      "blockAreaP25": 0.17456,
+      "blockAreaP75": 1.4517,
+      "blockAspectMedian": 1.9757,
+      "blockAspectP75": 2.5271,
+      "corridorContinuity": null,
+      "majorCorridorLengthKm": null
+     }
+    },
+    {
+     "sampleId": "n3-5-2",
+     "bounds": [
+      429937,
+      -4588714,
+      431437,
+      -4587214
+     ],
+     "areaKm2": 2.16,
+     "context": {
+      "ring": "peripheral",
+      "fabric": "mixed"
+     },
+     "metrics": {
+      "intersectionDensity": 145.83,
+      "streetDensity": 20.839,
+      "segmentLengthMean": 86.73,
+      "segmentLengthMedian": 65.632,
+      "avgNodeDegree": 3.1407,
+      "threeWayShare": 69.461,
+      "fourWayShare": 24.85,
+      "deadEndShare": 5.6886,
+      "circuity": 1.0141,
+      "orientationEntropy": 3.3792,
+      "orientationOrder": 0.17732,
+      "dominantOrientations": 2,
+      "shareRegional": 12.318,
+      "shareArterial": 0.086141,
+      "shareAvenue": 8.4767,
+      "shareConnector": 13.289,
+      "shareLocal": 65.831,
+      "majorRoadShare": 20.881,
+      "majorRoadSpacing": 459.63,
+      "blockAreaMedian": 0.73038,
+      "blockAreaP25": 0.25567,
+      "blockAreaP75": 1.203,
+      "blockAspectMedian": 1.8982,
+      "blockAspectP75": 2.4704,
+      "corridorContinuity": null,
+      "majorCorridorLengthKm": null
+     }
+    },
+    {
+     "sampleId": "n3-4-2",
+     "bounds": [
+      428437,
+      -4588714,
+      429937,
+      -4587214
+     ],
+     "areaKm2": 1.64,
+     "context": {
+      "ring": "peripheral",
+      "fabric": "mixed"
+     },
+     "metrics": {
+      "intersectionDensity": 92.073,
+      "streetDensity": 15.178,
+      "segmentLengthMean": 102.86,
+      "segmentLengthMedian": 78.113,
+      "avgNodeDegree": 2.9578,
+      "threeWayShare": 77.108,
+      "fourWayShare": 13.855,
+      "deadEndShare": 9.0361,
+      "circuity": 1.0625,
+      "orientationEntropy": 3.3747,
+      "orientationOrder": 0.18104,
+      "dominantOrientations": 1,
+      "shareRegional": 15.213,
+      "shareArterial": 9.4359,
+      "shareAvenue": 0,
+      "shareConnector": 18.901,
+      "shareLocal": 56.45,
+      "majorRoadShare": 24.649,
+      "majorRoadSpacing": 534.6,
+      "blockAreaMedian": 1.1857,
+      "blockAreaP25": 0.56542,
+      "blockAreaP75": 1.8546,
+      "blockAspectMedian": 1.9026,
+      "blockAspectP75": 2.418,
+      "corridorContinuity": null,
+      "majorCorridorLengthKm": null
+     }
+    },
+    {
+     "sampleId": "n3-5-3",
+     "bounds": [
+      429937,
+      -4587214,
+      431437,
+      -4585714
+     ],
+     "areaKm2": 1.96,
+     "context": {
+      "ring": "inner",
+      "fabric": "irregular"
+     },
+     "metrics": {
+      "intersectionDensity": 156.63,
+      "streetDensity": 22.526,
+      "segmentLengthMean": 85.234,
+      "segmentLengthMedian": 74.387,
+      "avgNodeDegree": 3.1768,
+      "threeWayShare": 63.415,
+      "fourWayShare": 30.183,
+      "deadEndShare": 6.4024,
+      "circuity": 1.0434,
+      "orientationEntropy": 3.4622,
+      "orientationOrder": 0.10742,
+      "dominantOrientations": 2,
+      "shareRegional": 0,
+      "shareArterial": 6.1742,
+      "shareAvenue": 2.647,
+      "shareConnector": 9.0187,
+      "shareLocal": 82.16,
+      "majorRoadShare": 8.8211,
+      "majorRoadSpacing": 1006.5,
+      "blockAreaMedian": 0.80281,
+      "blockAreaP25": 0.49907,
+      "blockAreaP75": 1.2356,
+      "blockAspectMedian": 1.6078,
+      "blockAspectP75": 2.1708,
+      "corridorContinuity": null,
+      "majorCorridorLengthKm": null
+     }
+    },
+    {
+     "sampleId": "n2-5-3",
+     "bounds": [
+      430687,
+      -4587214,
+      432187,
+      -4585714
+     ],
+     "areaKm2": 2.24,
+     "context": {
+      "ring": "inner",
+      "fabric": "mixed"
+     },
+     "metrics": {
+      "intersectionDensity": 157.59,
+      "streetDensity": 22.808,
+      "segmentLengthMean": 82.671,
+      "segmentLengthMedian": 74.724,
+      "avgNodeDegree": 3.3197,
+      "threeWayShare": 58.197,
+      "fourWayShare": 38.251,
+      "deadEndShare": 3.5519,
+      "circuity": 1.0239,
+      "orientationEntropy": 3.3134,
+      "orientationOrder": 0.23078,
+      "dominantOrientations": 1,
+      "shareRegional": 0,
+      "shareArterial": 12.68,
+      "shareAvenue": 6.6702,
+      "shareConnector": 5.7589,
+      "shareLocal": 74.891,
+      "majorRoadShare": 19.35,
+      "majorRoadSpacing": 453.15,
+      "blockAreaMedian": 0.75756,
+      "blockAreaP25": 0.48068,
+      "blockAreaP75": 1.1207,
+      "blockAspectMedian": 1.6129,
+      "blockAspectP75": 2.2466,
+      "corridorContinuity": null,
+      "majorCorridorLengthKm": null
+     }
+    },
+    {
+     "sampleId": "n0-5-2",
+     "bounds": [
+      430687,
+      -4587964,
+      432187,
+      -4586464
+     ],
+     "areaKm2": 2.52,
+     "context": {
+      "ring": "peripheral",
+      "fabric": "mixed"
+     },
+     "metrics": {
+      "intersectionDensity": 140.87,
+      "streetDensity": 19.694,
+      "segmentLengthMean": 81.625,
+      "segmentLengthMedian": 71.912,
+      "avgNodeDegree": 3.2567,
+      "threeWayShare": 60.16,
+      "fourWayShare": 34.759,
+      "deadEndShare": 5.0802,
+      "circuity": 1.0199,
+      "orientationEntropy": 3.3577,
+      "orientationOrder": 0.19496,
+      "dominantOrientations": 1,
+      "shareRegional": 0,
+      "shareArterial": 13.606,
+      "shareAvenue": 9.0747,
+      "shareConnector": 5.4324,
+      "shareLocal": 71.887,
+      "majorRoadShare": 22.681,
+      "majorRoadSpacing": 447.76,
+      "blockAreaMedian": 0.65821,
+      "blockAreaP25": 0.38346,
+      "blockAreaP75": 1.1219,
+      "blockAspectMedian": 1.6532,
+      "blockAspectP75": 2.3418,
+      "corridorContinuity": null,
+      "majorCorridorLengthKm": null
+     }
+    },
+    {
+     "sampleId": "n3-6-3",
+     "bounds": [
+      431437,
+      -4587214,
+      432937,
+      -4585714
+     ],
+     "areaKm2": 2.24,
+     "context": {
+      "ring": "peripheral",
+      "fabric": "mixed"
+     },
+     "metrics": {
+      "intersectionDensity": 129.46,
+      "streetDensity": 18.955,
+      "segmentLengthMean": 82.606,
+      "segmentLengthMedian": 73.52,
+      "avgNodeDegree": 3.2974,
+      "threeWayShare": 56.209,
+      "fourWayShare": 38.562,
+      "deadEndShare": 5.2288,
+      "circuity": 1.0196,
+      "orientationEntropy": 3.196,
+      "orientationOrder": 0.32167,
+      "dominantOrientations": 1,
+      "shareRegional": 0,
+      "shareArterial": 8.8377,
+      "shareAvenue": 8.2978,
+      "shareConnector": 9.724,
+      "shareLocal": 73.141,
+      "majorRoadShare": 17.136,
+      "majorRoadSpacing": 615.75,
+      "blockAreaMedian": 0.69765,
+      "blockAreaP25": 0.38698,
+      "blockAreaP75": 1.0065,
+      "blockAspectMedian": 1.8364,
+      "blockAspectP75": 2.4833,
+      "corridorContinuity": null,
+      "majorCorridorLengthKm": null
+     }
+    },
+    {
+     "sampleId": "n0-3-7",
+     "bounds": [
+      427687,
+      -4580464,
+      429187,
+      -4578964
+     ],
+     "areaKm2": 2.2,
+     "context": {
+      "ring": "peripheral",
+      "fabric": "mixed"
+     },
+     "metrics": {
+      "intersectionDensity": 102.27,
+      "streetDensity": 15.699,
+      "segmentLengthMean": 92.345,
+      "segmentLengthMedian": 60.323,
+      "avgNodeDegree": 3.0531,
+      "threeWayShare": 71.837,
+      "fourWayShare": 20,
+      "deadEndShare": 8.1633,
+      "circuity": 1.092,
+      "orientationEntropy": 3.3281,
+      "orientationOrder": 0.21902,
+      "dominantOrientations": 2,
+      "shareRegional": 3.5503,
+      "shareArterial": 5.3584,
+      "shareAvenue": 4.5977,
+      "shareConnector": 19.544,
+      "shareLocal": 66.949,
+      "majorRoadShare": 13.506,
+      "majorRoadSpacing": 943.26,
+      "blockAreaMedian": 0.78,
+      "blockAreaP25": 0.21468,
+      "blockAreaP75": 1.5445,
+      "blockAspectMedian": 1.7827,
+      "blockAspectP75": 3.0857,
+      "corridorContinuity": null,
+      "majorCorridorLengthKm": null
+     }
+    },
+    {
+     "sampleId": "n2-3-8",
+     "bounds": [
+      427687,
+      -4579714,
+      429187,
+      -4578214
+     ],
+     "areaKm2": 2.24,
+     "context": {
+      "ring": "peripheral",
+      "fabric": "mixed"
+     },
+     "metrics": {
+      "intersectionDensity": 60.268,
+      "streetDensity": 10.537,
+      "segmentLengthMean": 103.52,
+      "segmentLengthMedian": 67.653,
+      "avgNodeDegree": 2.9935,
+      "threeWayShare": 66.013,
+      "fourWayShare": 22.222,
+      "deadEndShare": 11.765,
+      "circuity": 1.0449,
+      "orientationEntropy": 3.1542,
+      "orientationOrder": 0.35258,
+      "dominantOrientations": 1,
+      "shareRegional": 0,
+      "shareArterial": 1.7738,
+      "shareAvenue": 13.826,
+      "shareConnector": 18.248,
+      "shareLocal": 66.152,
+      "majorRoadShare": 15.6,
+      "majorRoadSpacing": 1216.7,
+      "blockAreaMedian": 1.2416,
+      "blockAreaP25": 0.24896,
+      "blockAreaP75": 3.7728,
+      "blockAspectMedian": 1.9768,
+      "blockAspectP75": 2.3412,
+      "corridorContinuity": null,
+      "majorCorridorLengthKm": null
+     }
+    },
+    {
+     "sampleId": "n3-3-8",
+     "bounds": [
+      426937,
+      -4579714,
+      428437,
+      -4578214
+     ],
+     "areaKm2": 1.48,
+     "context": {
+      "ring": "peripheral",
+      "fabric": "mixed"
+     },
+     "metrics": {
+      "intersectionDensity": 66.216,
+      "streetDensity": 12.196,
+      "segmentLengthMean": 106.8,
+      "segmentLengthMedian": 88.06,
+      "avgNodeDegree": 3.0089,
+      "threeWayShare": 60.714,
+      "fourWayShare": 25.893,
+      "deadEndShare": 12.5,
+      "circuity": 1.0301,
+      "orientationEntropy": 2.8697,
+      "orientationOrder": 0.54421,
+      "dominantOrientations": 1,
+      "shareRegional": 0,
+      "shareArterial": 3.5635,
+      "shareAvenue": 18.384,
+      "shareConnector": 15.953,
+      "shareLocal": 62.099,
+      "majorRoadShare": 21.947,
+      "majorRoadSpacing": 747.21,
+      "blockAreaMedian": 1.5207,
+      "blockAreaP25": 0.38573,
+      "blockAreaP75": 3.6558,
+      "blockAspectMedian": 1.9675,
+      "blockAspectP75": 2.3414,
+      "corridorContinuity": null,
+      "majorCorridorLengthKm": null
+     }
+    },
+    {
+     "sampleId": "n1-2-5",
+     "bounds": [
+      425437,
+      -4583464,
+      426937,
+      -4581964
+     ],
+     "areaKm2": 2.2,
+     "context": {
+      "ring": "inner",
+      "fabric": "mixed"
+     },
+     "metrics": {
+      "intersectionDensity": 114.09,
+      "streetDensity": 17.736,
+      "segmentLengthMean": 92.242,
+      "segmentLengthMedian": 79.586,
+      "avgNodeDegree": 3.1493,
+      "threeWayShare": 67.91,
+      "fourWayShare": 25.746,
+      "deadEndShare": 6.3433,
+      "circuity": 1.0253,
+      "orientationEntropy": 3.3313,
+      "orientationOrder": 0.21637,
+      "dominantOrientations": 2,
+      "shareRegional": 6.4542,
+      "shareArterial": 7.6903,
+      "shareAvenue": 0,
+      "shareConnector": 19.512,
+      "shareLocal": 66.343,
+      "majorRoadShare": 14.145,
+      "majorRoadSpacing": 797.25,
+      "blockAreaMedian": 1.1917,
+      "blockAreaP25": 0.5505,
+      "blockAreaP75": 1.9652,
+      "blockAspectMedian": 1.6501,
+      "blockAspectP75": 2.0845,
+      "corridorContinuity": null,
+      "majorCorridorLengthKm": null
+     }
+    },
+    {
+     "sampleId": "n3-2-5",
+     "bounds": [
+      425437,
+      -4584214,
+      426937,
+      -4582714
+     ],
+     "areaKm2": 2.16,
+     "context": {
+      "ring": "inner",
+      "fabric": "mixed"
+     },
+     "metrics": {
+      "intersectionDensity": 128.24,
+      "streetDensity": 19.446,
+      "segmentLengthMean": 90.329,
+      "segmentLengthMedian": 75.074,
+      "avgNodeDegree": 3.1347,
+      "threeWayShare": 68.35,
+      "fourWayShare": 24.916,
+      "deadEndShare": 6.734,
+      "circuity": 1.0341,
+      "orientationEntropy": 3.2938,
+      "orientationOrder": 0.24634,
+      "dominantOrientations": 1,
+      "shareRegional": 16.394,
+      "shareArterial": 0.82616,
+      "shareAvenue": 1.361,
+      "shareConnector": 19.981,
+      "shareLocal": 61.438,
+      "majorRoadShare": 18.581,
+      "majorRoadSpacing": 553.51,
+      "blockAreaMedian": 0.75196,
+      "blockAreaP25": 0.43825,
+      "blockAreaP75": 1.4788,
+      "blockAspectMedian": 1.6826,
+      "blockAspectP75": 2.1704,
+      "corridorContinuity": null,
+      "majorCorridorLengthKm": null
+     }
+    },
+    {
+     "sampleId": "n1-2-4",
+     "bounds": [
+      425437,
+      -4584964,
+      426937,
+      -4583464
+     ],
+     "areaKm2": 2.24,
+     "context": {
+      "ring": "inner",
+      "fabric": "mixed"
+     },
+     "metrics": {
+      "intersectionDensity": 76.786,
+      "streetDensity": 15.614,
+      "segmentLengthMean": 117.76,
+      "segmentLengthMedian": 83.095,
+      "avgNodeDegree": 2.8798,
+      "threeWayShare": 61.058,
+      "fourWayShare": 21.635,
+      "deadEndShare": 17.308,
+      "circuity": 1.1154,
+      "orientationEntropy": 3.2868,
+      "orientationOrder": 0.25183,
+      "dominantOrientations": 1,
+      "shareRegional": 22.255,
+      "shareArterial": 0.060413,
+      "shareAvenue": 9.879,
+      "shareConnector": 16.202,
+      "shareLocal": 51.604,
+      "majorRoadShare": 32.194,
+      "majorRoadSpacing": 397.88,
+      "blockAreaMedian": 0.66641,
+      "blockAreaP25": 0.41295,
+      "blockAreaP75": 1.3513,
+      "blockAspectMedian": 1.6857,
+      "blockAspectP75": 2.3868,
+      "corridorContinuity": null,
+      "majorCorridorLengthKm": null
+     }
+    },
+    {
+     "sampleId": "n0-1-5",
+     "bounds": [
+      424687,
+      -4583464,
+      426187,
+      -4581964
+     ],
+     "areaKm2": 1.72,
+     "context": {
+      "ring": "peripheral",
+      "fabric": "mixed"
+     },
+     "metrics": {
+      "intersectionDensity": 94.767,
+      "streetDensity": 17.99,
+      "segmentLengthMean": 112.93,
+      "segmentLengthMedian": 88.337,
+      "avgNodeDegree": 3.067,
+      "threeWayShare": 69.274,
+      "fourWayShare": 21.788,
+      "deadEndShare": 8.9385,
+      "circuity": 1.1082,
+      "orientationEntropy": 3.2894,
+      "orientationOrder": 0.24978,
+      "dominantOrientations": 2,
+      "shareRegional": 19.533,
+      "shareArterial": 0.26656,
+      "shareAvenue": 0,
+      "shareConnector": 14.878,
+      "shareLocal": 65.322,
+      "majorRoadShare": 19.8,
+      "majorRoadSpacing": 561.47,
+      "blockAreaMedian": 1.2345,
+      "blockAreaP25": 0.50589,
+      "blockAreaP75": 1.9651,
+      "blockAspectMedian": 1.6191,
+      "blockAspectP75": 2.1593,
+      "corridorContinuity": null,
+      "majorCorridorLengthKm": null
+     }
+    },
+    {
+     "sampleId": "n2-1-5",
+     "bounds": [
+      424687,
+      -4584214,
+      426187,
+      -4582714
+     ],
+     "areaKm2": 1.48,
+     "context": {
+      "ring": "peripheral",
+      "fabric": "mixed"
+     },
+     "metrics": {
+      "intersectionDensity": 94.595,
+      "streetDensity": 15.87,
+      "segmentLengthMean": 102.12,
+      "segmentLengthMedian": 76.27,
+      "avgNodeDegree": 2.9245,
+      "threeWayShare": 74.214,
+      "fourWayShare": 13.836,
+      "deadEndShare": 11.95,
+      "circuity": 1.0788,
+      "orientationEntropy": 3.3911,
+      "orientationOrder": 0.16751,
+      "dominantOrientations": 1,
+      "shareRegional": 17.027,
+      "shareArterial": 0,
+      "shareAvenue": 1.1857,
+      "shareConnector": 18.171,
+      "shareLocal": 63.616,
+      "majorRoadShare": 18.213,
+      "majorRoadSpacing": 691.96,
+      "blockAreaMedian": 0.98389,
+      "blockAreaP25": 0.53785,
+      "blockAreaP75": 2.134,
+      "blockAspectMedian": 1.6191,
+      "blockAspectP75": 2.1832,
+      "corridorContinuity": null,
+      "majorCorridorLengthKm": null
+     }
+    },
+    {
+     "sampleId": "n0-1-4",
+     "bounds": [
+      424687,
+      -4584964,
+      426187,
+      -4583464
+     ],
+     "areaKm2": 1.76,
+     "context": {
+      "ring": "peripheral",
+      "fabric": "irregular"
+     },
+     "metrics": {
+      "intersectionDensity": 44.318,
+      "streetDensity": 10.797,
+      "segmentLengthMean": 142.87,
+      "segmentLengthMedian": 95.024,
+      "avgNodeDegree": 2.5238,
+      "threeWayShare": 68.571,
+      "fourWayShare": 4.7619,
+      "deadEndShare": 25.714,
+      "circuity": 1.208,
+      "orientationEntropy": 3.5049,
+      "orientationOrder": 0.070255,
+      "dominantOrientations": 1,
+      "shareRegional": 12.518,
+      "shareArterial": 0,
+      "shareAvenue": 21.465,
+      "shareConnector": 7.9135,
+      "shareLocal": 58.103,
+      "majorRoadShare": 33.983,
+      "majorRoadSpacing": 545.1,
+      "blockAreaMedian": 1.6224,
+      "blockAreaP25": 0.60293,
+      "blockAreaP75": 2.5553,
+      "blockAspectMedian": 2.1691,
+      "blockAspectP75": 2.5531,
+      "corridorContinuity": null,
+      "majorCorridorLengthKm": null
+     }
+    },
+    {
+     "sampleId": "n2-1-4",
+     "bounds": [
+      424687,
+      -4585714,
+      426187,
+      -4584214
+     ],
+     "areaKm2": 2.2,
+     "context": {
+      "ring": "peripheral",
+      "fabric": "irregular"
+     },
+     "metrics": {
+      "intersectionDensity": 26.818,
+      "streetDensity": 11.465,
+      "segmentLengthMean": 231.4,
+      "segmentLengthMedian": 142.19,
+      "avgNodeDegree": 2.266,
+      "threeWayShare": 59.574,
+      "fourWayShare": 2.1277,
+      "deadEndShare": 37.234,
+      "circuity": 1.3607,
+      "orientationEntropy": 3.5515,
+      "orientationOrder": 0.028902,
+      "dominantOrientations": 0,
+      "shareRegional": 11.918,
+      "shareArterial": 0,
+      "shareAvenue": 23.879,
+      "shareConnector": 5.6616,
+      "shareLocal": 58.541,
+      "majorRoadShare": 35.797,
+      "majorRoadSpacing": 487.31,
+      "blockAreaMedian": 2.1504,
+      "blockAreaP25": 1.5351,
+      "blockAreaP75": 3.093,
+      "blockAspectMedian": 2.4822,
+      "blockAspectP75": 2.9847,
+      "corridorContinuity": null,
+      "majorCorridorLengthKm": null
+     }
+    },
+    {
+     "sampleId": "n3-2-4",
+     "bounds": [
+      425437,
+      -4585714,
+      426937,
+      -4584214
+     ],
+     "areaKm2": 1.72,
+     "context": {
+      "ring": "peripheral",
+      "fabric": "irregular"
+     },
+     "metrics": {
+      "intersectionDensity": 40.698,
+      "streetDensity": 11.918,
+      "segmentLengthMean": 170.83,
+      "segmentLengthMedian": 106.13,
+      "avgNodeDegree": 2.5306,
+      "threeWayShare": 61.224,
+      "fourWayShare": 10.204,
+      "deadEndShare": 28.571,
+      "circuity": 1.296,
+      "orientationEntropy": 3.439,
+      "orientationOrder": 0.12723,
+      "dominantOrientations": 1,
+      "shareRegional": 12.283,
+      "shareArterial": 0,
+      "shareAvenue": 14.067,
+      "shareConnector": 11.685,
+      "shareLocal": 61.965,
+      "majorRoadShare": 26.35,
+      "majorRoadSpacing": 636.86,
+      "blockAreaMedian": 1.1575,
+      "blockAreaP25": 0.67886,
+      "blockAreaP75": 1.7719,
+      "blockAspectMedian": 1.997,
+      "blockAspectP75": 2.8977,
+      "corridorContinuity": null,
+      "majorCorridorLengthKm": null
+     }
+    },
+    {
+     "sampleId": "n1-6-2",
+     "bounds": [
+      431437,
+      -4587964,
+      432937,
+      -4586464
+     ],
+     "areaKm2": 2.56,
+     "context": {
+      "ring": "peripheral",
+      "fabric": "mixed"
+     },
+     "metrics": {
+      "intersectionDensity": 129.3,
+      "streetDensity": 18.203,
+      "segmentLengthMean": 80.76,
+      "segmentLengthMedian": 67.267,
+      "avgNodeDegree": 3.2358,
+      "threeWayShare": 60.227,
+      "fourWayShare": 33.807,
+      "deadEndShare": 5.9659,
+      "circuity": 1.023,
+      "orientationEntropy": 3.2056,
+      "orientationOrder": 0.31438,
+      "dominantOrientations": 1,
+      "shareRegional": 1.152,
+      "shareArterial": 11.016,
+      "shareAvenue": 7.3814,
+      "shareConnector": 8.5494,
+      "shareLocal": 71.901,
+      "majorRoadShare": 19.55,
+      "majorRoadSpacing": 562.03,
+      "blockAreaMedian": 0.60546,
+      "blockAreaP25": 0.30611,
+      "blockAreaP75": 1.0494,
+      "blockAspectMedian": 1.7762,
+      "blockAspectP75": 2.5218,
+      "corridorContinuity": null,
+      "majorCorridorLengthKm": null
+     }
+    },
+    {
+     "sampleId": "n0-6-2",
+     "bounds": [
+      432187,
+      -4587964,
+      433687,
+      -4586464
+     ],
+     "areaKm2": 2.24,
+     "context": {
+      "ring": "peripheral",
+      "fabric": "mixed"
+     },
+     "metrics": {
+      "intersectionDensity": 109.37,
+      "streetDensity": 15.226,
+      "segmentLengthMean": 84.42,
+      "segmentLengthMedian": 67.824,
+      "avgNodeDegree": 3.0951,
+      "threeWayShare": 70.342,
+      "fourWayShare": 22.433,
+      "deadEndShare": 6.8441,
+      "circuity": 1.0379,
+      "orientationEntropy": 3.1691,
+      "orientationOrder": 0.34162,
+      "dominantOrientations": 1,
+      "shareRegional": 1.574,
+      "shareArterial": 0,
+      "shareAvenue": 4.9326,
+      "shareConnector": 20.114,
+      "shareLocal": 73.38,
+      "majorRoadShare": 6.5067,
+      "majorRoadSpacing": 2018.8,
+      "blockAreaMedian": 0.64257,
+      "blockAreaP25": 0.31868,
+      "blockAreaP75": 1.3795,
+      "blockAspectMedian": 1.8025,
+      "blockAspectP75": 2.4595,
+      "corridorContinuity": null,
+      "majorCorridorLengthKm": null
+     }
+    },
+    {
+     "sampleId": "n2-5-2",
+     "bounds": [
+      430687,
+      -4588714,
+      432187,
+      -4587214
+     ],
+     "areaKm2": 2.52,
+     "context": {
+      "ring": "peripheral",
+      "fabric": "mixed"
+     },
+     "metrics": {
+      "intersectionDensity": 150.79,
+      "streetDensity": 22.164,
+      "segmentLengthMean": 87.406,
+      "segmentLengthMedian": 67.345,
+      "avgNodeDegree": 3.2646,
+      "threeWayShare": 64.631,
+      "fourWayShare": 32.061,
+      "deadEndShare": 3.3079,
+      "circuity": 1.0246,
+      "orientationEntropy": 3.3888,
+      "orientationOrder": 0.16936,
+      "dominantOrientations": 2,
+      "shareRegional": 9.0755,
+      "shareArterial": 9.0038,
+      "shareAvenue": 5.6368,
+      "shareConnector": 12.077,
+      "shareLocal": 64.207,
+      "majorRoadShare": 23.716,
+      "majorRoadSpacing": 380.49,
+      "blockAreaMedian": 0.68959,
+      "blockAreaP25": 0.36372,
+      "blockAreaP75": 1.1536,
+      "blockAspectMedian": 1.8939,
+      "blockAspectP75": 2.7014,
+      "corridorContinuity": null,
+      "majorCorridorLengthKm": null
+     }
+    },
+    {
+     "sampleId": "n3-6-2",
+     "bounds": [
+      431437,
+      -4588714,
+      432937,
+      -4587214
+     ],
+     "areaKm2": 2.56,
+     "context": {
+      "ring": "peripheral",
+      "fabric": "mixed"
+     },
+     "metrics": {
+      "intersectionDensity": 121.88,
+      "streetDensity": 18.894,
+      "segmentLengthMean": 91.607,
+      "segmentLengthMedian": 65.441,
+      "avgNodeDegree": 3.2508,
+      "threeWayShare": 62.691,
+      "fourWayShare": 32.722,
+      "deadEndShare": 4.5872,
+      "circuity": 1.0391,
+      "orientationEntropy": 3.2402,
+      "orientationOrder": 0.28806,
+      "dominantOrientations": 2,
+      "shareRegional": 9.4254,
+      "shareArterial": 10.317,
+      "shareAvenue": 5.7866,
+      "shareConnector": 14.43,
+      "shareLocal": 60.041,
+      "majorRoadShare": 25.529,
+      "majorRoadSpacing": 414.64,
+      "blockAreaMedian": 0.64853,
+      "blockAreaP25": 0.29313,
+      "blockAreaP75": 1.3655,
+      "blockAspectMedian": 1.7602,
+      "blockAspectP75": 2.7723,
+      "corridorContinuity": null,
+      "majorCorridorLengthKm": null
+     }
+    },
+    {
+     "sampleId": "n2-6-2",
+     "bounds": [
+      432187,
+      -4588714,
+      433687,
+      -4587214
+     ],
+     "areaKm2": 2.2,
+     "context": {
+      "ring": "peripheral",
+      "fabric": "mixed"
+     },
+     "metrics": {
+      "intersectionDensity": 95.455,
+      "streetDensity": 16.258,
+      "segmentLengthMean": 105.51,
+      "segmentLengthMedian": 75.319,
+      "avgNodeDegree": 3.1864,
+      "threeWayShare": 69.545,
+      "fourWayShare": 25.909,
+      "deadEndShare": 4.5455,
+      "circuity": 1.0394,
+      "orientationEntropy": 3.1339,
+      "orientationOrder": 0.36739,
+      "dominantOrientations": 1,
+      "shareRegional": 13.016,
+      "shareArterial": 0,
+      "shareAvenue": 5.2898,
+      "shareConnector": 22.811,
+      "shareLocal": 58.883,
+      "majorRoadShare": 18.306,
+      "majorRoadSpacing": 672.01,
+      "blockAreaMedian": 0.84126,
+      "blockAreaP25": 0.4233,
+      "blockAreaP75": 2.3887,
+      "blockAspectMedian": 1.7583,
+      "blockAspectP75": 2.4218,
+      "corridorContinuity": null,
+      "majorCorridorLengthKm": null
+     }
+    },
+    {
+     "sampleId": "n0-5-1",
+     "bounds": [
+      430687,
+      -4589464,
+      432187,
+      -4587964
+     ],
+     "areaKm2": 2.16,
+     "context": {
+      "ring": "peripheral",
+      "fabric": "irregular"
+     },
+     "metrics": {
+      "intersectionDensity": 131.48,
+      "streetDensity": 21.004,
+      "segmentLengthMean": 96.527,
+      "segmentLengthMedian": 70.339,
+      "avgNodeDegree": 3.1966,
+      "threeWayShare": 69.492,
+      "fourWayShare": 26.78,
+      "deadEndShare": 3.7288,
+      "circuity": 1.0656,
+      "orientationEntropy": 3.4409,
+      "orientationOrder": 0.12562,
+      "dominantOrientations": 0,
+      "shareRegional": 11.173,
+      "shareArterial": 5.765,
+      "shareAvenue": 1.0869,
+      "shareConnector": 11.379,
+      "shareLocal": 70.597,
+      "majorRoadShare": 18.025,
+      "majorRoadSpacing": 528.28,
+      "blockAreaMedian": 0.78493,
+      "blockAreaP25": 0.43006,
+      "blockAreaP75": 1.2582,
+      "blockAspectMedian": 2.0721,
+      "blockAspectP75": 2.8362,
+      "corridorContinuity": null,
+      "majorCorridorLengthKm": null
+     }
+    },
+    {
+     "sampleId": "n1-6-1",
+     "bounds": [
+      431437,
+      -4589464,
+      432937,
+      -4587964
+     ],
+     "areaKm2": 2.2,
+     "context": {
+      "ring": "peripheral",
+      "fabric": "mixed"
+     },
+     "metrics": {
+      "intersectionDensity": 117.27,
+      "streetDensity": 21.501,
+      "segmentLengthMean": 111.04,
+      "segmentLengthMedian": 72.661,
+      "avgNodeDegree": 3.2285,
+      "threeWayShare": 67.79,
+      "fourWayShare": 28.839,
+      "deadEndShare": 3.3708,
+      "circuity": 1.066,
+      "orientationEntropy": 3.3867,
+      "orientationOrder": 0.17113,
+      "dominantOrientations": 2,
+      "shareRegional": 26.442,
+      "shareArterial": 5.9409,
+      "shareAvenue": 3.6923,
+      "shareConnector": 9.9209,
+      "shareLocal": 54.004,
+      "majorRoadShare": 36.075,
+      "majorRoadSpacing": 257.85,
+      "blockAreaMedian": 0.76515,
+      "blockAreaP25": 0.37106,
+      "blockAreaP75": 1.5418,
+      "blockAspectMedian": 2.1679,
+      "blockAspectP75": 3.1159,
+      "corridorContinuity": null,
+      "majorCorridorLengthKm": null
+     }
+    },
+    {
+     "sampleId": "n1-5-1",
+     "bounds": [
+      429937,
+      -4589464,
+      431437,
+      -4587964
+     ],
+     "areaKm2": 1.56,
+     "context": {
+      "ring": "peripheral",
+      "fabric": "mixed"
+     },
+     "metrics": {
+      "intersectionDensity": 104.49,
+      "streetDensity": 20.355,
+      "segmentLengthMean": 120.28,
+      "segmentLengthMedian": 80.226,
+      "avgNodeDegree": 3.0988,
+      "threeWayShare": 75,
+      "fourWayShare": 19.767,
+      "deadEndShare": 5.2326,
+      "circuity": 1.0778,
+      "orientationEntropy": 3.2933,
+      "orientationOrder": 0.24676,
+      "dominantOrientations": 1,
+      "shareRegional": 15.695,
+      "shareArterial": 0,
+      "shareAvenue": 0.61434,
+      "shareConnector": 13.734,
+      "shareLocal": 69.957,
+      "majorRoadShare": 16.31,
+      "majorRoadSpacing": 602.43,
+      "blockAreaMedian": 0.88322,
+      "blockAreaP25": 0.51852,
+      "blockAreaP75": 1.369,
+      "blockAspectMedian": 2.0411,
+      "blockAspectP75": 2.7026,
+      "corridorContinuity": null,
+      "majorCorridorLengthKm": null
+     }
+    },
+    {
+     "sampleId": "n2-5-1",
+     "bounds": [
+      430687,
+      -4590214,
+      432187,
+      -4588714
+     ],
+     "areaKm2": 2.04,
+     "context": {
+      "ring": "peripheral",
+      "fabric": "irregular"
+     },
+     "metrics": {
+      "intersectionDensity": 74.02,
+      "streetDensity": 14.729,
+      "segmentLengthMean": 122.15,
+      "segmentLengthMedian": 71.567,
+      "avgNodeDegree": 2.8198,
+      "threeWayShare": 81.395,
+      "fourWayShare": 6.3953,
+      "deadEndShare": 12.209,
+      "circuity": 1.2127,
+      "orientationEntropy": 3.5264,
+      "orientationOrder": 0.051331,
+      "dominantOrientations": 0,
+      "shareRegional": 4.9796,
+      "shareArterial": 0.75811,
+      "shareAvenue": 0,
+      "shareConnector": 0.17205,
+      "shareLocal": 94.09,
+      "majorRoadShare": 5.7377,
+      "majorRoadSpacing": 2366.5,
+      "blockAreaMedian": 1.0741,
+      "blockAreaP25": 0.52731,
+      "blockAreaP75": 1.9707,
+      "blockAspectMedian": 2.0443,
+      "blockAspectP75": 2.9473,
+      "corridorContinuity": null,
+      "majorCorridorLengthKm": null
+     }
+    },
+    {
+     "sampleId": "n3-6-1",
+     "bounds": [
+      431437,
+      -4590214,
+      432937,
+      -4588714
+     ],
+     "areaKm2": 1.8,
+     "context": {
+      "ring": "peripheral",
+      "fabric": "irregular"
+     },
+     "metrics": {
+      "intersectionDensity": 88.889,
+      "streetDensity": 19.664,
+      "segmentLengthMean": 136.13,
+      "segmentLengthMedian": 83.251,
+      "avgNodeDegree": 2.954,
+      "threeWayShare": 79.885,
+      "fourWayShare": 11.494,
+      "deadEndShare": 8.046,
+      "circuity": 1.166,
+      "orientationEntropy": 3.4958,
+      "orientationOrder": 0.078255,
+      "dominantOrientations": 0,
+      "shareRegional": 37.685,
+      "shareArterial": 1.1938,
+      "shareAvenue": 0,
+      "shareConnector": 0.62591,
+      "shareLocal": 60.496,
+      "majorRoadShare": 38.878,
+      "majorRoadSpacing": 261.61,
+      "blockAreaMedian": 0.89983,
+      "blockAreaP25": 0.50373,
+      "blockAreaP75": 1.8596,
+      "blockAspectMedian": 2.0841,
+      "blockAspectP75": 3.1209,
+      "corridorContinuity": null,
+      "majorCorridorLengthKm": null
+     }
+    },
+    {
+     "sampleId": "n0-6-1",
+     "bounds": [
+      432187,
+      -4589464,
+      433687,
+      -4587964
+     ],
+     "areaKm2": 1.68,
+     "context": {
+      "ring": "peripheral",
+      "fabric": "irregular"
+     },
+     "metrics": {
+      "intersectionDensity": 84.524,
+      "streetDensity": 21.856,
+      "segmentLengthMean": 156.25,
+      "segmentLengthMedian": 93.724,
+      "avgNodeDegree": 3.2162,
+      "threeWayShare": 68.243,
+      "fourWayShare": 27.703,
+      "deadEndShare": 4.0541,
+      "circuity": 1.0886,
+      "orientationEntropy": 3.4178,
+      "orientationOrder": 0.14515,
+      "dominantOrientations": 1,
+      "shareRegional": 43.489,
+      "shareArterial": 0.53038,
+      "shareAvenue": 4.0682,
+      "shareConnector": 13.992,
+      "shareLocal": 37.92,
+      "majorRoadShare": 48.088,
+      "majorRoadSpacing": 190.29,
+      "blockAreaMedian": 0.86899,
+      "blockAreaP25": 0.43004,
+      "blockAreaP75": 2.669,
+      "blockAspectMedian": 2.1587,
+      "blockAspectP75": 2.719,
+      "corridorContinuity": null,
+      "majorCorridorLengthKm": null
+     }
+    },
+    {
+     "sampleId": "n1-6-0",
+     "bounds": [
+      431437,
+      -4590964,
+      432937,
+      -4589464
+     ],
+     "areaKm2": 1.48,
+     "context": {
+      "ring": "peripheral",
+      "fabric": "irregular"
+     },
+     "metrics": {
+      "intersectionDensity": 54.054,
+      "streetDensity": 13.298,
+      "segmentLengthMean": 151.39,
+      "segmentLengthMedian": 61.292,
+      "avgNodeDegree": 2.7527,
+      "threeWayShare": 80.645,
+      "fourWayShare": 4.3011,
+      "deadEndShare": 13.978,
+      "circuity": 1.3257,
+      "orientationEntropy": 3.4627,
+      "orientationOrder": 0.10694,
+      "dominantOrientations": 1,
+      "shareRegional": 26.386,
+      "shareArterial": 0,
+      "shareAvenue": 0,
+      "shareConnector": 0.26268,
+      "shareLocal": 73.352,
+      "majorRoadShare": 26.386,
+      "majorRoadSpacing": 570.01,
+      "blockAreaMedian": 0.62672,
+      "blockAreaP25": 0.2559,
+      "blockAreaP75": 1.5266,
+      "blockAspectMedian": 1.8834,
+      "blockAspectP75": 2.2946,
+      "corridorContinuity": null,
+      "majorCorridorLengthKm": null
+     }
+    },
+    {
+     "sampleId": "n3-7-2",
+     "bounds": [
+      432937,
+      -4588714,
+      434437,
+      -4587214
+     ],
+     "areaKm2": 1.4,
+     "context": {
+      "ring": "peripheral",
+      "fabric": "strong_grid"
+     },
+     "metrics": {
+      "intersectionDensity": 85,
+      "streetDensity": 14.4,
+      "segmentLengthMean": 105.55,
+      "segmentLengthMedian": 72.387,
+      "avgNodeDegree": 3.127,
+      "threeWayShare": 72.222,
+      "fourWayShare": 22.222,
+      "deadEndShare": 5.5556,
+      "circuity": 1.0423,
+      "orientationEntropy": 2.7337,
+      "orientationOrder": 0.62394,
+      "dominantOrientations": 1,
+      "shareRegional": 11.821,
+      "shareArterial": 0,
+      "shareAvenue": 1.1921,
+      "shareConnector": 21.575,
+      "shareLocal": 65.412,
+      "majorRoadShare": 13.013,
+      "majorRoadSpacing": 1067.3,
+      "blockAreaMedian": 0.65497,
+      "blockAreaP25": 0.39124,
+      "blockAreaP75": 2.1393,
+      "blockAspectMedian": 1.8483,
+      "blockAspectP75": 2.59,
+      "corridorContinuity": null,
+      "majorCorridorLengthKm": null
+     }
+    },
+    {
+     "sampleId": "n1-7-2",
+     "bounds": [
+      432937,
+      -4587964,
+      434437,
+      -4586464
+     ],
+     "areaKm2": 1.44,
+     "context": {
+      "ring": "peripheral",
+      "fabric": "mixed"
+     },
+     "metrics": {
+      "intersectionDensity": 70.139,
+      "streetDensity": 11.747,
+      "segmentLengthMean": 102.52,
+      "segmentLengthMedian": 73.932,
+      "avgNodeDegree": 2.9375,
+      "threeWayShare": 75,
+      "fourWayShare": 14.286,
+      "deadEndShare": 9.8214,
+      "circuity": 1.0454,
+      "orientationEntropy": 2.8048,
+      "orientationOrder": 0.58323,
+      "dominantOrientations": 1,
+      "shareRegional": 0,
+      "shareArterial": 0,
+      "shareAvenue": 0,
+      "shareConnector": 22.976,
+      "shareLocal": 77.024,
+      "majorRoadShare": 0,
+      "majorRoadSpacing": null,
+      "blockAreaMedian": 0.67106,
+      "blockAreaP25": 0.42496,
+      "blockAreaP75": 1.7996,
+      "blockAspectMedian": 1.8196,
+      "blockAspectP75": 2.7709,
+      "corridorContinuity": null,
+      "majorCorridorLengthKm": null
+     }
+    },
+    {
+     "sampleId": "n2-4-8",
+     "bounds": [
+      429187,
+      -4579714,
+      430687,
+      -4578214
+     ],
+     "areaKm2": 1.52,
+     "context": {
+      "ring": "peripheral",
+      "fabric": "mixed"
+     },
+     "metrics": {
+      "intersectionDensity": 31.579,
+      "streetDensity": 8.5474,
+      "segmentLengthMean": 164.46,
+      "segmentLengthMedian": 45.992,
+      "avgNodeDegree": 2.8462,
+      "threeWayShare": 92.308,
+      "fourWayShare": 0,
+      "deadEndShare": 7.6923,
+      "circuity": 1.0549,
+      "orientationEntropy": 3.0182,
+      "orientationOrder": 0.44841,
+      "dominantOrientations": 2,
+      "shareRegional": 35.654,
+      "shareArterial": 0,
+      "shareAvenue": 0,
+      "shareConnector": 8.047,
+      "shareLocal": 56.299,
+      "majorRoadShare": 35.654,
+      "majorRoadSpacing": 656.28,
+      "blockAreaMedian": 0.27485,
+      "blockAreaP25": 0.14065,
+      "blockAreaP75": 8.2035,
+      "blockAspectMedian": 1.7041,
+      "blockAspectP75": 2.4553,
+      "corridorContinuity": null,
+      "majorCorridorLengthKm": null
+     }
+    },
+    {
+     "sampleId": "n3-4-8",
+     "bounds": [
+      428437,
+      -4579714,
+      429937,
+      -4578214
+     ],
+     "areaKm2": 1.88,
+     "context": {
+      "ring": "peripheral",
+      "fabric": "irregular"
+     },
+     "metrics": {
+      "intersectionDensity": 38.83,
+      "streetDensity": 6.7159,
+      "segmentLengthMean": 111.73,
+      "segmentLengthMedian": 46.11,
+      "avgNodeDegree": 2.8889,
+      "threeWayShare": 82.716,
+      "fourWayShare": 7.4074,
+      "deadEndShare": 9.8765,
+      "circuity": 1.0875,
+      "orientationEntropy": 3.4265,
+      "orientationOrder": 0.13784,
+      "dominantOrientations": 1,
+      "shareRegional": 8.861,
+      "shareArterial": 0,
+      "shareAvenue": 0,
+      "shareConnector": 21.523,
+      "shareLocal": 69.616,
+      "majorRoadShare": 8.861,
+      "majorRoadSpacing": 3360.8,
+      "blockAreaMedian": 0.73959,
+      "blockAreaP25": 0.1013,
+      "blockAreaP75": 7.3319,
+      "blockAspectMedian": 1.7654,
+      "blockAspectP75": 2.1969,
+      "corridorContinuity": null,
+      "majorCorridorLengthKm": null
+     }
+    },
+    {
+     "sampleId": "n0-3-2",
+     "bounds": [
+      427687,
+      -4587964,
+      429187,
+      -4586464
+     ],
+     "areaKm2": 1.8,
+     "context": {
+      "ring": "peripheral",
+      "fabric": "mixed"
+     },
+     "metrics": {
+      "intersectionDensity": 85.556,
+      "streetDensity": 16.158,
+      "segmentLengthMean": 117.75,
+      "segmentLengthMedian": 64.579,
+      "avgNodeDegree": 2.8079,
+      "threeWayShare": 80.226,
+      "fourWayShare": 6.7797,
+      "deadEndShare": 12.994,
+      "circuity": 1.1768,
+      "orientationEntropy": 3.2218,
+      "orientationOrder": 0.30213,
+      "dominantOrientations": 1,
+      "shareRegional": 11.874,
+      "shareArterial": 0.9068,
+      "shareAvenue": 21.313,
+      "shareConnector": 18.766,
+      "shareLocal": 47.14,
+      "majorRoadShare": 34.094,
+      "majorRoadSpacing": 363.05,
+      "blockAreaMedian": 1.2887,
+      "blockAreaP25": 0.30917,
+      "blockAreaP75": 2.5813,
+      "blockAspectMedian": 2.1409,
+      "blockAspectP75": 3.3846,
+      "corridorContinuity": null,
+      "majorCorridorLengthKm": null
+     }
+    },
+    {
+     "sampleId": "n0-1-6",
+     "bounds": [
+      424687,
+      -4581964,
+      426187,
+      -4580464
+     ],
+     "areaKm2": 1.2,
+     "context": {
+      "ring": "peripheral",
+      "fabric": "mixed"
+     },
+     "metrics": {
+      "intersectionDensity": 65,
+      "streetDensity": 10.679,
+      "segmentLengthMean": 100.91,
+      "segmentLengthMedian": 67.227,
+      "avgNodeDegree": 3.0714,
+      "threeWayShare": 66.667,
+      "fourWayShare": 23.81,
+      "deadEndShare": 7.1429,
+      "circuity": 1.0808,
+      "orientationEntropy": 3.1007,
+      "orientationOrder": 0.39119,
+      "dominantOrientations": 1,
+      "shareRegional": 1.8368,
+      "shareArterial": 25.882,
+      "shareAvenue": 0,
+      "shareConnector": 13.331,
+      "shareLocal": 58.951,
+      "majorRoadShare": 27.719,
+      "majorRoadSpacing": 675.63,
+      "blockAreaMedian": 0.44868,
+      "blockAreaP25": 0.21286,
+      "blockAreaP75": 1.6231,
+      "blockAspectMedian": 2.5245,
+      "blockAspectP75": 6.1051,
+      "corridorContinuity": null,
+      "majorCorridorLengthKm": null
+     }
+    },
+    {
+     "sampleId": "n2-1-6",
+     "bounds": [
+      424687,
+      -4582714,
+      426187,
+      -4581214
+     ],
+     "areaKm2": 1.84,
+     "context": {
+      "ring": "peripheral",
+      "fabric": "mixed"
+     },
+     "metrics": {
+      "intersectionDensity": 64.674,
+      "streetDensity": 13.157,
+      "segmentLengthMean": 121.04,
+      "segmentLengthMedian": 94.441,
+      "avgNodeDegree": 3.1484,
+      "threeWayShare": 61.719,
+      "fourWayShare": 29.688,
+      "deadEndShare": 7.0313,
+      "circuity": 1.1091,
+      "orientationEntropy": 3.2331,
+      "orientationOrder": 0.29356,
+      "dominantOrientations": 2,
+      "shareRegional": 19.246,
+      "shareArterial": 11.947,
+      "shareAvenue": 0,
+      "shareConnector": 14.656,
+      "shareLocal": 54.151,
+      "majorRoadShare": 31.193,
+      "majorRoadSpacing": 487.33,
+      "blockAreaMedian": 0.84418,
+      "blockAreaP25": 0.26562,
+      "blockAreaP75": 2.038,
+      "blockAspectMedian": 2.0733,
+      "blockAspectP75": 3.9433,
+      "corridorContinuity": null,
+      "majorCorridorLengthKm": null
+     }
+    },
+    {
+     "sampleId": "n0-2-9",
+     "bounds": [
+      426187,
+      -4577464,
+      427687,
+      -4575964
+     ],
+     "areaKm2": 1.36,
+     "context": {
+      "ring": "peripheral",
+      "fabric": "strong_grid"
+     },
+     "metrics": {
+      "intersectionDensity": 61.765,
+      "streetDensity": 16.032,
+      "segmentLengthMean": 159.15,
+      "segmentLengthMedian": 43.5,
+      "avgNodeDegree": 2.9326,
+      "threeWayShare": 87.64,
+      "fourWayShare": 5.618,
+      "deadEndShare": 5.618,
+      "circuity": 1.097,
+      "orientationEntropy": 2.7714,
+      "orientationOrder": 0.6026,
+      "dominantOrientations": 2,
+      "shareRegional": 22.749,
+      "shareArterial": 0,
+      "shareAvenue": 14.721,
+      "shareConnector": 21.497,
+      "shareLocal": 41.033,
+      "majorRoadShare": 37.47,
+      "majorRoadSpacing": 332.93,
+      "blockAreaMedian": 0.17404,
+      "blockAreaP25": 0.12627,
+      "blockAreaP75": 0.69931,
+      "blockAspectMedian": 3.1868,
+      "blockAspectP75": 7.4444,
+      "corridorContinuity": null,
+      "majorCorridorLengthKm": null
+     }
+    },
+    {
+     "sampleId": "n0-5-0",
+     "bounds": [
+      430687,
+      -4590964,
+      432187,
+      -4589464
+     ],
+     "areaKm2": 2,
+     "context": {
+      "ring": "peripheral",
+      "fabric": "irregular"
+     },
+     "metrics": {
+      "intersectionDensity": 55,
+      "streetDensity": 12.702,
+      "segmentLengthMean": 138.82,
+      "segmentLengthMedian": 77.364,
+      "avgNodeDegree": 2.6791,
+      "threeWayShare": 78.358,
+      "fourWayShare": 3.7313,
+      "deadEndShare": 17.91,
+      "circuity": 1.296,
+      "orientationEntropy": 3.509,
+      "orientationOrder": 0.06672,
+      "dominantOrientations": 1,
+      "shareRegional": 7.2282,
+      "shareArterial": 0,
+      "shareAvenue": 0,
+      "shareConnector": 0.20351,
+      "shareLocal": 92.568,
+      "majorRoadShare": 7.2282,
+      "majorRoadSpacing": 2178.4,
+      "blockAreaMedian": 1.331,
+      "blockAreaP25": 0.54898,
+      "blockAreaP75": 3.4128,
+      "blockAspectMedian": 2.1864,
+      "blockAspectP75": 3.1567,
+      "corridorContinuity": null,
+      "majorCorridorLengthKm": null
+     }
+    },
+    {
+     "sampleId": "n0-0-3",
+     "bounds": [
+      423187,
+      -4586464,
+      424687,
+      -4584964
+     ],
+     "areaKm2": 1.16,
+     "context": {
+      "ring": "peripheral",
+      "fabric": "irregular"
+     },
+     "metrics": {
+      "intersectionDensity": 27.586,
+      "streetDensity": 12.137,
+      "segmentLengthMean": 255.98,
+      "segmentLengthMedian": 170.93,
+      "avgNodeDegree": 2.28,
+      "threeWayShare": 64,
+      "fourWayShare": 0,
+      "deadEndShare": 36,
+      "circuity": 1.4933,
+      "orientationEntropy": 3.5469,
+      "orientationOrder": 0.033018,
+      "dominantOrientations": 0,
+      "shareRegional": 0,
+      "shareArterial": 0,
+      "shareAvenue": 6.1349,
+      "shareConnector": 6.9412,
+      "shareLocal": 86.924,
+      "majorRoadShare": 6.1349,
+      "majorRoadSpacing": 2686,
+      "blockAreaMedian": 1.9971,
+      "blockAreaP25": 0.66335,
+      "blockAreaP75": 3.5165,
+      "blockAspectMedian": 1.7169,
+      "blockAspectP75": 3.2197,
+      "corridorContinuity": null,
+      "majorCorridorLengthKm": null
+     }
+    },
+    {
+     "sampleId": "n1-1-3",
+     "bounds": [
+      423937,
+      -4586464,
+      425437,
+      -4584964
+     ],
+     "areaKm2": 1.4,
+     "context": {
+      "ring": "peripheral",
+      "fabric": "irregular"
+     },
+     "metrics": {
+      "intersectionDensity": 30.714,
+      "streetDensity": 14.226,
+      "segmentLengthMean": 252.1,
+      "segmentLengthMedian": 156.72,
+      "avgNodeDegree": 2.2794,
+      "threeWayShare": 61.765,
+      "fourWayShare": 1.4706,
+      "deadEndShare": 36.765,
+      "circuity": 1.3606,
+      "orientationEntropy": 3.5125,
+      "orientationOrder": 0.063642,
+      "dominantOrientations": 1,
+      "shareRegional": 15.094,
+      "shareArterial": 0,
+      "shareAvenue": 15.497,
+      "shareConnector": 7.3841,
+      "shareLocal": 62.025,
+      "majorRoadShare": 30.591,
+      "majorRoadSpacing": 459.58,
+      "blockAreaMedian": 1.7612,
+      "blockAreaP25": 0.60671,
+      "blockAreaP75": 3.286,
+      "blockAspectMedian": 1.8459,
+      "blockAspectP75": 3.2243,
+      "corridorContinuity": null,
+      "majorCorridorLengthKm": null
+     }
+    },
+    {
+     "sampleId": "n2-0-3",
+     "bounds": [
+      423187,
+      -4587214,
+      424687,
+      -4585714
+     ],
+     "areaKm2": 1.28,
+     "context": {
+      "ring": "peripheral",
+      "fabric": "irregular"
+     },
+     "metrics": {
+      "intersectionDensity": 35.156,
+      "streetDensity": 13.974,
+      "segmentLengthMean": 220.83,
+      "segmentLengthMedian": 155.45,
+      "avgNodeDegree": 2.5079,
+      "threeWayShare": 66.667,
+      "fourWayShare": 4.7619,
+      "deadEndShare": 28.571,
+      "circuity": 1.3885,
+      "orientationEntropy": 3.5376,
+      "orientationOrder": 0.041363,
+      "dominantOrientations": 0,
+      "shareRegional": 0,
+      "shareArterial": 0,
+      "shareAvenue": 8.5536,
+      "shareConnector": 13.239,
+      "shareLocal": 78.207,
+      "majorRoadShare": 8.5536,
+      "majorRoadSpacing": 1673.2,
+      "blockAreaMedian": 0.84744,
+      "blockAreaP25": 0.69693,
+      "blockAreaP75": 6.4036,
+      "blockAspectMedian": 2.1263,
+      "blockAspectP75": 3.0982,
+      "corridorContinuity": null,
+      "majorCorridorLengthKm": null
+     }
+    },
+    {
+     "sampleId": "n3-1-3",
+     "bounds": [
+      423937,
+      -4587214,
+      425437,
+      -4585714
+     ],
+     "areaKm2": 1.2,
+     "context": {
+      "ring": "peripheral",
+      "fabric": "irregular"
+     },
+     "metrics": {
+      "intersectionDensity": 36.667,
+      "streetDensity": 13.644,
+      "segmentLengthMean": 215.44,
+      "segmentLengthMedian": 155.17,
+      "avgNodeDegree": 2.5424,
+      "threeWayShare": 69.492,
+      "fourWayShare": 5.0847,
+      "deadEndShare": 25.424,
+      "circuity": 1.2628,
+      "orientationEntropy": 3.4904,
+      "orientationOrder": 0.082947,
+      "dominantOrientations": 0,
+      "shareRegional": 0,
+      "shareArterial": 0,
+      "shareAvenue": 8.0464,
+      "shareConnector": 14.463,
+      "shareLocal": 77.49,
+      "majorRoadShare": 8.0464,
+      "majorRoadSpacing": 1821.7,
+      "blockAreaMedian": 1.6075,
+      "blockAreaP25": 0.61,
+      "blockAreaP75": 3.9856,
+      "blockAspectMedian": 2.5551,
+      "blockAspectP75": 3.6413,
+      "corridorContinuity": null,
+      "majorCorridorLengthKm": null
+     }
+    },
+    {
+     "sampleId": "n3-1-4",
+     "bounds": [
+      423937,
+      -4585714,
+      425437,
+      -4584214
+     ],
+     "areaKm2": 1.52,
+     "context": {
+      "ring": "peripheral",
+      "fabric": "irregular"
+     },
+     "metrics": {
+      "intersectionDensity": 28.947,
+      "streetDensity": 11.952,
+      "segmentLengthMean": 218.88,
+      "segmentLengthMedian": 142.19,
+      "avgNodeDegree": 2.2222,
+      "threeWayShare": 58.333,
+      "fourWayShare": 1.3889,
+      "deadEndShare": 38.889,
+      "circuity": 1.3024,
+      "orientationEntropy": 3.5207,
+      "orientationOrder": 0.05633,
+      "dominantOrientations": 0,
+      "shareRegional": 16.547,
+      "shareArterial": 0,
+      "shareAvenue": 18.002,
+      "shareConnector": 2.7157,
+      "shareLocal": 62.735,
+      "majorRoadShare": 34.55,
+      "majorRoadSpacing": 484.33,
+      "blockAreaMedian": 2.896,
+      "blockAreaP25": 1.9059,
+      "blockAreaP75": 3.7026,
+      "blockAspectMedian": 1.8459,
+      "blockAspectP75": 2.3816,
+      "corridorContinuity": null,
+      "majorCorridorLengthKm": null
+     }
+    },
+    {
+     "sampleId": "n0-1-3",
+     "bounds": [
+      424687,
+      -4586464,
+      426187,
+      -4584964
+     ],
+     "areaKm2": 1.36,
+     "context": {
+      "ring": "peripheral",
+      "fabric": "irregular"
+     },
+     "metrics": {
+      "intersectionDensity": 24.265,
+      "streetDensity": 11.227,
+      "segmentLengthMean": 258.8,
+      "segmentLengthMedian": 151.45,
+      "avgNodeDegree": 2.36,
+      "threeWayShare": 62,
+      "fourWayShare": 4,
+      "deadEndShare": 34,
+      "circuity": 1.3649,
+      "orientationEntropy": 3.5304,
+      "orientationOrder": 0.047796,
+      "dominantOrientations": 0,
+      "shareRegional": 19.687,
+      "shareArterial": 0,
+      "shareAvenue": 14.556,
+      "shareConnector": 9.3522,
+      "shareLocal": 56.404,
+      "majorRoadShare": 34.244,
+      "majorRoadSpacing": 520.2,
+      "blockAreaMedian": 1.538,
+      "blockAreaP25": 0.92094,
+      "blockAreaP75": 2.4094,
+      "blockAspectMedian": 3.0063,
+      "blockAspectP75": 3.1238,
+      "corridorContinuity": null,
+      "majorCorridorLengthKm": null
+     }
+    },
+    {
+     "sampleId": "n3-3-3",
+     "bounds": [
+      426937,
+      -4587214,
+      428437,
+      -4585714
+     ],
+     "areaKm2": 1.68,
+     "context": {
+      "ring": "inner",
+      "fabric": "mixed"
+     },
+     "metrics": {
+      "intersectionDensity": 67.857,
+      "streetDensity": 16.261,
+      "segmentLengthMean": 150.1,
+      "segmentLengthMedian": 65.537,
+      "avgNodeDegree": 2.7704,
+      "threeWayShare": 76.296,
+      "fourWayShare": 8.1481,
+      "deadEndShare": 15.556,
+      "circuity": 1.298,
+      "orientationEntropy": 3.3712,
+      "orientationOrder": 0.18395,
+      "dominantOrientations": 1,
+      "shareRegional": 7.6899,
+      "shareArterial": 0,
+      "shareAvenue": 29.238,
+      "shareConnector": 7.0557,
+      "shareLocal": 56.017,
+      "majorRoadShare": 36.927,
+      "majorRoadSpacing": 333.08,
+      "blockAreaMedian": 1.1365,
+      "blockAreaP25": 0.25398,
+      "blockAreaP75": 2.6288,
+      "blockAspectMedian": 2.7562,
+      "blockAspectP75": 3.8641,
+      "corridorContinuity": null,
+      "majorCorridorLengthKm": null
+     }
+    },
+    {
+     "sampleId": "n1-3-2",
+     "bounds": [
+      426937,
+      -4587964,
+      428437,
+      -4586464
+     ],
+     "areaKm2": 1.16,
+     "context": {
+      "ring": "peripheral",
+      "fabric": "mixed"
+     },
+     "metrics": {
+      "intersectionDensity": 48.276,
+      "streetDensity": 13.551,
+      "segmentLengthMean": 176.62,
+      "segmentLengthMedian": 61.523,
+      "avgNodeDegree": 2.5616,
+      "threeWayShare": 73.973,
+      "fourWayShare": 2.7397,
+      "deadEndShare": 23.288,
+      "circuity": 1.473,
+      "orientationEntropy": 3.407,
+      "orientationOrder": 0.15423,
+      "dominantOrientations": 1,
+      "shareRegional": 0,
+      "shareArterial": 0,
+      "shareAvenue": 46.737,
+      "shareConnector": 0.7298,
+      "shareLocal": 52.534,
+      "majorRoadShare": 46.737,
+      "majorRoadSpacing": 315.79,
+      "blockAreaMedian": 1.8634,
+      "blockAreaP25": 1.0798,
+      "blockAreaP75": 3.5512,
+      "blockAspectMedian": 3.1447,
+      "blockAspectP75": 3.8641,
+      "corridorContinuity": null,
+      "majorCorridorLengthKm": null
+     }
+    },
+    {
+     "sampleId": "n0-3-10",
+     "bounds": [
+      427687,
+      -4575964,
+      429187,
+      -4574464
+     ],
+     "areaKm2": 1.84,
+     "context": {
+      "ring": "peripheral",
+      "fabric": "strong_grid"
+     },
+     "metrics": {
+      "intersectionDensity": 50,
+      "streetDensity": 9.1701,
+      "segmentLengthMean": 113.24,
+      "segmentLengthMedian": 52.37,
+      "avgNodeDegree": 3.0842,
+      "threeWayShare": 84.211,
+      "fourWayShare": 12.632,
+      "deadEndShare": 3.1579,
+      "circuity": 1.0707,
+      "orientationEntropy": 2.718,
+      "orientationOrder": 0.63268,
+      "dominantOrientations": 1,
+      "shareRegional": 0,
+      "shareArterial": 0,
+      "shareAvenue": 7.4354,
+      "shareConnector": 0,
+      "shareLocal": 92.565,
+      "majorRoadShare": 7.4354,
+      "majorRoadSpacing": 2933.3,
+      "blockAreaMedian": 0.35007,
+      "blockAreaP25": 0.10737,
+      "blockAreaP75": 5.8407,
+      "blockAspectMedian": 1.5046,
+      "blockAspectP75": 3.4396,
+      "corridorContinuity": null,
+      "majorCorridorLengthKm": null
+     }
+    },
+    {
+     "sampleId": "n1-3-10",
+     "bounds": [
+      426937,
+      -4575964,
+      428437,
+      -4574464
+     ],
+     "areaKm2": 1.56,
+     "context": {
+      "ring": "peripheral",
+      "fabric": "strong_grid"
+     },
+     "metrics": {
+      "intersectionDensity": 69.231,
+      "streetDensity": 11.231,
+      "segmentLengthMean": 97.875,
+      "segmentLengthMedian": 42.909,
+      "avgNodeDegree": 3.2315,
+      "threeWayShare": 80.556,
+      "fourWayShare": 19.444,
+      "deadEndShare": 0,
+      "circuity": 1.0516,
+      "orientationEntropy": 2.7748,
+      "orientationOrder": 0.60067,
+      "dominantOrientations": 1,
+      "shareRegional": 0,
+      "shareArterial": 0,
+      "shareAvenue": 24.182,
+      "shareConnector": 13.833,
+      "shareLocal": 61.985,
+      "majorRoadShare": 24.182,
+      "majorRoadSpacing": 736.45,
+      "blockAreaMedian": 0.30196,
+      "blockAreaP25": 0.080394,
+      "blockAreaP75": 4.9952,
+      "blockAspectMedian": 2.4018,
+      "blockAspectP75": 3.9155,
+      "corridorContinuity": null,
+      "majorCorridorLengthKm": null
+     }
+    },
+    {
+     "sampleId": "n1-4-10",
+     "bounds": [
+      428437,
+      -4575964,
+      429937,
+      -4574464
+     ],
+     "areaKm2": 1.28,
+     "context": {
+      "ring": "peripheral",
+      "fabric": "mixed"
+     },
+     "metrics": {
+      "intersectionDensity": 39.844,
+      "streetDensity": 6.391,
+      "segmentLengthMean": 106.24,
+      "segmentLengthMedian": 49.34,
+      "avgNodeDegree": 2.8571,
+      "threeWayShare": 87.5,
+      "fourWayShare": 3.5714,
+      "deadEndShare": 8.9286,
+      "circuity": 1.0629,
+      "orientationEntropy": 2.7787,
+      "orientationOrder": 0.59839,
+      "dominantOrientations": 1,
+      "shareRegional": 0,
+      "shareArterial": 0,
+      "shareAvenue": 0,
+      "shareConnector": 0,
+      "shareLocal": 100,
+      "majorRoadShare": 0,
+      "majorRoadSpacing": null,
+      "blockAreaMedian": 0.29635,
+      "blockAreaP25": 0.10181,
+      "blockAreaP75": 2.268,
+      "blockAspectMedian": 1.4059,
+      "blockAspectP75": 3.5325,
+      "corridorContinuity": null,
+      "majorCorridorLengthKm": null
+     }
+    },
+    {
+     "sampleId": "n2-3-10",
+     "bounds": [
+      427687,
+      -4576714,
+      429187,
+      -4575214
+     ],
+     "areaKm2": 1.88,
+     "context": {
+      "ring": "peripheral",
+      "fabric": "strong_grid"
+     },
+     "metrics": {
+      "intersectionDensity": 46.809,
+      "streetDensity": 8.7236,
+      "segmentLengthMean": 118.84,
+      "segmentLengthMedian": 49.057,
+      "avgNodeDegree": 2.9677,
+      "threeWayShare": 87.097,
+      "fourWayShare": 7.5269,
+      "deadEndShare": 5.3763,
+      "circuity": 1.0603,
+      "orientationEntropy": 2.5504,
+      "orientationOrder": 0.71931,
+      "dominantOrientations": 1,
+      "shareRegional": 0,
+      "shareArterial": 0,
+      "shareAvenue": 26.58,
+      "shareConnector": 0,
+      "shareLocal": 73.42,
+      "majorRoadShare": 26.58,
+      "majorRoadSpacing": 862.55,
+      "blockAreaMedian": 0.17846,
+      "blockAreaP25": 0.088568,
+      "blockAreaP75": 0.88857,
+      "blockAspectMedian": 2.2793,
+      "blockAspectP75": 3.3037,
+      "corridorContinuity": null,
+      "majorCorridorLengthKm": null
+     }
+    },
+    {
+     "sampleId": "n3-4-10",
+     "bounds": [
+      428437,
+      -4576714,
+      429937,
+      -4575214
+     ],
+     "areaKm2": 1.56,
+     "context": {
+      "ring": "peripheral",
+      "fabric": "strong_grid"
+     },
+     "metrics": {
+      "intersectionDensity": 27.564,
+      "streetDensity": 6.7853,
+      "segmentLengthMean": 162.85,
+      "segmentLengthMedian": 49.34,
+      "avgNodeDegree": 2.7917,
+      "threeWayShare": 89.583,
+      "fourWayShare": 0,
+      "deadEndShare": 10.417,
+      "circuity": 1.0235,
+      "orientationEntropy": 2.5298,
+      "orientationOrder": 0.72917,
+      "dominantOrientations": 1,
+      "shareRegional": 0,
+      "shareArterial": 0,
+      "shareAvenue": 0,
+      "shareConnector": 0,
+      "shareLocal": 100,
+      "majorRoadShare": 0,
+      "majorRoadSpacing": null,
+      "blockAreaMedian": 0.22872,
+      "blockAreaP25": 0.075105,
+      "blockAreaP75": 0.7045,
+      "blockAspectMedian": 1.8057,
+      "blockAspectP75": 5.0083,
+      "corridorContinuity": null,
+      "majorCorridorLengthKm": null
+     }
+    },
+    {
+     "sampleId": "n3-3-10",
+     "bounds": [
+      426937,
+      -4576714,
+      428437,
+      -4575214
+     ],
+     "areaKm2": 1.96,
+     "context": {
+      "ring": "peripheral",
+      "fabric": "strong_grid"
+     },
+     "metrics": {
+      "intersectionDensity": 66.837,
+      "streetDensity": 11.01,
+      "segmentLengthMean": 100.84,
+      "segmentLengthMedian": 41.274,
+      "avgNodeDegree": 3.0889,
+      "threeWayShare": 83.704,
+      "fourWayShare": 13.333,
+      "deadEndShare": 2.963,
+      "circuity": 1.055,
+      "orientationEntropy": 2.6412,
+      "orientationOrder": 0.67383,
+      "dominantOrientations": 1,
+      "shareRegional": 0,
+      "shareArterial": 0,
+      "shareAvenue": 35.718,
+      "shareConnector": 11.38,
+      "shareLocal": 52.901,
+      "majorRoadShare": 35.718,
+      "majorRoadSpacing": 508.58,
+      "blockAreaMedian": 0.17595,
+      "blockAreaP25": 0.081427,
+      "blockAreaP75": 0.70407,
+      "blockAspectMedian": 2.5762,
+      "blockAspectP75": 3.6718,
+      "corridorContinuity": null,
+      "majorCorridorLengthKm": null
+     }
+    }
+   ]
+  }
+ },
+ "network": {
+  "nodes": 9083,
+  "segments": 14376,
+  "blocks": 4521
+ },
+ "city": "Barcelona",
+ "country": "Spain",
+ "sourceMetadata": {
+  "data": "OpenStreetMap contributors (ODbL), via the Overpass API",
+  "tool": "OSMnx 2.1.1",
+  "extracted": "2026-10-04",
+  "networkType": "drivable streets without service roads",
+  "overpassFilter": "[\"highway\"~\"motorway|motorway_link|trunk|trunk_link|primary|primary_link|secondary|secondary_link|tertiary|tertiary_link|unclassified|residential|living_street|road\"]",
+  "simplified": "OSMnx topology simplification (degree-2 nodes merged)",
+  "crs": "EPSG:32631",
+  "projection": "projected by OSMnx to the local UTM zone; coordinates in metres, rounded to 0.1 m",
+  "boundary": {
+   "method": "administrative_boundary",
+   "geocode_query": "Barcelona, Catalunya, España"
+  }
+ },
+ "form": "ordered grid expansion / Cerdà structure",
+ "alsoContributesTo": [
+  "FORMAL_PLANNED"
+ ]
+}

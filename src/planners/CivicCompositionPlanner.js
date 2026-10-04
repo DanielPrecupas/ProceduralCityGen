@@ -4,7 +4,7 @@
 // when the brief asks for radial structure. Nothing here is applied city-wide.
 
 import { record, SIZE_PRESETS } from '../core/CityModel.js';
-import { dist, clamp, rectPolygon, circlePolygon, clipPolylineOutside, polygonBBox, polylineLength, pointInPolygon, segSegIntersection, TAU } from '../core/Geometry.js';
+import { dist, clamp, rectPolygon, circlePolygon, clipPolylineOutside, polygonBBox, polylineLength, pointInPolygon, segSegIntersection, pointSegment, resamplePolyline, TAU } from '../core/Geometry.js';
 
 import { BRIDGEABLE } from './RegionalPlanner.js';
 
@@ -42,7 +42,11 @@ export function resetCivicComposition(m) {
   m.civicEnsembles = [];
   m.reservations = m.reservations.filter((r) => r.createdByStage !== STAGE);
   m.roads = m.roads.filter((r) => r.createdByStage !== STAGE);
-  for (const r of m.roads) if (r.basePoints) { r.points = r.basePoints; delete r.basePoints; }
+  for (const r of m.roads) {
+    if (r.basePoints) { r.points = r.basePoints; delete r.basePoints; }
+    if (r.baseCls) { r.cls = r.baseCls; r.type = r.baseCls; delete r.baseCls; delete r.urbanBoulevardFrom; }
+  }
+  m.civicConflicts = (m.civicConflicts || []).filter((c) => c.createdByStage !== STAGE);
 }
 
 export function planCivicComposition(model, ctx) {
@@ -170,6 +174,87 @@ export function planCivicComposition(model, ctx) {
   // a split road keeps its place in whichever gesture referenced it
   for (const g of gestures) g.roadIds = g.roadIds.concat(extra.filter((r) => g.roadIds.includes(r.derivedFrom)).map((r) => r.id));
 
+  // --- CONFLICTS AND APPROACHES. Every major road that met a formal square has been cut at its
+  // frame; here that outcome is made deliberate and recorded. Roads arrive at intentional places
+  // on the perimeter (the middle of a side, a corner, or their own axis through the centre), a
+  // regional road is stepped down to an urban boulevard before it reaches a square, and each
+  // square knows its principal and secondary approaches.
+  const conflicts = [];
+  const FRONTAGE = { civic_square: 'MONUMENTAL_CONTINUOUS', station_square: 'COMMERCIAL_ARCADED', subcentre_square: 'MARKET_FRONTAGE' };
+  const shiftEnd = (road, atStart, to) => { // slide the end of a road along the frame, easing the move out over ~180 m
+    const pts = resamplePolyline(road.points, 20), n = pts.length;
+    if (!atStart) pts.reverse();
+    const dx = to.x - pts[0].x, dy = to.y - pts[0].y, reach = Math.min(180, polylineLength(pts) * 0.6);
+    let acc = 0;
+    for (let i = 0; i < n; i++) {
+      if (i) acc += dist(pts[i - 1], pts[i]);
+      if (acc >= reach) break;
+      const t = 0.5 * (1 + Math.cos((Math.PI * acc) / reach));
+      pts[i] = { x: pts[i].x + dx * t, y: pts[i].y + dy * t };
+    }
+    if (!atStart) pts.reverse();
+    road.points = pts; road.length = polylineLength(pts);
+  };
+  for (const rv of reservations) {
+    if (!FRONTAGE[rv.type]) continue;
+    const poly = rv.polygon, round = poly.length > 8, anchor = model.anchors.find((a) => a.id === rv.anchorId);
+    const centre = anchor.position, approaches = [];
+    for (const road of all.concat(extra)) {
+      if (road.sub === 'frame' || road.points.length < 2 || road.createdByStage === STAGE && road.sub === 'ring') continue;
+      for (const atStart of [true, false]) {
+        const p = atStart ? road.points[0] : road.points[road.points.length - 1];
+        let side = -1, sd = 4;
+        for (let j = 0; j < poly.length; j++) { const a = poly[j], b = poly[(j + 1) % poly.length], d = pointSegment(p.x, p.y, a.x, a.y, b.x, b.y).d; if (d < sd) { sd = d; side = j; } }
+        if (side < 0) continue;
+        const q = atStart ? road.points[1] : road.points[road.points.length - 2];
+        approaches.push({ road, atStart, point: p, side, bearing: Math.atan2(q.y - p.y, q.x - p.x) });
+      }
+    }
+    const passesThrough = new Set(); // a road cut into two pieces by this square went straight through it
+    for (const a of approaches) { const root = a.road.derivedFrom || a.road.id; if (approaches.some((b) => b !== a && (b.road.derivedFrom || b.road.id) === root)) passesThrough.add(root); }
+    for (const a of approaches) {
+      const road = a.road, root = road.derivedFrom || road.id, formal = road.ceremonial && (road.alignment === 'straight' || road.alignment === 'segmented');
+      // 1. where on the perimeter
+      if (formal || round) a.gate = formal ? 'AXIAL' : 'RADIAL';
+      else {
+        const p0 = poly[a.side], p1 = poly[(a.side + 1) % poly.length], mid = { x: (p0.x + p1.x) / 2, y: (p0.y + p1.y) / 2 };
+        const opts = [[mid, 'SIDE_CENTRE'], [p0, 'CORNER'], [p1, 'CORNER']].sort((u, v) => dist(u[0], a.point) - dist(v[0], a.point));
+        const [target, gate] = opts[0];
+        a.gate = gate;
+        if (dist(target, a.point) > 1.5) {
+          if (!road.basePoints && road.createdByStage !== STAGE) road.basePoints = road.points;
+          shiftEnd(road, a.atStart, target); a.point = target; a.moved = true;
+        }
+      }
+      // 2. what the meeting means
+      let resolution, why;
+      if (road.cls === 'R1') {
+        road.baseCls = 'R1'; road.cls = 'R2'; road.type = 'R2'; road.urbanBoulevardFrom = 'R1';
+        [resolution, why] = ['DOWNGRADE_TO_URBAN_BOULEVARD', 'regional_road_becomes_an_urban_boulevard_before_it_reaches_the_square'];
+      } else if (road.ceremonial && !passesThrough.has(root)) [resolution, why] = ['TERMINATE_AXIS', 'formal_avenue_ends_on_the_square_it_was_laid_out_to_reach'];
+      else if (passesThrough.has(root)) [resolution, why] = ['SPLIT_AROUND', 'through_road_is_interrupted_by_the_square_and_carried_around_it_on_the_frame_street'];
+      else [resolution, why] = ['SPLIT_AROUND', 'arterial_arrives_at_a_gate_of_the_square_and_its_traffic_is_distributed_around_the_frame_street'];
+      a.resolution = resolution;
+      conflicts.push(record(ctx.id('conflict'), 'civic_conflict', STAGE, why, { reservationId: rv.id, roadId: road.id, resolution, gate: a.gate, position: a.point }));
+    }
+    // 3. the square's own description of how it is approached
+    const weight = (a) => (a.road.ceremonial === 'axis' ? 100 : a.road.ceremonial ? 50 : 0) + ({ R3: 30, R2: 20, R1: 20, R4: 5 }[a.road.cls] || 0) + (a.road.demand || 0);
+    approaches.sort((u, v) => weight(v) - weight(u) || (u.road.id < v.road.id ? -1 : 1));
+    const axisRoad = approaches.find((a) => a.road.ceremonial === 'axis');
+    let per = 0;
+    for (let j = 0; j < poly.length; j++) per += dist(poly[j], poly[(j + 1) % poly.length]);
+    const describe = (a) => ({ roadId: a.road.id, cls: a.road.cls, gate: a.gate, point: a.point, bearing: a.bearing, resolution: a.resolution, snappedToGate: !!a.moved });
+    rv.approachGrammar = {
+      perimeter: Math.round(per), shape: round ? 'ROUND' : 'RECTANGULAR',
+      principalApproach: approaches.length ? describe(approaches[0]) : null,
+      secondaryApproaches: approaches.slice(1).map(describe),
+      throughMovement: 'NOT_ALLOWED_ACROSS_THE_SQUARE_TRAFFIC_USES_THE_FRAME_STREET',
+      ceremonialAxis: axisRoad ? { roadId: axisRoad.road.id, bearing: axisAngle } : null,
+      frontageIntent: FRONTAGE[rv.type], centre,
+    };
+  }
+  for (const r of all.concat(extra)) r.length = polylineLength(r.points);
+
   // --- CIVIC ENSEMBLES: the gestures above, read as one authored composition
   const ensembles = [];
   const axes = [];
@@ -199,6 +284,9 @@ export function planCivicComposition(model, ctx) {
 
   model.roads = all.concat(extra);
   model.reservations = model.reservations.concat(reservations);
+  model.civicConflicts = (model.civicConflicts || []).concat(conflicts);
   model.civicComposition = { gestures, axisAngle, center: civic ? civic.position : RP.core };
+  const snapped = reservations.reduce((n, rv) => n + (rv.approachGrammar ? [rv.approachGrammar.principalApproach, ...rv.approachGrammar.secondaryApproaches].filter((a) => a && a.snappedToGate).length : 0), 0);
+  ctx.log(`${conflicts.length} road-square meetings resolved (${Object.entries(conflicts.reduce((o, c) => { o[c.resolution] = (o[c.resolution] || 0) + 1; return o; }, {})).map(([k, v]) => `${v} ${k.toLowerCase()}`).join(', ') || 'none'}), ${snapped} approaches moved to a gate`);
   ctx.log(`${gestures.length} gestures: ${gestures.map((g) => g.type).join(', ') || 'none'}; ensembles: ${ensembles.map((e) => e.type).join(', ') || 'none'}`);
 }

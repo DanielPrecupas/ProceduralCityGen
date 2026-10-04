@@ -4,13 +4,13 @@ import { TERRAIN_PRESETS, UNIT_PARAMS, SIZE_PRESETS } from '../core/CityModel.js
 import { STAGES } from '../core/Pipeline.js';
 import { BLOCK_PRESETS } from '../core/BlockPresets.js';
 import { DISTRICT_COLORS, ROAD_STYLE } from '../rendering/MapRenderer.js';
-import { MAP_LANDUSE, MAP_ROADS } from '../rendering/MapStyle.js';
+import { MAP_LANDUSE, MAP_HIERARCHY } from '../rendering/MapStyle.js';
 
 export const LAYER_GROUPS = [
   ['Base', [['terrain', 'Terrain'], ['water', 'Water'], ['districts', 'Districts'], ['blocks', 'Blocks']]],
-  ['Transport', [['major', 'Major Roads'], ['local', 'Local Streets'], ['rail', 'Rail'], ['nodes', 'Urban Nodes'], ['places', 'Roundabouts / Squares'], ['interchanges', 'Interchanges'], ['roles', 'Road Roles'], ['influence', 'Road Influence Zones']]],
+  ['Transport', [['major', 'Major Roads'], ['local', 'Local Streets'], ['rail', 'Rail'], ['nodes', 'Urban Nodes'], ['places', 'Roundabouts / Squares'], ['interchanges', 'Interchanges'], ['hierarchy', 'Road Hierarchy'], ['corridors', 'Corridors'], ['roles', 'Road Roles'], ['influence', 'Road Influence Zones']]],
   ['Places', [['spaces', 'Public Spaces'], ['parks', 'Park Hierarchy'], ['reservations', 'Major Reservations'], ['anchors', 'Anchors'], ['edges', 'Waterfront Edge Types'], ['civic', 'Civic Ensembles']]],
-  ['Debug', [['growth', 'Growth Directions'], ['demand', 'Demand Graph'], ['topology', 'Network Topology'], ['reinforcement', 'Network Reinforcement'], ['regimes', 'Street Regimes'], ['field', 'Direction Field'], ['engineering', 'Terrain Engineering'], ['validation', 'Validation']]],
+  ['Debug', [['growth', 'Growth Directions'], ['demand', 'Demand Graph'], ['topology', 'Network Topology'], ['reinforcement', 'Network Reinforcement'], ['regimes', 'Street Regimes'], ['seams', 'District Seams'], ['approaches', 'Civic Approaches'], ['field', 'Direction Field'], ['engineering', 'Terrain Engineering'], ['validation', 'Validation']]],
 ];
 export const LAYERS = LAYER_GROUPS.flatMap(([, items]) => items);
 export const PLAN_VIEW = { terrain: true, water: true, anchors: true, major: true, rail: true, local: true, blocks: true, spaces: true };
@@ -92,10 +92,10 @@ export function initControls(app) {
 
 export function showLegend(app) {
   const map = app.style === 'map';
-  $('legend').innerHTML = [
-    ...Object.entries({ R1: 'R1 regional', R2: 'R2 arterial', R3: 'R3 boulevard', R4: 'R4 collector' }).map(([k, v]) => `<span><i style="background:${map ? MAP_ROADS[k].fill : ROAD_STYLE[k].color};${map ? `outline:1px solid ${MAP_ROADS[k].casing}` : ''}"></i>${v}</span>`),
-    ...Object.entries(map ? MAP_LANDUSE : DISTRICT_COLORS).map(([k, c]) => `<span><i class="sq" style="background:${c}"></i>${k}</span>`),
-  ].join('');
+  const roads = map
+    ? Object.values(MAP_HIERARCHY).map((h) => `<span><i style="background:${h.fill};outline:1px solid ${h.casing}"></i>${h.label}</span>`)
+    : Object.entries({ R1: 'R1 regional', R2: 'R2 arterial', R3: 'R3 boulevard', R4: 'R4 collector' }).map(([k, v]) => `<span><i style="background:${ROAD_STYLE[k].color}"></i>${v}</span>`);
+  $('legend').innerHTML = [...roads, ...Object.entries(map ? MAP_LANDUSE : DISTRICT_COLORS).map(([k, c]) => `<span><i class="sq" style="background:${c}"></i>${k}</span>`)].join('');
 }
 
 export function setBusy(busy, text) {
@@ -122,7 +122,7 @@ export function showModel(app) {
   $('status').textContent = `seed "${m.seed}" · ${m.brief.population.toLocaleString()} people · ${met.edges ?? 0} road segments · ${met.blocks ?? 0} blocks · ${total.toFixed(0)} ms`;
 }
 
-const HIDE = new Set(['points', 'basePoints', 'polygon', 'polygons', 'edgeIds', 'bbox', 'blockIds', 'index', 'districtIndex', 'strip', 'endCells', 'pedestrianCuts', 'centre', 'blockRange', 'nodeBasePoints', 'engineering']);
+const HIDE = new Set(['paths', 'segments', 'aIndex', 'bIndex', 'points', 'basePoints', 'polygon', 'polygons', 'edgeIds', 'bbox', 'blockIds', 'index', 'districtIndex', 'strip', 'endCells', 'pedestrianCuts', 'centre', 'blockRange', 'nodeBasePoints', 'engineering']);
 function fmt(v) {
   if (typeof v === 'number') return Number.isInteger(v) ? v.toLocaleString() : v.toFixed(Math.abs(v) < 10 ? 2 : 0);
   if (v && typeof v === 'object') {
@@ -136,7 +136,7 @@ export function showInspector(objects) {
   $('inspector').innerHTML = objects.length ? objects.map((o) => {
     const lead = ['id', 'type', 'createdByStage', 'reason'].filter((k) => k in o);
     const rest = Object.keys(o).filter((k) => !lead.includes(k) && !HIDE.has(k) && o[k] !== null && o[k] !== undefined);
-    const tags = [o.tier != null && (typeof o.tier === 'string' ? o.tier : `tier ${o.tier}`), o.form, o.interchangeType, o.designRole, o.cls && o.cls !== o.type && o.cls, o.streetRegime, o.level != null && `level ${o.level}`, o.kind, o.engineeringType && o.engineeringType !== 'NORMAL' && o.engineeringType, o.morphology?.preset]
+    const tags = [o.hierarchy, o.resolution, o.behaviour, o.hard && 'abrupt', o.form !== 'REGULAR' && o.type === 'block' && o.form, o.profile || o.transportProfile, o.tier != null && (typeof o.tier === 'string' ? o.tier : `tier ${o.tier}`), o.type !== 'block' && o.form, o.interchangeType, o.designRole, o.cls && o.cls !== o.type && o.cls, o.streetRegime, o.level != null && `level ${o.level}`, o.kind, o.engineeringType && o.engineeringType !== 'NORMAL' && o.engineeringType, o.morphology?.preset]
       .filter(Boolean).map((t) => `<span>${esc(String(t).replace(/_/g, ' ').toLowerCase())}</span>`).join('');
     const head = `<div class="oh"><b>${esc(o.name || String(o.type ?? 'object').replace(/_/g, ' '))}</b>${tags ? `<div class="chips">${tags}</div>` : ''}</div>`;
     return `<div class="obj">${head}<table>${[...lead, ...rest].map((k) => `<tr><td>${k}</td><td>${k === 'reason' ? '<b>' + fmt(o[k]) + '</b>' : fmt(o[k])}</td></tr>`).join('')}</table></div>`;

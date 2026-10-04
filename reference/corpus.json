@@ -1,0 +1,230 @@
+{
+ "schema": "citygen-corpus/1",
+ "note": "Calibration references, never templates: no generation rule reads this file. A city is extracted either as a named `place` (its administrative boundary) or as a square `window` of that many km centred on `center` [lat, lon], which keeps very large or sprawling cities to their urbanised core and comparable in size to a generated plan. Profiles are produced offline (docs/REALISM.md) into reference/profiles/<id>.json.",
+ "archetypes": {
+  "COMPACT_CONTINENTAL": "Dense, layered European fabric with an old core and ringed or radial extensions",
+  "GRID_METROPOLITAN": "A dominant planned grid with a clear intermediate road hierarchy",
+  "RADIAL_TRANSITIONAL": "Radial boulevards over irregular fabric absorbed from fast, partly informal growth",
+  "GEOGRAPHIC_FRAGMENTED": "Urban fabric broken into parts by water, rock and forest",
+  "RADIAL_AUTOMOTIVE": "Low-density fabric organised by radial motorways and arterials",
+  "FORMAL_PLANNED": "Designed set-pieces and monumental overlays (open category: Washington, Canberra to be added)"
+ },
+ "planned": [
+  {
+   "id": "washington_dc",
+   "name": "Washington DC",
+   "archetype": "MONUMENTAL_OVERLAY",
+   "place": "Washington, District of Columbia, USA"
+  },
+  {
+   "id": "paris",
+   "name": "Paris",
+   "archetype": "MONUMENTAL_OVERLAY",
+   "place": "Paris, Ile-de-France, France"
+  },
+  {
+   "id": "manhattan",
+   "name": "Manhattan",
+   "archetype": "ORTHOGONAL_GRID",
+   "place": "Manhattan, New York, USA"
+  },
+  {
+   "id": "chicago",
+   "name": "Chicago",
+   "archetype": "ORTHOGONAL_GRID",
+   "place": "Chicago, Illinois, USA",
+   "center": [
+    41.8819,
+    -87.6278
+   ],
+   "window": 14
+  },
+  {
+   "id": "philadelphia",
+   "name": "Philadelphia",
+   "archetype": "ORTHOGONAL_GRID",
+   "place": "Philadelphia, Pennsylvania, USA",
+   "center": [
+    39.9526,
+    -75.1652
+   ],
+   "window": 14
+  },
+  {
+   "id": "barcelona",
+   "name": "Barcelona",
+   "archetype": "CERDA_GRID",
+   "place": "Barcelona, Catalonia, Spain"
+  },
+  {
+   "id": "vienna",
+   "name": "Vienna",
+   "archetype": "MULTIPLE_GRID_ORIENTATIONS",
+   "place": "Vienna, Austria",
+   "center": [
+    48.2082,
+    16.3738
+   ],
+   "window": 14
+  },
+  {
+   "id": "london",
+   "name": "London",
+   "archetype": "MULTIPLE_GRID_ORIENTATIONS",
+   "place": "London, England",
+   "center": [
+    51.5074,
+    -0.1278
+   ],
+   "window": 14
+  },
+  {
+   "id": "tokyo",
+   "name": "Tokyo",
+   "archetype": "ORGANIC_POLYCENTRIC",
+   "place": "Tokyo, Japan",
+   "center": [
+    35.6812,
+    139.7671
+   ],
+   "window": 14
+  },
+  {
+   "id": "canberra",
+   "name": "Canberra",
+   "archetype": "PLANNED_CAPITAL",
+   "place": "Canberra, Australian Capital Territory, Australia"
+  },
+  {
+   "id": "brasilia",
+   "name": "Brasília",
+   "archetype": "PLANNED_CAPITAL",
+   "place": "Plano Piloto, Brasília, Brazil"
+  },
+  {
+   "id": "shanghai_pudong",
+   "name": "Shanghai / Pudong",
+   "archetype": "MODERN_CHINESE_METROPOLITAN",
+   "place": "Pudong, Shanghai, China",
+   "center": [
+    31.2304,
+    121.544
+   ],
+   "window": 14
+  },
+  {
+   "id": "beijing",
+   "name": "Beijing",
+   "archetype": "MODERN_CHINESE_METROPOLITAN",
+   "place": "Beijing, China",
+   "center": [
+    39.9042,
+    116.4074
+   ],
+   "window": 14
+  },
+  {
+   "id": "timisoara",
+   "name": "Timișoara",
+   "archetype": "SMALLER_EUROPEAN_METROPOLIS",
+   "place": "Timișoara, Romania"
+  }
+ ],
+ "planned_note": "The V3.0 Alpha.1 wish-list, kept for later calibration rounds (formal / planned capitals in particular). Not measured yet.",
+ "cities": [
+  {
+   "id": "denver",
+   "name": "Denver",
+   "country": "United States",
+   "archetype": "GRID_METROPOLITAN",
+   "form": "grid metropolitan / strong intermediate hierarchy",
+   "center": [
+    39.7392,
+    -104.9903
+   ],
+   "window": 18
+  },
+  {
+   "id": "seville",
+   "name": "Seville",
+   "country": "Spain",
+   "archetype": "COMPACT_CONTINENTAL",
+   "form": "compact layered city / outer bypass",
+   "center": [
+    37.3891,
+    -5.9845
+   ],
+   "window": 14
+  },
+  {
+   "id": "helsinki",
+   "name": "Helsinki",
+   "country": "Finland",
+   "archetype": "GEOGRAPHIC_FRAGMENTED",
+   "form": "geographically fragmented",
+   "center": [
+    60.19,
+    24.94
+   ],
+   "window": 16
+  },
+  {
+   "id": "palermo",
+   "name": "Palermo",
+   "country": "Italy",
+   "archetype": "COMPACT_CONTINENTAL",
+   "form": "linear terrain-constrained city",
+   "center": [
+    38.132,
+    13.34
+   ],
+   "window": 16
+  },
+  {
+   "id": "tirana",
+   "name": "Tirana",
+   "country": "Albania",
+   "archetype": "RADIAL_TRANSITIONAL",
+   "form": "radial + irregular absorbed fabric",
+   "center": [
+    41.3275,
+    19.8187
+   ],
+   "window": 12
+  },
+  {
+   "id": "nashville",
+   "name": "Nashville",
+   "country": "United States",
+   "archetype": "RADIAL_AUTOMOTIVE",
+   "form": "automotive / radial motorway overlay",
+   "center": [
+    36.1627,
+    -86.7816
+   ],
+   "window": 20
+  },
+  {
+   "id": "paris",
+   "name": "Paris",
+   "country": "France",
+   "archetype": "COMPACT_CONTINENTAL",
+   "alsoContributesTo": [
+    "FORMAL_PLANNED"
+   ],
+   "form": "monumental overlay / layered compact fabric",
+   "place": "Paris, Île-de-France, France"
+  },
+  {
+   "id": "barcelona",
+   "name": "Barcelona",
+   "country": "Spain",
+   "archetype": "GRID_METROPOLITAN",
+   "alsoContributesTo": [
+    "FORMAL_PLANNED"
+   ],
+   "form": "ordered grid expansion / Cerdà structure",
+   "place": "Barcelona, Catalunya, España"
+  }
+ ]
+}

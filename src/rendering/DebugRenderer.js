@@ -3,6 +3,11 @@
 import { ROAD_STYLE, PARK_COLORS, EDGE_COLORS, ROLE_COLORS, INSTITUTION_COLORS } from './MapRenderer.js';
 
 const REINFORCEMENT_COLORS = { additional_bridge: '#0277bd', bypass: '#5d4037', cross_town_boulevard: '#6b3fa0', direct_centre_link: '#c2185b', second_access: '#ef6c00', tangential_arterial: '#2e7d32' };
+export const HIERARCHY_STYLE = {
+  REGIONAL: ['#b71c1c', 4.4], METROPOLITAN_ARTERIAL: ['#e65100', 3.8], PRIMARY_AVENUE: ['#f9a825', 3.2], SECONDARY_AVENUE: ['#2e7d32', 2.6],
+  DISTRICT_CONNECTOR: ['#1565c0', 2.0], LOCAL_HIGH_STREET: ['#8e24aa', 1.7], LOCAL: ['#9e9e9e', 0.6],
+};
+export const SEAM_COLORS = { SOFT_BLEND: '#8d99a6', HARD_GRID_CHANGE: '#d81b60', ARTERIAL_BOUNDARY: '#e65100', RAIL_BOUNDARY: '#212121', GREEN_BOUNDARY: '#2e7d32', WATER_BOUNDARY: '#0277bd' };
 const TIER_COLORS = { N1: '#b71c1c', N2: '#ef6c00', N3: '#f9a825', N4: '#9e9e9e' };
 const TIER_RADIUS = { N1: 13, N2: 10, N3: 7, N4: 5 };
 
@@ -26,6 +31,64 @@ const label = (ctx, px, txt, p, size = 11) => {
 
 export class DebugRenderer {
   constructor() { this.cache = null; }
+
+  // V3: every edge coloured by its hierarchy level
+  drawHierarchy(ctx, view, paths) {
+    if (!paths) return;
+    const px = 1 / view.scale;
+    ctx.lineCap = 'round'; ctx.lineJoin = 'round';
+    for (const lvl of ['LOCAL_HIGH_STREET', 'DISTRICT_CONNECTOR', 'SECONDARY_AVENUE', 'PRIMARY_AVENUE', 'METROPOLITAN_ARTERIAL', 'REGIONAL']) {
+      if (!paths[lvl]) continue;
+      const [color, wdt] = HIERARCHY_STYLE[lvl];
+      ctx.strokeStyle = color; ctx.lineWidth = Math.max(wdt * px, wdt * 4); ctx.stroke(paths[lvl]);
+    }
+  }
+
+  // V3: corridors of avenue rank and above, one colour each, with length and continuity
+  drawCorridors(ctx, view, m) {
+    const px = 1 / view.scale;
+    ctx.lineCap = 'round'; ctx.lineJoin = 'round';
+    const shown = (m.corridors || []).filter((c) => ['REGIONAL', 'METROPOLITAN_ARTERIAL', 'PRIMARY_AVENUE', 'SECONDARY_AVENUE'].includes(c.hierarchy));
+    shown.forEach((c, k) => {
+      ctx.strokeStyle = `hsla(${(k * 67) % 360}, 75%, 42%, 0.85)`; ctx.lineWidth = Math.max(5 * px, 26);
+      for (const path of c.paths) { polyPath(ctx, path); ctx.stroke(); }
+    });
+    for (const c of shown) {
+      if (c.length < 2500) continue;
+      const path = c.paths.reduce((a, b) => (b.length > a.length ? b : a));
+      label(ctx, px, `${(c.length / 1000).toFixed(1)} km · ${c.segments.length} sections`, path[path.length >> 1], 10);
+    }
+  }
+
+  // V3: how neighbouring districts' grids meet. Solid = abrupt change, dotted = gradual blend
+  drawSeams(ctx, view, m) {
+    const px = 1 / view.scale;
+    ctx.lineCap = 'butt';
+    for (const sm of m.districtSeams || []) {
+      ctx.strokeStyle = SEAM_COLORS[sm.behaviour]; ctx.lineWidth = (sm.hard ? 4.5 : 2) * px; ctx.setLineDash(sm.hard ? [] : [3 * px, 4 * px]);
+      ctx.beginPath();
+      for (let k = 0; k < sm.segments.length; k += 4) { ctx.moveTo(sm.segments[k], sm.segments[k + 1]); ctx.lineTo(sm.segments[k + 2], sm.segments[k + 3]); }
+      ctx.stroke();
+    }
+    ctx.setLineDash([]);
+  }
+
+  // V3: where roads meet formal squares, and how each meeting of infrastructure and civic object was resolved
+  drawApproaches(ctx, view, m) {
+    const px = 1 / view.scale;
+    for (const rv of m.reservations) {
+      const ag = rv.approachGrammar;
+      if (!ag) continue;
+      ctx.strokeStyle = '#3a1f66'; ctx.lineWidth = 2 * px; ctx.setLineDash([5 * px, 4 * px]); polyPath(ctx, rv.polygon, true); ctx.stroke(); ctx.setLineDash([]);
+      [ag.principalApproach, ...ag.secondaryApproaches].forEach((a, k) => {
+        if (!a) return;
+        const r = (k === 0 ? 8 : 5.5) * px;
+        ctx.beginPath(); ctx.arc(a.point.x, a.point.y, r, 0, Math.PI * 2); ctx.fillStyle = k === 0 ? '#c2185b' : a.gate === 'CORNER' ? '#ef6c00' : '#2e7d32'; ctx.fill(); ctx.strokeStyle = '#fff'; ctx.lineWidth = 1.5 * px; ctx.stroke();
+        ctx.strokeStyle = ctx.fillStyle; ctx.lineWidth = 2.5 * px; ctx.beginPath(); ctx.moveTo(a.point.x, a.point.y); ctx.lineTo(a.point.x + Math.cos(a.bearing) * 60, a.point.y + Math.sin(a.bearing) * 60); ctx.stroke();
+      });
+    }
+    if (view.scale > 0.12) for (const c of m.civicConflicts || []) if (c.position) label(ctx, px, c.resolution.replace(/_/g, ' ').toLowerCase(), { x: c.position.x, y: c.position.y - 14 * px }, 9);
+  }
 
   prepare(model) {
     const RP = model.regionalPlan, T = model.terrain;

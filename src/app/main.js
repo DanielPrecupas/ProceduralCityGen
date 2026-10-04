@@ -10,6 +10,7 @@ import { pointInPolygon, pointPolylineDistance } from '../core/Geometry.js';
 import { initControls, setBusy, showModel, showInspector, showLegend, PLAN_VIEW } from './controls.js';
 import { createViewport } from './viewport.js';
 import { createChrome } from './mapChrome.js';
+import { createRealityPanel } from './realityPanel.js';
 
 const canvas = document.getElementById('map');
 const ctx2d = canvas.getContext('2d');
@@ -47,6 +48,7 @@ const app = {
       app.selected = null; app.selectedId = null;
       showModel(app);
       chrome.modelChanged();
+      reality.modelChanged();
       if (fresh) viewport.resetView(0); else app.redraw();
     } catch (err) {
       console.error(err);
@@ -85,9 +87,13 @@ function draw() {
   if (!L.mono) {
     if (L.engineering) debugRenderer.drawEngineering(ctx, v, m);
     if (L.regimes) debugRenderer.drawRegimes(ctx, v, m);
+    if (L.seams) debugRenderer.drawSeams(ctx, v, m);
     if (L.influence) debugRenderer.drawInfluence(ctx, v, m);
     if (L.reservations) debugRenderer.drawReservations(ctx, v, m);
     if (L.roles) debugRenderer.drawRoles(ctx, v, m);
+    if (L.hierarchy) debugRenderer.drawHierarchy(ctx, v, mapRenderer.cache.hierPaths);
+    if (L.corridors) debugRenderer.drawCorridors(ctx, v, m);
+    if (L.approaches) debugRenderer.drawApproaches(ctx, v, m);
     if (L.topology) debugRenderer.drawTopology(ctx, v, m);
     if (L.reinforcement) debugRenderer.drawReinforcement(ctx, v, m);
     if (L.places) debugRenderer.drawNodes(ctx, v, m, true);
@@ -115,7 +121,8 @@ function drawSelection(ctx, v) {
   ctx.lineJoin = 'round'; ctx.lineCap = 'round'; ctx.setLineDash([]);
   for (const [color, wpx] of [['rgba(255,255,255,0.9)', 6], ['#0b7fd6', 2.6]]) {
     ctx.strokeStyle = color; ctx.lineWidth = wpx * px;
-    if (o.points?.length > 1) { path(o.points); ctx.stroke(); }
+    if (o.paths) for (const pp of o.paths) { path(pp); ctx.stroke(); }
+    else if (o.points?.length > 1) { path(o.points); ctx.stroke(); }
     else if (o.polygons) for (const poly of o.polygons) { path(poly, true); ctx.stroke(); }
     else if (o.polygon?.length && Array.isArray(o.polygon[0])) for (const ring of o.polygon) { path(ring, true); ctx.stroke(); }
     else if (o.polygon?.length) { path(o.polygon, true); ctx.stroke(); }
@@ -151,6 +158,7 @@ function inspect(p) {
     out.push(rv);
     for (const en of m.civicEnsembles) if (en.plazas.includes(rv.id) || en.gardens.includes(rv.id)) out.push(en);
   }
+  if (app.layers.seams) for (const sm of m.districtSeams || []) { let hit = false; for (let k = 0; k < sm.segments.length && !hit; k += 4) hit = Math.hypot((sm.segments[k] + sm.segments[k + 2]) / 2 - p.x, (sm.segments[k + 1] + sm.segments[k + 3]) / 2 - p.y) < tol + 30; if (hit) out.push(sm); }
   if (app.layers.edges && m.waterfront) { const e = m.waterfront.edges.find((x) => pointPolylineDistance(p, x.points) < tol + 10); if (e) out.push(e); }
   let bestRoad = null, bd = tol + 12;
   for (const r of m.roads.concat(m.rail ? m.rail.lines : [])) {
@@ -160,6 +168,9 @@ function inspect(p) {
   }
   if (bestRoad) {
     out.push(bestRoad);
+    const cor = bestRoad.corridorId && m.corridors.find((x) => x.id === bestRoad.corridorId);
+    if (cor) out.push(cor);
+    for (const cf of m.civicConflicts || []) if (cf.roadId === bestRoad.id) out.push(cf);
     const g = m.civicComposition.gestures.find((x) => x.roadIds.includes(bestRoad.id));
     if (g) out.push(g);
     for (const en of m.civicEnsembles) if (en.boulevardSegments.includes(bestRoad.id) && !out.includes(en)) out.push(en);
@@ -219,6 +230,8 @@ window.addEventListener('resize', () => app.redraw());
 
 const viewport = createViewport(app, canvas);
 const chrome = createChrome(app, canvas, viewport, mapRenderer);
+const reality = createRealityPanel(app);
+app.reality = reality;
 initControls(app);
 chrome.syncStyle();
 window.cityGen = app; // handy in the console

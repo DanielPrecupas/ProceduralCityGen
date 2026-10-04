@@ -1,5 +1,11 @@
-// STAGE 10 - BLOCKS. Blocks are the enclosed faces of the planar road graph. Slivers are
-// repaired by removing the local street that separates them from a neighbour (merging faces).
+// STAGE 10 - BLOCKS. Blocks are the enclosed faces of the planar road graph.
+//
+// Repair distinguishes two things. INVALID GEOMETRY (hairline or near-zero faces) is always
+// repaired by removing the local street that separates the face from a neighbour. A block that is
+// merely AWKWARD BUT VALID - a triangle, a wedge, a small residual - is kept when something real
+// explains it: a major road or diagonal cutting the grid, the railway, the frame of a formal
+// place, or a seam between two grids. Only unexplained slivers between ordinary local streets,
+// which are artefacts of street growth, are still merged away.
 
 import { record } from '../core/CityModel.js';
 import { polygonArea, polygonPerimeter, polygonCentroid, polygonMinAngle, polygonBBox, pointInPolygon, segSegIntersection } from '../core/Geometry.js';
@@ -63,6 +69,28 @@ export function planBlocks(model, ctx) {
   };
   const reservationOf = (c) => model.reservations.find((rv) => c.x > rv.bbox.minX && c.x < rv.bbox.maxX && c.y > rv.bbox.minY && c.y < rv.bbox.maxY && pointInPolygon(c.x, c.y, rv.polygon));
   const isSliver = (b) => b.district.type !== 'park' && (b.area < 0.14 * nominal(b.district) || (4 * Math.PI * b.area) / b.perimeter ** 2 < 0.12 || (2 * b.area) / b.perimeter < 9);
+  const isInvalid = (b) => b.area < 350 || (2 * b.area) / b.perimeter < 7 || (4 * Math.PI * b.area) / b.perimeter ** 2 < 0.07;
+  const hardSeams = (model.districtSeams || []).filter((sm) => sm.hard);
+  // what, if anything, makes an odd block legitimate
+  const causeOf = (b) => {
+    let total = 0, major = 0, rail = 0, frame = 0;
+    for (const eid of new Set(b.face.edges)) { const e = g.edges[eid]; total += e.len; if (e.cls === 'rail') rail += e.len; else if (e.sub === 'frame' || e.sub === 'circle_street') frame += e.len; else if (e.cls === 'R1' || e.cls === 'R2' || e.cls === 'R3') major += e.len; }
+    if (major / total >= 0.2) return 'cut_by_a_major_road_crossing_the_grid';
+    if (rail / total >= 0.2) return 'left_between_the_street_grid_and_the_railway';
+    if (frame / total >= 0.2) return 'shaped_by_the_frame_of_a_formal_place';
+    for (const sm of hardSeams) for (let k = 0; k < sm.segments.length; k += 4) if (Math.hypot((sm.segments[k] + sm.segments[k + 2]) / 2 - b.centroid.x, (sm.segments[k + 1] + sm.segments[k + 3]) / 2 - b.centroid.y) < 110) return 'lies_on_the_seam_where_two_grids_meet';
+    return null;
+  };
+  // corners that are real changes of direction (curved sides do not count)
+  const formOf = (poly, minAngle) => {
+    let corners = 0;
+    for (let i = 0; i < poly.length; i++) {
+      const a = poly[(i + poly.length - 1) % poly.length], p = poly[i], c = poly[(i + 1) % poly.length];
+      let d = Math.abs(Math.atan2(c.y - p.y, c.x - p.x) - Math.atan2(p.y - a.y, p.x - a.x)); if (d > Math.PI) d = 2 * Math.PI - d;
+      if (d > 0.45) corners++;
+    }
+    return corners <= 3 ? 'TRIANGULAR' : corners === 4 ? (minAngle < 0.87 ? 'WEDGE' : minAngle < 1.26 ? 'SKEW' : 'REGULAR') : corners <= 6 ? (minAngle < 0.87 ? 'WEDGE' : 'REGULAR') : 'IRREGULAR';
+  };
 
   // repair passes: merge slivers into a neighbour by removing their longest local street
   let merged = 0, faces;
@@ -79,6 +107,7 @@ export function planBlocks(model, ctx) {
         if (!e.removed && prunableEdge(e)) { g.removeEdge(e); removed++; }
       }
       if (!isSliver(b) || reservationOf(b.inner)) continue;
+      if (!isInvalid(b) && b.area >= 600 && (2 * b.area) / b.perimeter >= 10 && causeOf(b)) continue; // awkward but valid: leave it alone
       let longest = null;
       for (const eid of b.face.edges) { const e = g.edges[eid]; if (!e.removed && e.cls === 'local' && !e.required && (!longest || e.len > longest.len)) longest = e; }
       if (longest) { g.removeEdge(longest); removed++; }
@@ -94,7 +123,7 @@ export function planBlocks(model, ctx) {
   }
 
   const blocks = [];
-  let skippedOpen = 0;
+  let skippedOpen = 0, preserved = 0;
   for (const b of faces) {
     const rv = reservationOf(b.inner);
     const nom = b.district.type === 'park' ? 20000 : nominal(b.district);
@@ -136,15 +165,23 @@ export function planBlocks(model, ctx) {
       hits.sort((u, v) => u.t - v.t);
       if (hits.length >= 2) pedestrianCuts = [[{ x: hits[0].x, y: hits[0].y }, { x: hits[hits.length - 1].x, y: hits[hits.length - 1].y }]];
     }
-    blocks.push(record(ctx.id('block'), 'block', STAGE, `enclosed_by_streets_of_${b.district.id}`, {
+    const minAngle = polygonMinAngle(b.polygon), form = formOf(b.polygon, minAngle);
+    // record why an odd block exists, so the validator and later stages treat it as intended
+    let imperfection = null;
+    if (!rv && b.district.type !== 'park' && (isSliver(b) || form === 'TRIANGULAR' || form === 'WEDGE')) {
+      const cause = causeOf(b);
+      if (cause) { imperfection = { class: 'AWKWARD_BUT_VALID_URBAN_FORM', kind: isSliver(b) ? 'RESIDUAL' : form, cause, wouldHaveBeenRepaired: isSliver(b) }; if (isSliver(b)) preserved++; }
+    }
+    blocks.push(record(ctx.id('block'), 'block', STAGE, imperfection ? `${imperfection.kind.toLowerCase()}_block_${imperfection.cause}` : `enclosed_by_streets_of_${b.district.id}`, {
+      form, imperfection,
       polygon: b.polygon.map((p) => ({ x: p.x, y: p.y })), districtId: b.district.id, districtIndex: b.district.index,
       area: b.area, perimeter: b.perimeter, centroid: b.centroid, frontage,
-      compactness: (4 * Math.PI * b.area) / b.perimeter ** 2, minAngle: polygonMinAngle(b.polygon),
+      compactness: (4 * Math.PI * b.area) / b.perimeter ** 2, minAngle,
       edgeIds: [...new Set(b.face.edges)], use: rv ? 'reserved' : 'urban', reservationId: rv ? rv.id : null, pedestrianCuts,
     }));
   }
   model.blocks = blocks;
   const urban = blocks.filter((b) => b.use === 'urban');
   const mean = urban.reduce((s, b) => s + b.area, 0) / Math.max(1, urban.length);
-  ctx.log(`${blocks.length} blocks (mean ${(mean / 1e4).toFixed(2)} ha), ${merged} sliver merges, ${skippedOpen} open-land faces ignored`);
+  ctx.log(`${blocks.length} blocks (mean ${(mean / 1e4).toFixed(2)} ha), ${merged} sliver merges, ${preserved} awkward-but-valid blocks kept, ${skippedOpen} open-land faces ignored; forms: ${Object.entries(blocks.reduce((o, b) => { o[b.form] = (o[b.form] || 0) + 1; return o; }, {})).map(([k, v]) => `${v} ${k.toLowerCase()}`).join(', ')}`);
 }

@@ -19,6 +19,7 @@ import { planRoadCharacter, resetRoadCharacter } from '../planners/RoadCharacter
 import { planMajorReservations, resetMajorReservations } from '../planners/MajorReservationPlanner.js';
 import { planStreets } from '../planners/StreetPlanner.js';
 import { planBlocks } from '../planners/BlockPlanner.js';
+import { planHierarchy, resetHierarchy } from '../planners/HierarchyPlanner.js';
 import { planPublicSpaces } from '../planners/PublicSpacePlanner.js';
 import { validate } from '../planners/Validator.js';
 
@@ -35,12 +36,13 @@ export const STAGES = [
   { id: 'civicComposition', label: 'Civic composition', run: planCivicComposition, reset: resetCivicComposition },
   { id: 'rail', label: 'Rail', run: planRail, reset: (m) => { m.rail = null; } },
   { id: 'urbanNodes', label: 'Urban nodes', run: planUrbanNodes, reset: resetUrbanNodes },
-  { id: 'districts', label: 'Districts', run: planDistricts, reset: (m) => { m.districts = []; m.districtGrid = null; dropStage(m, 'reservations', 'districts'); dropStage(m, 'roads', 'districts'); } },
+  { id: 'districts', label: 'Districts', run: planDistricts, reset: (m) => { m.districts = []; m.districtGrid = null; m.districtSeams = []; dropStage(m, 'reservations', 'districts'); dropStage(m, 'roads', 'districts'); } },
   { id: 'waterfront', label: 'Waterfront edges', run: planWaterfront, reset: (m) => { m.waterfront = null; dropStage(m, 'roads', 'waterfront'); } },
   { id: 'roadCharacter', label: 'Road character', run: planRoadCharacter, reset: resetRoadCharacter },
   { id: 'majorReservations', label: 'Major reservations', run: planMajorReservations, reset: resetMajorReservations },
   { id: 'streets', label: 'Local streets', run: planStreets, reset: (m) => { m.field = null; m.network = null; m.railCrossings = null; dropStage(m, 'roads', 'streets'); dropStage(m, 'urbanNodes', 'streets'); } },
   { id: 'blocks', label: 'Blocks', run: planBlocks, reset: (m) => { m.blocks = []; } },
+  { id: 'hierarchy', label: 'Hierarchy and corridors', run: planHierarchy, reset: resetHierarchy },
   { id: 'publicSpaces', label: 'Public spaces', run: planPublicSpaces, reset: (m) => { m.publicSpaces = []; for (const b of m.blocks) b.use = 'urban'; } },
   { id: 'validation', label: 'Validation', run: validate, reset: (m) => { m.validation = { warnings: [], summary: {} }; } },
 ];

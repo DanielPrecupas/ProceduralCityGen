@@ -102,6 +102,9 @@ export function createCityModel(inputConfig) {
     field: null, // tensor field used for street directions
     network: null, // RoadGraph: authoritative planar topology
     blocks: [],
+    corridors: [], // continuous routes through junctions, each with a hierarchy level
+    civicConflicts: [], // how each major road / railway meeting a civic object was resolved
+    districtSeams: [], // how neighbouring districts' street grids meet
     publicSpaces: [],
     validation: { warnings: [], summary: {} },
     metadata: { timings: {}, log: [] },

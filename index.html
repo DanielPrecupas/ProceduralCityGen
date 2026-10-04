@@ -51,7 +51,7 @@
   #map { display: block; width: 100%; height: 100%; cursor: grab; }
   #bottomLeft { left: 10px; bottom: 10px; max-width: calc(100% - 200px); pointer-events: none; }
   #status { width: fit-content; background: rgba(27,31,36,0.85); padding: 5px 9px; border-radius: 5px; font-size: 12px; margin-top: 8px; }
-  #legend { font-size: 11px; color: var(--muted); display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 2px 8px; margin-top: 8px; }
+  #legend { font-size: 11px; color: var(--muted); display: grid; grid-template-columns: 1fr 1fr; gap: 2px 8px; margin-top: 8px; }
   #legend i { display: inline-block; width: 16px; height: 4px; vertical-align: middle; margin-right: 5px; border-radius: 2px; }
   #legend i.sq { height: 9px; width: 9px; }
   .log div, .warn { padding: 4px 0; border-bottom: 1px solid var(--line); font-size: 12px; }
@@ -62,6 +62,9 @@
   .chips span { display: inline-block; background: #303844; border-radius: 10px; padding: 1px 8px; margin: 0 4px 4px 0; font-size: 11px; }
   #inspector { font-size: 12px; } #inspector table { border-collapse: collapse; width: 100%; } #inspector td { padding: 2px 4px 2px 0; vertical-align: top; word-break: break-word; }
   #inspector td:first-child { color: var(--muted); white-space: nowrap; width: 92px; } #inspector .obj { margin-bottom: 10px; }
+  table.reality { border-collapse: collapse; width: 100%; font-size: 11.5px; margin-top: 4px; } table.reality th { text-align: left; color: var(--muted); font-weight: 600; padding: 3px 4px 3px 0; border-bottom: 1px solid var(--line); }
+  table.reality td { padding: 3px 4px 3px 0; border-bottom: 1px solid #2b3139; vertical-align: top; font-variant-numeric: tabular-nums; } table.reality .u { color: var(--muted); }
+  .verdict { font-size: 9.5px; font-weight: 700; letter-spacing: 0.03em; padding: 1px 5px; border-radius: 8px; white-space: nowrap; } .verdict.ok { background: #244a33; color: #9fe0b5; } .verdict.off { background: #54421b; color: #f2cf7c; } .verdict.na { color: var(--muted); }
   .note { color: #e8c37a; font-size: 12px; margin: 4px 0; }
 </style>
 </head>
@@ -118,6 +121,13 @@
     <div id="legend"></div>
     <h2>Inspector <span style="text-transform:none;letter-spacing:0">(click the map)</span></h2>
     <div id="inspector"><span class="sub">Click a road, block, district, space or anchor to see why it exists.</span></div>
+    <h2>Reality Profile</h2>
+    <p class="sub">The plan's street-network metrics, measured the same way as real cities. Load a reference profile (or several, to form a range) to compare. Diagnostics only: no score.</p>
+    <label class="row wide">Scale <select id="realityScale"><option value="city">City (whole urban area)</option><option value="district">District (6 km windows)</option><option value="neighbourhood">Neighbourhood (1.5 km windows)</option></select></label>
+    <label class="row wide">Reference <input type="file" id="realityRef" accept=".json,.geojson,.graphml,.xml" multiple></label>
+    <div class="btns"><button id="realityClear" disabled>Clear reference</button><button id="realityExport">Export city-profile.json</button></div>
+    <div class="note" id="realityNote"></div>
+    <div id="realityTable"></div>
     <h2>Pipeline</h2>
     <div class="log" id="log"></div>
     <h2>Validation</h2>

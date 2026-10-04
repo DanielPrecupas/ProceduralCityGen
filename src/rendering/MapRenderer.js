@@ -85,6 +85,22 @@ export class MapRenderer {
       const p = roundabouts.has(r.reservationId) ? c.roundaboutPaths[r.cls] : c.roadPaths[r.cls];
       r.points.forEach((pt, i) => (i ? p.lineTo(pt.x, pt.y) : p.moveTo(pt.x, pt.y)));
     }
+    // the same network by hierarchy level (V3): drawn by the Map style and the hierarchy layer
+    c.hierPaths = null;
+    if (model.network && model.corridors && model.corridors.length) {
+      c.hierPaths = {}; c.tiles.hier = { LOCAL: new Array(nt * nt), LOCAL_HIGH_STREET: new Array(nt * nt) };
+      const roadOf = new Map(model.roads.map((r) => [r.id, r]));
+      for (const e of model.network.edges) {
+        if (e.removed || e.cls === 'rail' || !e.hierarchy) continue;
+        const r = roadOf.get(e.roadId);
+        if (r && roundabouts.has(r.reservationId)) continue; // roundabout carriageways are drawn on their own
+        const a = model.network.nodes[e.a], b = model.network.nodes[e.b];
+        const p = c.hierPaths[e.hierarchy] || (c.hierPaths[e.hierarchy] = new Path2D());
+        p.moveTo(a.x, a.y); p.lineTo(b.x, b.y);
+        const tl = c.tiles.hier[e.hierarchy];
+        if (tl) { const t = tileOf((a.x + b.x) / 2, (a.y + b.y) / 2), tp = tl[t] || (tl[t] = new Path2D()); tp.moveTo(a.x, a.y); tp.lineTo(b.x, b.y); }
+      }
+    }
     if (model.network) for (const e of model.network.edges) {
       if (e.removed || e.stage !== 'streets') continue;
       const p = c.roadPaths[e.cls === 'local' ? 'local' : 'collector'], a = model.network.nodes[e.a], b = model.network.nodes[e.b];

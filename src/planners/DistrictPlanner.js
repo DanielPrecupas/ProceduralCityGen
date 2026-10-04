@@ -215,6 +215,59 @@ export function planDistricts(model, ctx) {
 
   for (const d of districts) d.polygon = traceRegionRings(grid, w, h, cell, d.index).map((ring) => chaikin(ring, 1, true));
 
+  // --- SEAMS: how each pair of neighbouring districts meets. Most fabrics pass gradually into
+  // one another; where two coherent grids of clearly different orientation meet, or a railway,
+  // an arterial, water or a park separates them, the change may be abrupt (see TensorField.js).
+  const T2 = model.terrain, majorMask = new Uint8Array(w * h);
+  for (const r of model.roads.concat(roads)) if ((r.cls === 'R1' || r.cls === 'R2' || r.cls === 'R3') && r.points.length > 1) for (const p of resamplePolyline(r.points, 25)) { const i = R.index(p.x, p.y); if (i >= 0) majorMask[i] = 1; }
+  const railMask = model.rail ? model.rail.mask : null, pairs = new Map();
+  const touch = (i, j, kind, x1, y1, x2, y2) => {
+    const a = grid[i], b = grid[j];
+    if (a < 0 || b < 0 || a === b) return;
+    const key = a < b ? a * 1000 + b : b * 1000 + a;
+    let o = pairs.get(key);
+    if (!o) { o = { a: Math.min(a, b), b: Math.max(a, b), n: 0, rail: 0, major: 0, water: 0, segments: [] }; pairs.set(key, o); }
+    o.n++;
+    if (kind === 'water') o.water++;
+    else { if (railMask && (railMask[i] || railMask[j])) o.rail++; if (majorMask[i] || majorMask[j]) o.major++; }
+    o.segments.push(x1, y1, x2, y2);
+  };
+  for (let y = 0; y < h; y++) for (let x = 0; x < w; x++) {
+    const i = y * w + x;
+    if (grid[i] < 0) continue;
+    if (x + 1 < w) touch(i, i + 1, 'land', (x + 1) * cell, y * cell, (x + 1) * cell, (y + 1) * cell);
+    if (y + 1 < h) touch(i, i + w, 'land', x * cell, (y + 1) * cell, (x + 1) * cell, (y + 1) * cell);
+    // across a narrow water body (a river): the districts on the two banks also form a seam
+    for (const [dx, dy] of [[1, 0], [0, 1]]) {
+      let k = 1;
+      while (k <= 6 && x + dx * k < w && y + dy * k < h && T2.water[i + (dx + dy * w) * k]) k++;
+      if (k > 1 && k <= 6 && x + dx * k < w && y + dy * k < h) { const mx = (x + 0.5 + (dx * k) / 2) * cell, my = (y + 0.5 + (dy * k) / 2) * cell; touch(i, i + (dx + dy * w) * k, 'water', mx - (dy * cell) / 2, my - (dx * cell) / 2, mx + (dy * cell) / 2, my + (dx * cell) / 2); }
+    }
+  }
+  const COHERENT = new Set(['ORTHOGONAL', 'STATION_DENSE', 'INDUSTRIAL_LARGE_BLOCK']);
+  const seams = [];
+  for (const o of [...pairs.values()].sort((p, q) => p.a - q.a || p.b - q.b)) {
+    if (o.n < 3) continue;
+    const A = districts[o.a], B = districts[o.b];
+    let delta = Math.abs(A.streetOrientation - B.streetOrientation) % (Math.PI / 2); if (delta > Math.PI / 4) delta = Math.PI / 2 - delta; // difference between two grids
+    const park = A.type === 'park' || B.type === 'park', coherent = COHERENT.has(A.streetRegime) && COHERENT.has(B.streetRegime);
+    let behaviour, why;
+    if (o.water / o.n >= 0.5) [behaviour, why] = ['WATER_BOUNDARY', 'the_two_districts_face_each_other_across_water'];
+    else if (park) [behaviour, why] = ['GREEN_BOUNDARY', 'a_park_separates_the_street_fabric'];
+    else if (o.rail / o.n >= 0.4) [behaviour, why] = ['RAIL_BOUNDARY', 'the_railway_divides_the_two_districts'];
+    else if (o.major / o.n >= 0.4) [behaviour, why] = ['ARTERIAL_BOUNDARY', 'a_major_road_runs_along_the_boundary'];
+    else if (coherent && delta >= 0.3) [behaviour, why] = ['HARD_GRID_CHANGE', 'two_regular_grids_of_different_orientation_meet_directly'];
+    else [behaviour, why] = ['SOFT_BLEND', coherent ? 'both_districts_share_one_grid_orientation' : 'one_fabric_passes_gradually_into_the_other'];
+    // the change of orientation is abrupt only where there is a real difference between two grids
+    const hard = !park && delta >= 0.2 && (behaviour === 'HARD_GRID_CHANGE' || (behaviour !== 'SOFT_BLEND' && A.gridStrength >= 0.5 && B.gridStrength >= 0.5));
+    seams.push(record(ctx.id('seam'), 'district_seam', STAGE, `${why}${hard ? '_and_the_grids_change_abruptly' : ''}`, {
+      a: A.id, b: B.id, aIndex: o.a, bIndex: o.b, behaviour, hard, orientationDelta: Math.round((delta * 180) / Math.PI), length: o.n * cell, segments: o.segments,
+      position: { x: o.segments[0], y: o.segments[1] },
+    }));
+  }
+  model.districtSeams = seams;
+  ctx.log(`seams: ${Object.entries(seams.reduce((acc, sm) => { acc[sm.behaviour] = (acc[sm.behaviour] || 0) + 1; return acc; }, {})).map(([k, v]) => `${v} ${k.toLowerCase()}`).join(', ')}; ${seams.filter((sm) => sm.hard).length} with an abrupt change of grid`);
+
   model.districts = districts;
   model.districtGrid = grid;
   model.reservations = model.reservations.concat(reservations);

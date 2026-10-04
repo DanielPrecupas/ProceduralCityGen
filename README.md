@@ -22,12 +22,13 @@ Then open http://localhost:5173.
 
 ```bash
 npm run check   # headless run of three seeds: stage log, warnings, determinism
-npm test        # regression checks: network and nodes, roundabouts, map interface
+npm test        # regression checks: network and nodes, roundabouts, map interface, realism harness
+npm run realism # measure cities and compare them with real ones (see docs/REALISM.md)
 ```
 
 ## What it does
 
-- **Staged pipeline.** Eighteen planning stages run in order over one `CityModel`. Any stage can be
+- **Staged pipeline.** Nineteen planning stages run in order over one `CityModel`. Any stage can be
   shown on its own, and the plan can be regenerated from any stage onward.
 - **Deterministic.** The same seed and parameters always give the same city. Each stage has its own
   random stream (`seed + stage name`), so regenerating from a stage reproduces a full run exactly.
@@ -41,6 +42,11 @@ npm test        # regression checks: network and nodes, roundabouts, map interfa
   area can be read from its form alone (there is a monochrome view to test this).
 - **Self-checking.** A validator reports specific, located warnings. There is deliberately no
   overall city score.
+- **Measured against real cities.** The street network is profiled with the same code and the
+  same metric schema as an OpenStreetMap extract, at city, district and neighbourhood scale, so
+  realism can be compared in numbers rather than by eye ([docs/REALISM.md](docs/REALISM.md)). The
+  first study, eight real cities against 96 generated ones, is in
+  [docs/REALISM_CALIBRATION_REPORT.md](docs/REALISM_CALIBRATION_REPORT.md).
 
 ## Using the app
 
@@ -71,8 +77,12 @@ npm test        # regression checks: network and nodes, roundabouts, map interfa
   "Plan view" and "All layers" are presets.
 - **Monochrome morphology test** hides district colour, leaving roads, rail, parks, water, blocks and
   major anchors, always at full detail.
+- **Reality Profile** (right panel) lists the plan's metrics at the chosen scale. Load one
+  reference profile, or several to form a range, to see generated value, reference range and a
+  diagnosis per metric. "Export city-profile.json" saves the profile for notebooks.
+- New debug layers: Road Hierarchy, Corridors, District Seams, Civic Approaches.
 - **Click** a road, rail line, node, district, park, reservation, block or anchor to inspect it: id,
-  type, stage, reason and its metadata (tier, design role, morphology, ...). The inspector is
+  type, stage, reason and its metadata (tier, hierarchy, corridor, design role, morphology, ...). The inspector is
   read-only. Click a warning to jump to it.
 
 **Changing the plan**
@@ -107,8 +117,9 @@ Each stage reads the model left by earlier stages and adds to it.
 | 14 | Major reservations | `planners/MajorReservationPlanner.js` | `institutions` (hospital, stadium, rail yard, ...) with access roads |
 | 15 | Local streets | `planners/StreetPlanner.js` | `field`, collectors + local streets, `network` (planar graph incl. rail), `railCrossings` |
 | 16 | Blocks | `planners/BlockPlanner.js` | `blocks` from planar faces, sliver repair, pedestrian cuts in institutional blocks |
-| 17 | Public spaces | `planners/PublicSpacePlanner.js` | `publicSpaces` (park hierarchy, node places); `block.morphology` |
-| 18 | Validation | `planners/Validator.js` | `validation.warnings` |
+| 17 | Hierarchy and corridors | `planners/HierarchyPlanner.js` | `corridors`; `hierarchy` and `corridorId` on every edge and road; late `civicConflicts` |
+| 18 | Public spaces | `planners/PublicSpacePlanner.js` | `publicSpaces` (park hierarchy, node places); `block.morphology` |
+| 19 | Validation | `planners/Validator.js` | `validation.warnings` |
 
 ## Project layout
 
@@ -118,6 +129,8 @@ src/
   core/        CityModel, Pipeline, seeded RNG, geometry, rasters, planar RoadGraph, block presets
   algorithms/  least-cost routing, tensor field, streamline road growth, polygon and crossing helpers
   planners/    one file per pipeline stage
+  analysis/    realism harness: Metrics (the shared schema), NetworkIO (GeoJSON / GraphML /
+               network JSON readers), ReferenceCityAnalyzer, GeneratedCityAnalyzer, Compare
   rendering/   read-only over the model:
                MapRenderer (planning style, cached paths), MapStyle (cartographic style),
                Lod (what to draw at each zoom, width interpolation), LabelLayer (label
@@ -130,6 +143,13 @@ scripts/
   test-v21.mjs           network, node, reservation-access and rail checks
   test-roundabouts.mjs   roundabout geometry and eligibility checks
   test-v22.mjs           map interface: detail levels, widths, labels, jump list, model untouched
+  test-v30a.mjs          realism harness, rail geometry, corridors, hierarchy, civic approaches, seams
+  realism.mjs            profile generated cities, measure references, compare
+tools/reference/         osmnx_to_reference.py: offline download of a real city for the harness
+  calibration-batch.mjs  generate and measure a varied batch of cities
+  calibration-report.mjs build the calibration data tables; calibration-plots.mjs the plots
+reference/               corpus.json (cities and archetypes); profiles/ (measured real cities)
+calibration/             citygen-batch.json (measured generated cities), summary.json
 ```
 
 ## How the main pieces work
@@ -207,6 +227,52 @@ scripts/
   district parks go to large districts without one in reach; neighbourhood parks are placed where
   they bring the most unserved housing within 400 m; pocket greens use remnant blocks.
 
+### V3.0 Alpha: realism calibration and transport structure
+
+- **Reality profile.** `analysis/Metrics.js` turns any street network into a profile: intersection
+  and street density, segment lengths, node degrees, 3-way / 4-way / dead-end shares, circuity,
+  orientation entropy and order, number of grid orientations, road-class shares, major-road
+  spacing, block area and aspect distributions, major-corridor continuity. A generated plan and a
+  real city go through the same function. Results are reported per scale (whole city, 6 km
+  windows, 1.5 km windows) and compared metric by metric against a reference city or a range from
+  several; the outcome is a list of diagnostics such as "TOO SPARSE", never a score.
+- **Hierarchy.** Every street has one of seven levels: `REGIONAL`, `METROPOLITAN_ARTERIAL`,
+  `PRIMARY_AVENUE`, `SECONDARY_AVENUE`, `DISTRICT_CONNECTOR`, `LOCAL_HIGH_STREET`, `LOCAL`. The
+  middle is filled by promoting streets that already exist: long collectors between major roads,
+  long through-streets linking higher roads (kept apart from parallel ones), and the street
+  through each neighbourhood centre. Each level, with those above it, must be one connected
+  network; fragments are demoted.
+- **Corridors.** Road sections that continue one another through junctions with little change of
+  direction are chained into `Corridor` records (`segments`, `hierarchy`, `designRole`,
+  `continuityScore`, `dominantBearing`, `length`, `reason`). A corridor may carry on across a
+  square, circle or roundabout that interrupts it.
+- **Transport profiles** (`core/TransportProfiles.js`): regional highway, urban expressway,
+  metropolitan arterial, grand boulevard, parkway, intercity / regional / freight rail, each with
+  a minimum radius, largest acceptable bend, grade sensitivity, access behaviour, continuity and
+  frontage. Metro and tram are in the schema but not generated.
+- **Rail alignment.** The routed path is fitted as a smoothing spline whose stiffness rises until
+  the profile's minimum radius is met (`algorithms/Alignment.js`). Platforms of the central
+  station stay on a straight; a branch is cut back and rejoins its host line along that line, so
+  the turnout is tangential; the slow approach to a station or yard may use a tighter radius.
+  Where terrain or reserved land prevents the radius, the line says so and the validator reports it.
+- **Road alignment.** Arterial and regional chains are fitted the same way with their own radii.
+  Straight and segmented formal alignments are left as designed; local streets keep hard corners.
+- **Civic conflicts.** Every major road meeting a formal square has a recorded outcome:
+  `TERMINATE_AXIS`, `SPLIT_AROUND` (traffic goes round on the frame street),
+  `DOWNGRADE_TO_URBAN_BOULEVARD` (a regional road is stepped down before the square) or
+  `PASS_ALONG_EDGE` (roads and rail beside parks, gardens and compounds). `REROUTE` is in the
+  vocabulary; nothing currently needs it because rail routing already avoids reserved squares.
+- **Square approaches.** Each formal square carries `approachGrammar`: perimeter, principal and
+  secondary approaches, ceremonial axis, through-movement rule, frontage intent. Roads arrive at
+  the middle of a side or at a corner; formal avenues keep their own axis through the centre.
+- **District seams.** Each pair of neighbouring districts gets a boundary behaviour: `SOFT_BLEND`,
+  `HARD_GRID_CHANGE`, `ARTERIAL_BOUNDARY`, `RAIL_BOUNDARY`, `GREEN_BOUNDARY`, `WATER_BOUNDARY`.
+  Across a hard seam the two grids keep their own orientation up to the boundary instead of
+  blending.
+- **Valid imperfection.** Block repair now separates invalid geometry from blocks that are merely
+  awkward. A triangle, wedge or small residual is kept when a major road, the railway, a formal
+  frame or a hard seam explains it; it carries `form` and `imperfection.cause`.
+
 ### Map rendering
 
 - **Geometry never changes for readability.** Only stroke widths, symbol sizes and label visibility
@@ -231,14 +297,20 @@ scripts/
 - **Bridges, tunnels and viaducts** are metadata only (`road.engineering`).
 - **Interchanges** are a footprint, a type and a symbol; ramps are not modelled.
 - **Roundabouts** have ring and arm geometry but no lane-level detail.
-- **Rail junctions** are not tangential: spurs join where the least-cost path arrives.
+- **Rail** is a smoothed centre line, not engineered track: no transition curves, cant or
+  gradients profile, and some lines cannot meet their radius on difficult terrain.
+- **Hierarchy promotion is classification.** A promoted street is drawn and counted as a connector
+  but is still the street that was grown; it is not widened or straightened.
+- **Hard seams** change the direction field; streets crossing one bend rather than stop at it.
+- **Square approach rules** apply to the squares of the civic composition, not yet to squares
+  created at ordinary junctions.
 - **Block presets** only scale block dimensions today; the other fields are passed through.
 - **Thresholds** (node tier scores, place-form caps, reinforcement budget) are hand-tuned constants.
 
 ## Out of scope
 
-Parcels, buildings, façades, 3D, traffic simulation, utilities, historical growth, economics and
-export are not implemented. Locked roads, user-drawn axes and edited districts are not implemented
+Parcels, buildings, façades, 3D, traffic simulation, utilities, historical growth, economics,
+multi-city regions, metro and tram are not implemented. Locked roads, user-drawn axes and edited districts are not implemented
 either; the hooks for them are `anchor.userMoved`, `reservations` and the per-stage reset in
 `core/Pipeline.js`.
 

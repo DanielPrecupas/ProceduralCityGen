@@ -6,7 +6,8 @@
 // They do NOT act everywhere equally: each district has a dominant STREET REGIME that sets how
 // much each basis field counts there. Regularity is the default; distortion needs a cause
 // (slope, shoreline, a formal civic element, rail). Regime weights are blurred across district
-// boundaries so one fabric passes gradually into the next.
+// boundaries so one fabric passes gradually into the next - except across a HARD seam
+// (model.districtSeams), where two grids keep their own orientation right up to the boundary.
 
 import { boxBlur } from '../core/Raster.js';
 import { resamplePolyline, smoothstep } from '../core/Geometry.js';
@@ -46,7 +47,18 @@ export function buildTensorField(model, rng) {
     W.align[i] = reg.align; W.contour[i] = reg.contour * (d ? d.terrainInfluence : cfg.terrainAdaptation * 0.6); W.water[i] = reg.water;
     W.radial[i] = reg.radial * (d ? d.radialInfluence : 0); W.noise[i] = reg.noise * (d ? d.irregularity : cfg.streetIrregularity); W.reach[i] = reg.reach;
   }
+  const rawC = tc, rawS = ts;
   tc = boxBlur(tc, w, h, 3, 2); ts = boxBlur(ts, w, h, 3, 2);
+  // HARD SEAMS: a district with an abrupt seam does not blend its grid with the neighbour on the
+  // other side of it. Its orientation is averaged only over cells that are not across such a seam.
+  const hardWith = new Map();
+  for (const sm of model.districtSeams || []) if (sm.hard) for (const [p, q] of [[sm.aIndex, sm.bIndex], [sm.bIndex, sm.aIndex]]) { let l = hardWith.get(p); if (!l) { l = new Set(); hardWith.set(p, l); } l.add(q); }
+  for (const [d, across] of hardWith) {
+    const mask = new Float32Array(n), mc = new Float32Array(n), ms = new Float32Array(n);
+    for (let i = 0; i < n; i++) if (!across.has(grid[i])) { mask[i] = 1; mc[i] = rawC[i]; ms[i] = rawS[i]; }
+    const bm = boxBlur(mask, w, h, 3, 2), bc = boxBlur(mc, w, h, 3, 2), bs = boxBlur(ms, w, h, 3, 2);
+    for (let i = 0; i < n; i++) if (grid[i] === d && bm[i] > 1e-3) { tc[i] = bc[i] / bm[i]; ts[i] = bs[i] / bm[i]; }
+  }
   sepA = boxBlur(sepA, w, h, 2, 1); sepB = boxBlur(sepB, w, h, 2, 1);
   for (const k in W) W[k] = boxBlur(W[k], w, h, 3, 1);
 
