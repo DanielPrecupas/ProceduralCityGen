@@ -26,9 +26,31 @@
   .layers { display: grid; grid-template-columns: 1fr 1fr; gap: 5px; }
   .layers button { text-align: left; padding: 5px 8px; font-size: 12px; opacity: 0.55; }
   .layers button.on { opacity: 1; border-color: var(--accent); box-shadow: inset 3px 0 0 var(--accent); }
+  button.grp { display: block; width: 100%; text-align: left; background: none; border: 0; padding: 9px 0 4px; font-size: 10.5px; text-transform: uppercase; letter-spacing: 0.09em; color: var(--muted); }
+  button.grp:hover { background: none; color: var(--text); }
+  .ovl { position: absolute; z-index: 2; }
+  #mapTop { left: 10px; top: 10px; display: flex; gap: 8px; align-items: flex-start; }
+  .seg { display: flex; border-radius: 6px; overflow: hidden; box-shadow: 0 1px 4px rgba(0,0,0,0.3); }
+  .seg button { border-radius: 0; border: 0; background: #f7f6f3; color: #3a3f47; padding: 6px 12px; font-weight: 600; }
+  .seg button:hover { background: #e9e7e1; } .seg button.on { background: #2f6fb0; color: #fff; }
+  #searchBox { position: relative; width: 230px; }
+  #search { background: #fff; color: #23282f; border: 0; border-radius: 6px; padding: 6px 10px; box-shadow: 0 1px 4px rgba(0,0,0,0.3); }
+  #searchResults { position: absolute; top: 34px; left: 0; right: 0; max-height: 340px; overflow-y: auto; background: #fff; color: #23282f; border-radius: 6px; box-shadow: 0 3px 12px rgba(0,0,0,0.35); padding: 4px 0; }
+  #searchResults .grp { padding: 6px 10px 2px; font-size: 10.5px; text-transform: uppercase; letter-spacing: 0.08em; color: #7a828c; }
+  #searchResults .hit { padding: 4px 10px; cursor: pointer; } #searchResults .hit:hover { background: #e8f0f8; }
+  #mapTools { right: 10px; top: 10px; display: flex; flex-direction: column; gap: 4px; align-items: flex-end; }
+  #mapTools button { background: #f7f6f3; color: #3a3f47; border: 0; box-shadow: 0 1px 4px rgba(0,0,0,0.3); font-weight: 600; min-width: 34px; }
+  #mapTools button:hover { background: #e9e7e1; }
+  #scale { margin-left: 2px; color: #23282f; font-size: 11px; text-shadow: 0 0 3px #fff, 0 0 3px #fff, 0 0 3px #fff; }
+  #scaleBar { height: 6px; border: 2px solid #23282f; border-top: 0; background: rgba(255,255,255,0.5); margin-top: 2px; }
+  #lodText { margin-top: 3px; font-variant-numeric: tabular-nums; }
+  #minimap { right: 10px; bottom: 10px; width: 168px; height: 168px; border: 2px solid #fff; border-radius: 4px; box-shadow: 0 1px 6px rgba(0,0,0,0.4); cursor: crosshair; }
+  #inspector .oh { margin-bottom: 3px; } #inspector .oh b { text-transform: capitalize; font-size: 13px; } #inspector .oh .chips { margin-top: 3px; }
+  #inspector .obj { border-top: 1px solid var(--line); padding-top: 7px; } #inspector .obj:first-child { border-top: 0; padding-top: 0; } #inspector .k { color: var(--muted); }
   #stage { position: relative; overflow: hidden; background: #2a2f36; }
-  canvas { display: block; width: 100%; height: 100%; cursor: grab; }
-  #status { position: absolute; left: 10px; bottom: 10px; right: 10px; width: fit-content; background: rgba(27,31,36,0.85); padding: 5px 9px; border-radius: 5px; font-size: 12px; pointer-events: none; }
+  #map { display: block; width: 100%; height: 100%; cursor: grab; }
+  #bottomLeft { left: 10px; bottom: 10px; max-width: calc(100% - 200px); pointer-events: none; }
+  #status { width: fit-content; background: rgba(27,31,36,0.85); padding: 5px 9px; border-radius: 5px; font-size: 12px; margin-top: 8px; }
   #legend { font-size: 11px; color: var(--muted); display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 2px 8px; margin-top: 8px; }
   #legend i { display: inline-block; width: 16px; height: 4px; vertical-align: middle; margin-right: 5px; border-radius: 2px; }
   #legend i.sq { height: 9px; width: 9px; }
@@ -69,14 +91,30 @@
 
   <div id="stage">
     <canvas id="map"></canvas>
-    <div id="status">Starting...</div>
+    <div id="mapTop" class="ovl">
+      <div class="seg" id="styleToggle"><button data-style="map">Map</button><button data-style="plan">Planning</button></div>
+      <div id="searchBox"><input type="text" id="search" placeholder="Jump to a place..." autocomplete="off" aria-label="Jump to a place"><div id="searchResults" hidden></div></div>
+    </div>
+    <div id="mapTools" class="ovl">
+      <button id="zoomIn" title="Zoom in (+)" aria-label="Zoom in">+</button>
+      <button id="zoomOut" title="Zoom out (-)" aria-label="Zoom out">&minus;</button>
+      <button id="fitCity" title="Fit the city to the screen (F)">Fit city</button>
+      <button id="resetView" title="Show the whole map (0)">Reset view</button>
+      <button id="exportPng" title="Save the current view as a PNG image">PNG</button>
+    </div>
+    <canvas id="minimap" class="ovl" title="Overview: click or drag to move"></canvas>
+    <div id="bottomLeft" class="ovl">
+      <div id="scale"><span id="scaleText"></span><div id="scaleBar"></div><div id="lodText"></div></div>
+      <div id="status">Starting...</div>
+    </div>
   </div>
 
   <aside class="right">
-    <h2 style="margin-top:0">Stage layers</h2>
-    <div class="layers" id="layers"></div>
-    <div class="btns"><button id="viewPlan">Plan view</button><button id="viewAll">All layers</button><button id="viewFit">Fit</button></div>
+    <h2 style="margin-top:0">Layers</h2>
+    <div id="layers"></div>
+    <div class="btns" style="margin-top:10px"><button id="viewPlan">Plan view</button><button id="viewAll">All layers</button></div>
     <div class="btns"><button id="viewMono">Monochrome morphology test</button></div>
+    <label class="sub" style="display:block;margin:6px 0"><input type="checkbox" id="fullDetail"> Full detail at every zoom (no level of detail)</label>
     <div id="legend"></div>
     <h2>Inspector <span style="text-transform:none;letter-spacing:0">(click the map)</span></h2>
     <div id="inspector"><span class="sub">Click a road, block, district, space or anchor to see why it exists.</span></div>

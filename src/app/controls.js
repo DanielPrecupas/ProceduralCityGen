@@ -4,17 +4,16 @@ import { TERRAIN_PRESETS, UNIT_PARAMS, SIZE_PRESETS } from '../core/CityModel.js
 import { STAGES } from '../core/Pipeline.js';
 import { BLOCK_PRESETS } from '../core/BlockPresets.js';
 import { DISTRICT_COLORS, ROAD_STYLE } from '../rendering/MapRenderer.js';
+import { MAP_LANDUSE, MAP_ROADS } from '../rendering/MapStyle.js';
 
-export const LAYERS = [
-  ['terrain', 'Terrain'], ['growth', 'Growth Directions'], ['anchors', 'Anchors'], ['demand', 'Demand Graph'],
-  ['major', 'Major Roads'], ['topology', 'Network Topology'], ['reinforcement', 'Network Reinforcement'], ['rail', 'Rail'],
-  ['civic', 'Civic Ensembles'], ['nodes', 'Urban Nodes'], ['places', 'Roundabouts / Squares'], ['interchanges', 'Interchanges'],
-  ['districts', 'Districts'], ['roles', 'Road Roles'], ['influence', 'Road Influence Zones'], ['reservations', 'Major Reservations'],
-  ['regimes', 'Street Regimes'], ['field', 'Direction Field'], ['local', 'Local Streets'], ['blocks', 'Blocks'],
-  ['spaces', 'Public Spaces'], ['parks', 'Park Hierarchy'], ['edges', 'Waterfront Edge Types'], ['engineering', 'Terrain Engineering'],
-  ['validation', 'Validation'],
+export const LAYER_GROUPS = [
+  ['Base', [['terrain', 'Terrain'], ['water', 'Water'], ['districts', 'Districts'], ['blocks', 'Blocks']]],
+  ['Transport', [['major', 'Major Roads'], ['local', 'Local Streets'], ['rail', 'Rail'], ['nodes', 'Urban Nodes'], ['places', 'Roundabouts / Squares'], ['interchanges', 'Interchanges'], ['roles', 'Road Roles'], ['influence', 'Road Influence Zones']]],
+  ['Places', [['spaces', 'Public Spaces'], ['parks', 'Park Hierarchy'], ['reservations', 'Major Reservations'], ['anchors', 'Anchors'], ['edges', 'Waterfront Edge Types'], ['civic', 'Civic Ensembles']]],
+  ['Debug', [['growth', 'Growth Directions'], ['demand', 'Demand Graph'], ['topology', 'Network Topology'], ['reinforcement', 'Network Reinforcement'], ['regimes', 'Street Regimes'], ['field', 'Direction Field'], ['engineering', 'Terrain Engineering'], ['validation', 'Validation']]],
 ];
-export const PLAN_VIEW = { terrain: true, anchors: true, major: true, rail: true, local: true, blocks: true, spaces: true };
+export const LAYERS = LAYER_GROUPS.flatMap(([, items]) => items);
+export const PLAN_VIEW = { terrain: true, water: true, anchors: true, major: true, rail: true, local: true, blocks: true, spaces: true };
 
 const PARAM_LABELS = {
   terrainInfluence: 'Terrain relief', civicOrder: 'Civic order', gridPreference: 'Grid preference', radialPreference: 'Radial preference',
@@ -70,9 +69,16 @@ export function initControls(app) {
   });
   $('clearHeightmap').addEventListener('click', () => { config.heightmap = null; $('heightmap').value = ''; $('clearHeightmap').disabled = true; app.generate('terrain'); });
   // layers
-  $('layers').innerHTML = LAYERS.map(([k, label]) => `<button data-layer="${k}">${label}</button>`).join('');
-  const syncLayers = () => { for (const b of $('layers').children) b.classList.toggle('on', !!app.layers[b.dataset.layer]); app.redraw(); };
-  $('layers').addEventListener('click', (e) => { const k = e.target.dataset.layer; if (k) { app.layers[k] = !app.layers[k]; syncLayers(); } });
+  $('layers').innerHTML = LAYER_GROUPS.map(([name, items], g) => `<button class="grp" data-group="${g}" title="Toggle the whole group">${name}</button><div class="layers">${items.map(([k, label]) => `<button data-layer="${k}">${label}</button>`).join('')}</div>`).join('');
+  const syncLayers = () => { for (const b of $('layers').querySelectorAll('[data-layer]')) b.classList.toggle('on', !!app.layers[b.dataset.layer]); app.redraw(); };
+  $('layers').addEventListener('click', (e) => {
+    const k = e.target.dataset.layer, g = e.target.dataset.group;
+    if (k) app.layers[k] = !app.layers[k];
+    else if (g !== undefined) { const keys = LAYER_GROUPS[g][1].map(([key]) => key), on = !keys.every((key) => app.layers[key]); for (const key of keys) app.layers[key] = on; }
+    else return;
+    syncLayers();
+  });
+  $('fullDetail').addEventListener('change', (e) => { app.fullDetail = e.target.checked; app.redraw(); });
   const syncMono = () => $('viewMono').classList.toggle('primary', !!app.layers.mono);
   $('viewPlan').addEventListener('click', () => { for (const [k] of LAYERS) app.layers[k] = !!PLAN_VIEW[k]; app.layers.mono = false; syncMono(); syncLayers(); });
   // morphology test: no district colours, only roads, rail, parks, water, blocks and major anchors
@@ -80,11 +86,15 @@ export function initControls(app) {
   $('urbanExpressway').checked = config.urbanExpressway;
   $('urbanExpressway').addEventListener('change', (e) => { config.urbanExpressway = e.target.checked; });
   $('viewAll').addEventListener('click', () => { for (const [k] of LAYERS) app.layers[k] = true; app.layers.mono = false; syncMono(); syncLayers(); });
-  $('viewFit').addEventListener('click', () => app.fit());
   syncLayers();
+  showLegend(app);
+}
+
+export function showLegend(app) {
+  const map = app.style === 'map';
   $('legend').innerHTML = [
-    ...Object.entries({ R1: 'R1 regional', R2: 'R2 arterial', R3: 'R3 boulevard', R4: 'R4 collector' }).map(([k, v]) => `<span><i style="background:${ROAD_STYLE[k].color}"></i>${v}</span>`),
-    ...Object.entries(DISTRICT_COLORS).map(([k, c]) => `<span><i class="sq" style="background:${c}"></i>${k}</span>`),
+    ...Object.entries({ R1: 'R1 regional', R2: 'R2 arterial', R3: 'R3 boulevard', R4: 'R4 collector' }).map(([k, v]) => `<span><i style="background:${map ? MAP_ROADS[k].fill : ROAD_STYLE[k].color};${map ? `outline:1px solid ${MAP_ROADS[k].casing}` : ''}"></i>${v}</span>`),
+    ...Object.entries(map ? MAP_LANDUSE : DISTRICT_COLORS).map(([k, c]) => `<span><i class="sq" style="background:${c}"></i>${k}</span>`),
   ].join('');
 }
 
@@ -118,7 +128,7 @@ function fmt(v) {
   if (v && typeof v === 'object') {
     if ('x' in v && 'y' in v) return `(${v.x.toFixed(0)}, ${v.y.toFixed(0)})`;
     if (Array.isArray(v)) return v.length > 6 ? `${v.length} items` : v.map(fmt).join(', ');
-    return Object.entries(v).map(([k, x]) => `${k}: ${fmt(x)}`).join(', ');
+    return Object.entries(v).filter(([, x]) => x !== null && x !== undefined).map(([k, x]) => `<span class="k">${esc(k)}</span> ${fmt(x)}`).join('<br>');
   }
   return esc(v);
 }
@@ -126,6 +136,9 @@ export function showInspector(objects) {
   $('inspector').innerHTML = objects.length ? objects.map((o) => {
     const lead = ['id', 'type', 'createdByStage', 'reason'].filter((k) => k in o);
     const rest = Object.keys(o).filter((k) => !lead.includes(k) && !HIDE.has(k) && o[k] !== null && o[k] !== undefined);
-    return `<div class="obj"><table>${[...lead, ...rest].map((k) => `<tr><td>${k}</td><td>${k === 'reason' ? '<b>' + fmt(o[k]) + '</b>' : fmt(o[k])}</td></tr>`).join('')}</table></div>`;
+    const tags = [o.tier != null && (typeof o.tier === 'string' ? o.tier : `tier ${o.tier}`), o.form, o.interchangeType, o.designRole, o.cls && o.cls !== o.type && o.cls, o.streetRegime, o.level != null && `level ${o.level}`, o.kind, o.engineeringType && o.engineeringType !== 'NORMAL' && o.engineeringType, o.morphology?.preset]
+      .filter(Boolean).map((t) => `<span>${esc(String(t).replace(/_/g, ' ').toLowerCase())}</span>`).join('');
+    const head = `<div class="oh"><b>${esc(o.name || String(o.type ?? 'object').replace(/_/g, ' '))}</b>${tags ? `<div class="chips">${tags}</div>` : ''}</div>`;
+    return `<div class="obj">${head}<table>${[...lead, ...rest].map((k) => `<tr><td>${k}</td><td>${k === 'reason' ? '<b>' + fmt(o[k]) + '</b>' : fmt(o[k])}</td></tr>`).join('')}</table></div>`;
   }).join('') : '<span class="sub">Nothing here.</span>';
 }

@@ -1,12 +1,12 @@
 {
   "name": "citygen",
-  "version": "2.1.0",
+  "version": "2.2.0",
   "private": true,
   "type": "module",
   "description": "Staged procedural urban planning prototype",
   "scripts": {
     "start": "node scripts/serve.mjs",
     "check": "node scripts/check.mjs meridian-1 harbour-7 delta-3",
-    "test": "node scripts/test-v21.mjs && node scripts/test-roundabouts.mjs"
+    "test": "node scripts/test-v21.mjs && node scripts/test-roundabouts.mjs && node scripts/test-v22.mjs"
   }
 }

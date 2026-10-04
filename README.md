@@ -6,7 +6,7 @@ Roads are a consequence of the plan, not the starting point.
 
 Plain JavaScript and Canvas. No dependencies, no build step.
 
-![A generated city: coast, river, arterial network, rail, districts, blocks and parks](docs/plan.png)
+![A generated city in the Map style: coast, river, road hierarchy, rail, districts and parks](docs/plan.png)
 
 ## Quick start
 
@@ -22,7 +22,7 @@ Then open http://localhost:5173.
 
 ```bash
 npm run check   # headless run of three seeds: stage log, warnings, determinism
-npm test        # regression checks over ten or more configurations
+npm test        # regression checks: network and nodes, roundabouts, map interface
 ```
 
 ## What it does
@@ -44,15 +44,44 @@ npm test        # regression checks over ten or more configurations
 
 ## Using the app
 
+**Navigating**
+
+- Drag to pan (the map glides on when released); scroll or pinch to zoom toward the cursor;
+  double-click to zoom in. Keyboard: arrow keys or WASD pan, `+` / `-` zoom, `F` fits the city,
+  `0` shows the whole map, `Esc` clears the selection.
+- **Fit city** and **Reset view** are also buttons on the map, next to **PNG**, which saves the
+  current view as an image.
+- **Jump to a place** searches centres, the station, sub-centres, university, industry, port,
+  major parks, institutions and named urban nodes, then flies there and selects it.
+- The **minimap** shows the whole map and the current view; click or drag in it to move.
+- A **scale bar** follows the zoom. None of this regenerates the city.
+
+**Reading the map**
+
+- **Map / Planning** switches between a cartographic style (pale land, cased roads coloured by
+  hierarchy, muted land use) and the planning style (district colours, strong road classes).
+  Every layer works in both.
+- Detail follows the zoom. Far out: water, the built-up area and city boundary, R1/R2 roads, rail,
+  main anchors and major parks. Mid zoom adds R3/R4 roads, district boundaries, urban nodes,
+  institutions and waterfront edges. Close in: local streets, blocks, roundabout geometry, small
+  parks and local labels. "Full detail at every zoom" turns this off.
+- **Labels** are placed by priority (centre, station, sub-centres, university / industry / port,
+  parks, nodes) and a label that would cover a more important one is left out.
+- **Layers** are grouped as Base, Transport, Places and Debug; a group title toggles the group.
+  "Plan view" and "All layers" are presets.
+- **Monochrome morphology test** hides district colour, leaving roads, rail, parks, water, blocks and
+  major anchors, always at full detail.
+- **Click** a road, rail line, node, district, park, reservation, block or anchor to inspect it: id,
+  type, stage, reason and its metadata (tier, design role, morphology, ...). The inspector is
+  read-only. Click a warning to jump to it.
+
+**Changing the plan**
+
 - **Generate city** runs the whole pipeline; **New seed** picks another city.
 - **Regenerate from stage** applies edited parameters from that stage onward (terrain changes need a
   full generate).
 - **Drag an anchor** (station, civic centre, port, ...) and the plan is rebuilt from the demand graph
   onward with the anchor kept where you put it.
-- **Stage layers** on the right show each stage's output; "Plan view" and "All layers" are presets.
-- **Monochrome morphology test** hides district colour, leaving roads, rail, parks, water, blocks and
-  major anchors.
-- **Click** a road, block, district, space or anchor to inspect it. Click a warning to jump to it.
 - An optional **heightmap image** replaces the procedural terrain (dark is low; below about 22% grey
   is water).
 
@@ -89,13 +118,18 @@ src/
   core/        CityModel, Pipeline, seeded RNG, geometry, rasters, planar RoadGraph, block presets
   algorithms/  least-cost routing, tensor field, streamline road growth, polygon and crossing helpers
   planners/    one file per pipeline stage
-  rendering/   MapRenderer (plan) and DebugRenderer (stage layers); read-only over the model
-  app/         controls, pan/zoom, inspector, anchor dragging
+  rendering/   read-only over the model:
+               MapRenderer (planning style, cached paths), MapStyle (cartographic style),
+               Lod (what to draw at each zoom, width interpolation), LabelLayer (label
+               priority and collision, jump list), DebugRenderer (stage layers)
+  app/         main (app state, inspector, anchor dragging), viewport (pan / zoom animation),
+               mapChrome (search, minimap, scale bar, export), controls (side panels)
 scripts/
   serve.mjs              static server for npm start
   check.mjs              headless run and determinism check
   test-v21.mjs           network, node, reservation-access and rail checks
   test-roundabouts.mjs   roundabout geometry and eligibility checks
+  test-v22.mjs           map interface: detail levels, widths, labels, jump list, model untouched
 ```
 
 ## How the main pieces work
@@ -173,9 +207,22 @@ scripts/
   district parks go to large districts without one in reach; neighbourhood parks are placed where
   they bring the most unserved housing within 400 m; pocket greens use remnant blocks.
 
+### Map rendering
+
+- **Geometry never changes for readability.** Only stroke widths, symbol sizes and label visibility
+  depend on zoom. A road is drawn at a cartographic width interpolated between zoom stops, or at
+  its physical width once that is larger.
+- **Level of detail** is three bands on pixels-per-metre (`rendering/Lod.js`). Blocks and local
+  streets are also bucketed into 1 km tiles, and only tiles on screen are drawn.
+- **Labels** are drawn in screen space, greedily by priority, each trying a few positions around
+  its symbol; area names wait until the area is larger than the name.
+
 ## Known simplifications
 
-- **Terrain is a 50 m raster.** Shorelines and district outlines show stair-steps.
+- **Terrain is a 50 m raster.** Shorelines and district outlines show stair-steps, most visibly
+  when zoomed in close.
+- **Roads have no names**, so there are no street labels; the far-zoom built-up fill uses the
+  raster-traced district outlines. There is no tile engine and no SVG export.
 - **Turn penalty in routing** uses the arrival direction of the best path per cell, not a full
   (cell × heading) state space.
 - **Planarisation** splits at crossings and snaps nodes within 6 m; collinear overlaps are reported
