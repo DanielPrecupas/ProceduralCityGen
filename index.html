@@ -1,0 +1,92 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>CityGen - staged procedural urban planning</title>
+<style>
+  :root { --bg: #1b1f24; --panel: #23282f; --line: #343b45; --text: #dfe5ec; --muted: #94a0ad; --accent: #e0a53b; }
+  * { box-sizing: border-box; }
+  html, body { margin: 0; height: 100%; background: var(--bg); color: var(--text); font: 13px/1.4 system-ui, -apple-system, "Segoe UI", sans-serif; }
+  #app { display: grid; grid-template-columns: 300px 1fr 320px; height: 100vh; }
+  aside { background: var(--panel); overflow-y: auto; padding: 12px 14px 30px; border-color: var(--line); border-style: solid; border-width: 0; }
+  aside.left { border-right-width: 1px; } aside.right { border-left-width: 1px; }
+  h1 { font-size: 15px; margin: 0 0 2px; letter-spacing: 0.02em; }
+  h2 { font-size: 11px; text-transform: uppercase; letter-spacing: 0.08em; color: var(--muted); margin: 18px 0 8px; border-bottom: 1px solid var(--line); padding-bottom: 4px; }
+  .sub { color: var(--muted); font-size: 12px; margin: 0; }
+  label.row { display: grid; grid-template-columns: 118px 1fr 34px; align-items: center; gap: 6px; margin: 5px 0; }
+  label.row.wide { grid-template-columns: 118px 1fr; }
+  input[type=range] { width: 100%; accent-color: var(--accent); }
+  input[type=text], input[type=number], select { width: 100%; background: #171b20; color: var(--text); border: 1px solid var(--line); border-radius: 4px; padding: 4px 6px; font: inherit; }
+  output { text-align: right; color: var(--muted); font-variant-numeric: tabular-nums; }
+  button { background: #303844; color: var(--text); border: 1px solid #45505e; border-radius: 5px; padding: 6px 10px; font: inherit; cursor: pointer; }
+  button:hover { background: #3a4553; } button:disabled { opacity: 0.5; cursor: default; }
+  button.primary { background: var(--accent); color: #1b1f24; border-color: var(--accent); font-weight: 700; }
+  .btns { display: flex; gap: 6px; flex-wrap: wrap; margin: 6px 0; } .btns > * { flex: 1; }
+  .layers { display: grid; grid-template-columns: 1fr 1fr; gap: 5px; }
+  .layers button { text-align: left; padding: 5px 8px; font-size: 12px; opacity: 0.55; }
+  .layers button.on { opacity: 1; border-color: var(--accent); box-shadow: inset 3px 0 0 var(--accent); }
+  #stage { position: relative; overflow: hidden; background: #2a2f36; }
+  canvas { display: block; width: 100%; height: 100%; cursor: grab; }
+  #status { position: absolute; left: 10px; bottom: 10px; right: 10px; width: fit-content; background: rgba(27,31,36,0.85); padding: 5px 9px; border-radius: 5px; font-size: 12px; pointer-events: none; }
+  #legend { font-size: 11px; color: var(--muted); display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 2px 8px; margin-top: 8px; }
+  #legend i { display: inline-block; width: 16px; height: 4px; vertical-align: middle; margin-right: 5px; border-radius: 2px; }
+  #legend i.sq { height: 9px; width: 9px; }
+  .log div, .warn { padding: 4px 0; border-bottom: 1px solid var(--line); font-size: 12px; }
+  .log b { font-weight: 600; } .log span { color: var(--muted); } .log em { float: right; color: var(--muted); font-style: normal; font-variant-numeric: tabular-nums; }
+  .warn { cursor: pointer; } .warn:hover { background: #2b323b; }
+  .sev { display: inline-block; width: 8px; height: 8px; border-radius: 50%; margin-right: 6px; }
+  .sev.error { background: #d11a2a; } .sev.warning { background: #f08c00; } .sev.info { background: #1c7ed6; }
+  .chips span { display: inline-block; background: #303844; border-radius: 10px; padding: 1px 8px; margin: 0 4px 4px 0; font-size: 11px; }
+  #inspector { font-size: 12px; } #inspector table { border-collapse: collapse; width: 100%; } #inspector td { padding: 2px 4px 2px 0; vertical-align: top; word-break: break-word; }
+  #inspector td:first-child { color: var(--muted); white-space: nowrap; width: 92px; } #inspector .obj { margin-bottom: 10px; }
+  .note { color: #e8c37a; font-size: 12px; margin: 4px 0; }
+</style>
+</head>
+<body>
+<div id="app">
+  <aside class="left">
+    <h1>CityGen</h1>
+    <p class="sub">Staged procedural urban planning prototype</p>
+    <div class="btns" style="margin-top:12px"><button id="generate" class="primary">Generate city</button><button id="newSeed">New seed</button></div>
+    <div class="btns"><select id="fromStage"></select><button id="regen">Regenerate from stage</button></div>
+    <div id="notes"></div>
+
+    <h2>City brief</h2>
+    <label class="row wide">Seed <input type="text" id="seed"></label>
+    <label class="row wide">City size <select id="citySize"><option value="small">Small</option><option value="medium">Medium</option><option value="major">Major</option></select></label>
+    <label class="row wide">Founding population <input type="number" id="targetPopulation" step="10000"></label>
+    <label class="row wide">Terrain <select id="terrainPreset"></select></label>
+    <label class="row wide">Block preset <select id="blockPreset"></select></label>
+    <label class="row wide">Heightmap (optional) <input type="file" id="heightmap" accept="image/*"></label>
+    <div class="btns"><button id="clearHeightmap" disabled>Use procedural terrain</button></div>
+
+    <h2>Planning parameters</h2>
+    <div id="sliders"></div>
+    <label class="row wide">Urban expressway <span><input type="checkbox" id="urbanExpressway"> R1 may reach the station</span></label>
+    <p class="sub">Terrain parameters apply on "Generate city". Others can be applied with "Regenerate from stage". Drag an anchor on the map to re-plan from the demand graph onward.</p>
+  </aside>
+
+  <div id="stage">
+    <canvas id="map"></canvas>
+    <div id="status">Starting...</div>
+  </div>
+
+  <aside class="right">
+    <h2 style="margin-top:0">Stage layers</h2>
+    <div class="layers" id="layers"></div>
+    <div class="btns"><button id="viewPlan">Plan view</button><button id="viewAll">All layers</button><button id="viewFit">Fit</button></div>
+    <div class="btns"><button id="viewMono">Monochrome morphology test</button></div>
+    <div id="legend"></div>
+    <h2>Inspector <span style="text-transform:none;letter-spacing:0">(click the map)</span></h2>
+    <div id="inspector"><span class="sub">Click a road, block, district, space or anchor to see why it exists.</span></div>
+    <h2>Pipeline</h2>
+    <div class="log" id="log"></div>
+    <h2>Validation</h2>
+    <div class="chips" id="valSummary"></div>
+    <div id="warnings"></div>
+  </aside>
+</div>
+<script type="module" src="src/app/main.js"></script>
+</body>
+</html>
