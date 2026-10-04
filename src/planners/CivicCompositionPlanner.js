@@ -54,7 +54,7 @@ export function planCivicComposition(model, ctx) {
   const civic = model.anchors.find((a) => a.type === 'civic'), station = model.anchors.find((a) => a.type === 'station');
   const gestures = [], reservations = [], newRoads = [];
   const axisAngle = civic && station ? Math.atan2(station.position.y - civic.position.y, station.position.x - civic.position.x) : 0;
-  const s = (0.8 + 0.5 * cfg.civicOrder) * { small: 0.8, medium: 0.9, major: 1, metropolis: 1.1 }[cfg.citySize];
+  const s = (0.8 + 0.5 * cfg.civicOrder) * { small: 0.8, medium: 0.9, major: 1, metropolis: 1.1, megacity: 1.15 }[cfg.citySize];
   const budget = model.brief.gestureBudget;
 
   const reserve = (kind, polygon, reason, anchor) => {

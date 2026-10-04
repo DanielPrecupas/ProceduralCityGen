@@ -24,7 +24,8 @@ export function planBrief(model, ctx) {
     urbanRadius: Math.sqrt(urbanArea / Math.PI),
     scale: Math.sqrt(urbanArea / 45e6), // 1.0 for the default ~45 km2 city; scales anchor spacing
     gestureBudget: Math.max(1, Math.min(preset.gestureBudget, Math.round(1 + cfg.civicOrder * 2))),
-    secondaryCentres: Math.min(preset.maxSecondary, Math.round(cfg.polycentricity * 3.2)),
+    // in a region the number of sub-centres is derived from the settlement's size and demand, not from a quota
+    secondaryCentres: cfg.regionalContext?.institutions ? cfg.regionalContext.institutions.subCentres : Math.min(preset.maxSecondary, Math.round(cfg.polycentricity * 3.2)),
   };
   ctx.log(`${population.toLocaleString()} people on ${(urbanArea / 1e6).toFixed(1)} km2, reserve for ${eventualPopulation.toLocaleString()}`);
 }

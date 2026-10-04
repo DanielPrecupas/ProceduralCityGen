@@ -10,14 +10,14 @@
 // No ring is drawn by default: tangentials appear only between neighbours that lack a connection.
 
 import { record } from '../core/CityModel.js';
-import { dist, resamplePolyline } from '../core/Geometry.js';
+import { dist, clamp, resamplePolyline } from '../core/Geometry.js';
 import { labelComponents } from '../core/Raster.js';
 import { MinHeap } from '../algorithms/LeastCostPath.js';
 import { routeMajorNetwork } from './MajorNetworkPlanner.js';
 
 const STAGE = 'reinforcement';
 const STRONG = new Set(['R1', 'R2', 'R3']);
-const BUDGET = { small: 3, medium: 5, major: 10, metropolis: 16 };
+const BUDGET = { small: 3, medium: 5, major: 10, metropolis: 16, megacity: 22 };
 
 // Abstract graph of the strong network: nodes are road ends, edges are road sections.
 function buildGraph(model) {
@@ -172,11 +172,41 @@ export function planReinforcement(model, ctx) {
   const detour = (a, b) => Math.min(9, before.netDist(a, b) / dist(a.position, b.position));
   const links = [], taken = new Set();
   const budget = BUDGET[cfg.citySize];
+  // USEFULNESS. Redundancy is not importance: a link is added for what it carries or relieves,
+  // not because it closes a polygon. Each candidate is scored before it is accepted.
+  const rejected = [], pop = Math.max(1, model.brief.population), RPm = model.regionalPlan;
+  const weightOf = (a) => clamp(((a.jobs || 0) + (a.visitors || 0) + (a.residents || 0)) / (0.12 * pop), 0, 1);
+  const utilityOf = (a, b, kind) => {
+    const d = dist(a.position, b.position), r = detour(a, b), lowA = a.tier >= 4, lowB = b.tier >= 4;
+    let outside = 0, steps = Math.max(2, Math.round(d / 100));
+    for (let s = 0; s <= steps; s++) { const i = R.index(a.position.x + ((b.position.x - a.position.x) * s) / steps, a.position.y + ((b.position.y - a.position.y) * s) / steps); if (i >= 0 && !T.water[i] && !RPm.urbanMask[i]) outside++; }
+    const through = a.type === 'gateway' || b.type === 'gateway';
+    const c = {
+      detourReduction: clamp((r - 1) / 1.5, 0, 1),
+      throughDemand: kind === 'bypass' ? 1 : through ? 0.6 : 0,
+      centreAccess: Math.max(lowA ? 0.3 * a.importance : a.importance, lowB ? 0.3 * b.importance : b.importance),
+      tripDemand: Math.sqrt(weightOf(a) * weightOf(b)),
+      bottleneckRelief: kind === 'additional_bridge' || kind === 'second_access' ? 1 : 0,
+      continuity: (before.anchorDegree[a.id] ?? 0) + (before.anchorDegree[b.id] ?? 0) > 0 ? 1 : 0,
+      closesPolygonOnly: kind === 'tangential_arterial' ? (lowA && lowB ? 1 : lowA || lowB ? 0.6 : 0.3) * clamp(d / 3200, 0.4, 1) : 0,
+      parallelsExistingRoute: r < 1.25 && kind !== 'additional_bridge' ? 1 : 0,
+      emptyDetour: kind === 'bypass' ? 0 : outside / (steps + 1),
+    };
+    const utility = 0.28 * c.detourReduction + 0.22 * c.throughDemand + 0.24 * c.centreAccess + 0.2 * c.tripDemand + 0.3 * c.bottleneckRelief + 0.08 * c.continuity - 0.36 * c.closesPolygonOnly - 0.3 * c.parallelsExistingRoute - 0.3 * c.emptyDetour;
+    for (const key of Object.keys(c)) c[key] = Math.round(c[key] * 100) / 100;
+    return { utility: Math.round(utility * 100) / 100, c };
+  };
   const add = (a, b, kind, reason, opts = {}) => {
     const key = a.id < b.id ? a.id + b.id : b.id + a.id;
     if (links.length >= budget || taken.has(key)) return false;
     taken.add(key);
-    links.push(record(ctx.id('reinf'), 'reinforcement_link', STAGE, reason, { a: a.id, b: b.id, cls: 'R2', demand: 0.5, ceremonial: null, reinforcement: kind, distance: dist(a.position, b.position), ...opts }));
+    const { utility, c } = utilityOf(a, b, kind);
+    if (utility < 0.3) {
+      const why = c.closesPolygonOnly >= 0.36 && c.centreAccess < 0.4 ? 'would_only_close_a_large_polygon_between_minor_places' : c.parallelsExistingRoute ? 'parallels_an_existing_route_without_serving_another_purpose' : c.emptyDetour > 0.4 ? 'long_run_across_empty_land_for_little_traffic' : 'too_little_demand_or_relief_to_justify_a_major_road';
+      rejected.push(record(ctx.id('reinfrej'), 'rejected_reinforcement_link', STAGE, reason, { a: a.id, b: b.id, reinforcement: kind, utility, utilityComponents: c, rejectedReason: why }));
+      return false;
+    }
+    links.push(record(ctx.id('reinf'), 'reinforcement_link', STAGE, reason, { a: a.id, b: b.id, cls: 'R2', demand: 0.5, ceremonial: null, reinforcement: kind, distance: dist(a.position, b.position), utility, utilityComponents: c, rejectedReason: null, ...opts }));
     return true;
   };
 
@@ -239,10 +269,10 @@ export function planReinforcement(model, ctx) {
   const after = links.length ? analyseNetwork(model) : before;
   for (const r of model.roads) if (after.betweenness.has(r.id)) r.betweenness = after.betweenness.get(r.id);
   const strip = ({ graph, netDist, betweenness, ...rest }) => rest; // keep only plain data on the model
-  model.reinforcement = { links, before: strip(before), after: strip(after) };
+  model.reinforcement = { links, rejected, before: strip(before), after: strip(after) };
   const kinds = {};
   for (const l of links) kinds[l.reinforcement] = (kinds[l.reinforcement] || 0) + 1;
-  ctx.log(`${links.length} links added (${Object.entries(kinds).map(([k, v]) => `${v} ${k}`).join(', ') || 'network already redundant'}); independent loops ${before.cyclomatic} -> ${after.cyclomatic}; articulation points ${before.articulation.length} -> ${after.articulation.length}; crossings ${after.crossings.count}/${after.crossings.required}; freight through core ${before.freight.filter((f) => f.through).length} -> ${after.freight.filter((f) => f.through).length}`);
+  ctx.log(`${rejected.length} candidate links rejected as not useful enough; ${links.length} links added (${Object.entries(kinds).map(([k, v]) => `${v} ${k}`).join(', ') || 'network already redundant'}); independent loops ${before.cyclomatic} -> ${after.cyclomatic}; articulation points ${before.articulation.length} -> ${after.articulation.length}; crossings ${after.crossings.count}/${after.crossings.required}; freight through core ${before.freight.filter((f) => f.through).length} -> ${after.freight.filter((f) => f.through).length}`);
 }
 
 export function resetReinforcement(m) {

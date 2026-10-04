@@ -77,7 +77,7 @@ export function planDemand(model, ctx) {
   // opposite each other, routed around the core (a bypass, or a route that skirts the city).
   // It is a different thing from an avenue: no frontage, no local street joins it.
   const gates = byType('gateway');
-  const wantBypass = cfg.bypass === 'always' || (cfg.bypass === 'auto' && (cfg.citySize === 'major' || cfg.citySize === 'metropolis' || (cfg.citySize === 'medium' && B.population >= 220000)));
+  const wantBypass = cfg.bypass === 'always' || (cfg.bypass === 'auto' && (cfg.citySize === 'major' || cfg.citySize === 'metropolis' || cfg.citySize === 'megacity' || (cfg.citySize === 'medium' && B.population >= 220000)));
   let bypass = null;
   if (wantBypass && gates.length >= 2 && civic) {
     let best = null;

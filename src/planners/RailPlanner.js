@@ -249,7 +249,7 @@ export function planRail(model, ctx) {
   // --- further approach lines: a larger city is reached by more than one main line. Each extra
   // regional approach is routed from its portal and merges, tangentially, into the main line a
   // little way out from the station, so that several lines converge on one throat.
-  const sizeRank = { small: 0, medium: 1, major: 2, metropolis: 3 }[model.config.citySize] ?? 1;
+  const sizeRank = { small: 0, medium: 1, major: 2, metropolis: 3, megacity: 3 }[model.config.citySize] ?? 1;
   const extraWanted = model.config.regionalContext?.railApproaches != null ? Math.max(0, model.config.regionalContext.railApproaches - 2) : sizeRank >= 3 ? 2 : sizeRank >= 2 ? 1 : 0;
   let extraLines = 0;
   if (pair && branches.length) {
@@ -268,8 +268,11 @@ export function planRail(model, ctx) {
   {
     const through = branches.length === 2, halfLen = dist(throat.e1, throat.e2) / 2;
     const approaches = rail.lines.filter((l) => l.railClass !== 'RAIL_FREIGHT');
-    const N = Math.min(12, [2, 4, 6, 10][sizeRank] + 2 * extraLines), GAP = 7.5;
-    const platformHalf = Math.min(halfLen * 0.62, 210 + 25 * sizeRank), ux = throat.px, uy = throat.py, nx = -uy, ny = ux;
+    // in a region the station is sized by the settlement's rank: hub, main station, simple station, halt
+    const stationClass = model.config.regionalContext?.institutions?.stationClass || null;
+    const stationRank = stationClass ? { HUB: 3, MAIN: 2, SIMPLE: 1, STOP: 0 }[stationClass] ?? sizeRank : sizeRank;
+    const N = stationClass === 'STOP' ? 2 : stationClass === 'HUB' ? Math.min(14, 12 + 2 * extraLines) : Math.min(stationClass ? 10 : 12, [2, 4, 6, 10][stationRank] + 2 * extraLines), GAP = 7.5;
+    const platformHalf = Math.min(halfLen * 0.62, 210 + 25 * stationRank), ux = throat.px, uy = throat.py, nx = -uy, ny = ux;
     const at = (u, v) => ({ x: throat.q.x + ux * u + nx * v, y: throat.q.y + uy * u + ny * v });
     const ease = (t) => 0.5 - 0.5 * Math.cos(Math.PI * Math.min(1, Math.max(0, t)));
     const tracks = [], platforms = [];

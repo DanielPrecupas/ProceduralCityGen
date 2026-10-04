@@ -12,7 +12,7 @@ It also generates **regions**: several settlements, each a full city of its own,
 terrain and tied together by intercity roads and regional rail that are planned before any
 settlement's streets.
 
-![A generated region: settlements with their boundaries, interface zones, regional roads and rail](docs/region.png)
+![A generated region: settlements with their boundaries, regional roads and rail](docs/region.png)
 
 ## Quick start
 
@@ -56,8 +56,11 @@ npm run realism # measure cities and compare them with real ones (see docs/REALI
   [docs/REALISM_CALIBRATION_REPORT.md](docs/REALISM_CALIBRATION_REPORT.md); the biases it found
   were then corrected and re-measured in [docs/REALISM_BETA_CHECK.md](docs/REALISM_BETA_CHECK.md).
 - **Regions.** A regional population (700 thousand to 10 million) is shared out over settlements
-  of different scale and role, which may stay separate, nearly touch, or grow together while
-  keeping their own centre, street grid and administrative identity.
+  by a rank-size hierarchy, so one city usually dominates. Universities, hospitals, stadiums,
+  station size and sub-centres are allocated by the region, not given to every town. Settlements
+  may stay separate, nearly touch, or grow together: their streets are then joined selectively
+  across the shared boundary while each keeps its own centre, street grid, growth pattern and
+  administrative identity.
 
 ## Using the app
 
@@ -99,10 +102,11 @@ npm run realism # measure cities and compare them with real ones (see docs/REALI
 **Regions**
 
 - **City / Region** at the top of the left panel switches mode. In Region mode choose a regional
-  population, a seed and a structure (one dominant city, balanced, polycentric), then
-  **Generate region**.
+  population, a seed, a structure (dominant core, monocentric, polycentric, twin core, linear
+  corridor, or auto), coast, and how dense the regional roads and rail are, then
+  **Generate region**. City-only controls are hidden in this mode.
 - The regional map shows settlement boundaries, centres, stations, regional highways and
-  intercity roads, regional rail, protected land and interface zones. Zoomed out, most local
+  intercity roads, regional rail, protected land and the streets that cross shared boundaries. Zoomed out, most local
   streets are hidden; zoomed in, every settlement is drawn in full.
 - **Click a settlement** to inspect its scale, role, population, planning profile, relationships
   with its neighbours, regional roads and rail, station, and the reason it is where it is.
@@ -153,8 +157,8 @@ src/
   core/        CityModel, Pipeline, seeded RNG, geometry, rasters, planar RoadGraph, block presets
   algorithms/  least-cost routing, tensor field, streamline road growth, polygon and crossing helpers
   planners/    one file per pipeline stage
-  region/      RegionGen (regional terrain, settlement system, sites, infrastructure, interface
-               zones, settlement generation) and PlanningProfiles
+  region/      RegionGen (regional terrain, settlement system, sites, infrastructure, seam
+               behaviour, settlement generation), SeamStitcher and PlanningProfiles
   analysis/    realism harness: Metrics (the shared schema), NetworkIO (GeoJSON / GraphML /
                network JSON readers), ReferenceCityAnalyzer, GeneratedCityAnalyzer, Compare
   rendering/   read-only over the model:
@@ -288,18 +292,18 @@ calibration/             citygen-batch.json (measured generated cities), summary
   into the approach, so several lines converge on one throat.
 
 **RegionGen** (`src/region/RegionGen.js`): a `RegionModel` holds terrain, a regional plan,
-settlements, regional roads and rail, interface zones, protected areas and statistics. CityGen is
+settlements, regional roads and rail, seam connections, protected areas and statistics. CityGen is
 reused unchanged as the settlement generator; each settlement is its own `CityModel`.
 
 | Step | What it produces |
 |---|---|
 | 1. Regional terrain | one elevation function for the region (34–104 km square); each settlement's terrain is a window of it |
-| 2. Regional plan | population shared by rank-size into settlements: scale (`PRIMARY_CITY` … `LOCAL_TOWN`), unequal centre strength |
+| 2. Regional plan | a population profile (`DOMINANT_CORE`, `MONOCENTRIC`, `POLYCENTRIC`, `TWIN_CORE`, `LINEAR_CORRIDOR`) and a rank-size list of settlements with a tail of towns: `rank`, `regionalImportance`, scale (`PRIMARY_CITY` … `LOCAL_TOWN`), unequal centre strength |
 | 3. Sites | position, founding and growth boundary, influence radius, orientation, planning profile, role (`MIXED`, `INDUSTRIAL`, `PORT`, …), relation to neighbours |
-| 4. Regional infrastructure | intercity roads and regional highways between settlements, a main rail line with branches and freight corridors, port and airport anchors, protected uplands and river corridors |
-| 5. Interface zones | what the land between neighbours becomes: `URBAN_INFILL`, `COMMERCIAL_CORRIDOR`, `INDUSTRIAL_BUFFER`, `GREEN_WEDGE`, `TRANSPORT_CORRIDOR`, `MIXED_EDGE`, `HARD_INFRASTRUCTURE_EDGE` |
+| 4. Regional infrastructure | a road tree reaching every settlement plus direct links that pass a usefulness score, a main rail line with branches and freight corridors, port and airport anchors, protected land; then the regional allocation of institutions and each settlement's macro-growth pattern |
+| 5. Seam behaviour | how open each shared boundary is: `POROUS`, `MODERATE`, `HARD` or `BARRIER`. This is behaviour, not a zone on the map |
 | 6. Settlements | CityGen per settlement, given its terrain window, the boundary with each neighbour, where regional roads and rail arrive, and its role |
-| 7. Stitching | regional lines end on the settlements' own gateways and rail portals |
+| 7. Stitching | regional lines end on the settlements' own gateways and rail portals; street ends facing a shared boundary are matched across it (`SeamStitcher.js`) |
 
 - **Relations.** Two settlements are `SEPARATE`, `NEAR_TOUCHING` or `GLUED`; three or more glued
   together form a `CONTINUOUS_METROPOLITAN` group. Glued settlements are never merged: each
@@ -307,6 +311,26 @@ reused unchanged as the settlement generator; each settlement is its own `CityMo
   and `administrativeId`. `urbanContinuityGroup` and `metroRegionId` are stored separately.
 - **Roads across a boundary** are handed over at the seam: both settlements get a gateway at the
   same point.
+- **Streets across a boundary.** Avenues are matched first, then connectors, then a share of
+  local streets set by the seam mode. A link is straight, a short curve, or a T-junction on the
+  neighbour's first street; badly aligned streets are left apart and most local streets simply
+  end at the old boundary. Each link records both settlements, both administrative ids, the
+  class on each side and a `continuityReason`; avenues that meet form a cross-boundary corridor.
+- **Hierarchy.** The primary city may be far larger than the rest (an internal 28 km `megacity`
+  size holds up to 4.2 million). Institutions follow rank: the region works out demand for
+  universities, hospitals, stadiums and cultural complexes and hands them down; stations are a
+  hub, main station, simple station, halt or none; sub-centres run from none in a town to eight
+  in the primary city.
+- **Macro growth.** Each settlement has a `macroGrowthPattern` and `macroGrowthReason`
+  (`CONCENTRIC`, `GRID_EXPANSION`, `RADIAL_CORRIDOR`, `MULTINODAL`, `ASYMMETRIC`,
+  `BIDIRECTIONAL`, `LINEAR`) derived from coast, river, steep ground, regional roads, neighbours,
+  size and planning profile. A city may stretch far along one axis only where its pattern or the
+  terrain gives a reason.
+- **Useful links only.** Reinforcement links inside a city and direct links between cities are
+  scored (detour saved, demand, centre access, bottleneck relief, minus polygon-closing and empty
+  runs). Rejected candidates are kept with a `rejectedReason`.
+- **An opened settlement** shows its inherited values read-only; city controls cannot regenerate
+  it in place.
 - **A settlement a regional road runs through** decides for itself, in its own plan, whether
   that road bypasses, skirts or crosses it.
 
@@ -381,9 +405,10 @@ reused unchanged as the settlement generator; each settlement is its own `CityMo
 - **Roundabouts** have ring and arm geometry but no lane-level detail.
 - **Rail** is a smoothed centre line, not engineered track: no transition curves, cant or
   gradients profile, and some lines cannot meet their radius on difficult terrain.
-- **Regions are a first version.** Settlements are capped at 1.6 million each; very large
-  regions are many settlements, not one huge city. Interface zones are classified and drawn but
-  nothing is built in them. The regional terrain is smooth (250 m cells), regional roads and rail
+- **Regions are a first version.** A settlement is capped at 4.2 million. Streets joined across
+  a boundary are regional objects drawn in Region view; an opened settlement's own city view
+  does not show them, and some touching pairs still have a gap with no connection. A primary
+  city has one large station, not several. The regional terrain is smooth (250 m cells), regional roads and rail
   between settlements are simple fitted lines, and a settlement's own road and rail network is
   not re-planned after its neighbours exist.
 - **The station complex is drawn, not operated:** tracks are not part of the street graph, there

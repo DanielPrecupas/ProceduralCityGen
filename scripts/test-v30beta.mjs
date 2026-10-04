@@ -69,11 +69,13 @@ check('across the test cities: station size follows city size', Math.max(...tall
 // ---------------------------------------------------------------- Part B: regions
 const rel = { GLUED: 0, NEAR_TOUCHING: 0, SEPARATE: 0 }, zoneTypes = new Set(), roles = new Set(), scales = new Set();
 let continuous = 0;
+const regions = [];
 for (const [seed, P] of [['region-1', 1000000], ['region-2', 2000000], ['region-7', 700000]]) {
   const tag = `[${seed} ${P / 1e6}M]`, t0 = performance.now(), r = generateRegionSync({ seed, regionalPopulationTarget: P });
   const S = r.settlements, secs = ((performance.now() - t0) / 1000).toFixed(1);
+  regions.push(r);
   for (const x of r.relations) rel[x.relation]++;
-  for (const z of r.interfaceZones) zoneTypes.add(z.type);
+  for (const x of r.relations) if (x.seamMode) zoneTypes.add(x.seamMode);
   for (const s of S) { roles.add(s.role); scales.add(s.scale); }
   if (S.some((s) => s.continuity === 'CONTINUOUS_METROPOLITAN')) continuous++;
   check(`${tag} several settlements share the regional population; no single model holds it all`, S.length >= 4 && Math.abs(r.stats.allocatedPopulation - P) < 0.06 * P && S[0].populationTarget < 0.6 * P && S.every((s) => SETTLEMENT_SCALES.includes(s.scale) && SETTLEMENT_ROLES.includes(s.role)), `${S.length} settlements in ${secs} s; primary ${Math.round(S[0].populationTarget / 1000)}k`);
@@ -104,7 +106,10 @@ for (const [seed, P] of [['region-1', 1000000], ['region-2', 2000000], ['region-
     }
   }
   check(`${tag} neighbouring settlements keep to their own side of the shared boundary (seam preserved)`, crossed === 0, `${glued / 2} glued pair(s), ${crossed} blocks across a boundary`);
-  check(`${tag} interface zones describe the land between neighbours without blending their grids`, r.interfaceZones.every((z) => INTERFACE_TYPES.includes(z.type) && z.preserveSeam && z.streetGridsBlended === false && z.reason && z.polygon.length === 4) && (r.relations.filter((x) => x.gap <= 4000).length === r.interfaceZones.length), `${r.interfaceZones.length} zones`);
+  check(`${tag} no interface zones: neighbours are joined by streets, and every connection keeps both identities`, r.interfaceZones.length === 0 && r.seamConnections.every((c) => c.crossSettlement && c.fromSettlement !== c.toSettlement && c.fromAdministrativeId !== c.toAdministrativeId && c.continuityReason && c.points.length >= 2), `${r.seamConnections.length} streets across ${r.relations.filter((x) => x.seamMode).length} shared boundaries, ${r.metropolitanCorridors.length} cross-boundary corridors`);
+  { const glued = r.relations.filter((x) => x.relation === 'GLUED' && x.seamStats && x.seamStats.mode !== 'BARRIER');
+    check(`${tag} glued settlements are joined selectively: several streets cross, most stop at the boundary`, glued.every((x) => x.seamStats.connections >= 2 && x.seamStats.connections < 0.6 * x.seamStats.streetEndsFacingTheBoundary), glued.map((x) => `${x.seamStats.mode.toLowerCase()} ${x.seamStats.connections}/${x.seamStats.streetEndsFacingTheBoundary}`).join(', ') || 'no glued pair');
+    check(`${tag} every settlement has a macro-growth pattern with a reason`, S.every((s) => s.macroGrowthPattern && s.macroGrowthReason), [...new Set(S.map((s) => s.macroGrowthPattern))].join(' ').toLowerCase()); }
   // stations scale with the settlement
   const prim = S[0].model.rail?.stationComplex, small = S.filter((s) => s.summary.hasStation).sort((a, b) => a.populationTarget - b.populationTarget)[0];
   check(`${tag} the primary city's station is larger than a small city's`, prim && small && prim.platformTracks >= small.summary.stationTracks && prim.platformTracks >= 4, `primary ${prim?.platformTracks} tracks (${prim?.convergingLines} converging lines), smallest station ${small?.summary.stationTracks}`);
@@ -113,11 +118,32 @@ for (const [seed, P] of [['region-1', 1000000], ['region-2', 2000000], ['region-
   check(`${tag} same seed -> same region and same settlements`, again.settlements.length === S.length && S.every((s, i) => fingerprint(s.model) === fingerprint(again.settlements[i].model) && s.position.x === again.settlements[i].position.x) && JSON.stringify(again.stats) === JSON.stringify(r.stats));
 }
 check('across the test regions: settlements are separate, near-touching and glued', rel.SEPARATE > 0 && rel.NEAR_TOUCHING > 0 && rel.GLUED > 0, JSON.stringify(rel));
-check('across the test regions: several interface types, roles and scales occur', zoneTypes.size >= 3 && roles.size >= 3 && scales.size >= 3, `${[...zoneTypes].join(' ')} | ${[...roles].join(' ')} | ${[...scales].join(' ')}`);
+check('across the test regions: several seam modes, roles and scales occur', zoneTypes.size >= 2 && roles.size >= 3 && scales.size >= 3, `${[...zoneTypes].join(' ')} | ${[...roles].join(' ')} | ${[...scales].join(' ')}`);
 // the population range is supported at the planning level (no settlements generated here)
 for (const P of [700000, 1000000, 2000000, 5000000, 10000000]) {
   const r = generateRegionSync({ seed: 'scale-test', regionalPopulationTarget: P }, { settlements: false });
   check(`regional plan for ${P / 1e6}M`, r.settlements.length >= 3 && Math.abs(r.stats.allocatedPopulation - P) < 0.08 * P && r.regionalRoads.length >= r.settlements.length - 1, `${r.settlements.length} settlements placed, ${r.terrain.size / 1000} km region, largest continuous group ${r.stats.largestContinuousGroup}, allocated ${(r.stats.allocatedPopulation / 1e6).toFixed(2)}M`);
+}
+
+// Beta finishing pass: settlement hierarchy, regional allocation of institutions, footprints
+for (const P of [1000000, 5000000, 10000000]) {
+  const r = generateRegionSync({ seed: 'hier-test', regionalPopulationTarget: P, structure: 'DOMINANT_CORE' }, { settlements: false }), S = r.settlements, I = (s) => s.institutions;
+  const pops = S.map((s) => s.populationTarget);
+  check(`${P / 1e6}M dominant core: the primary city dominates and sizes fall with rank`, r.populationProfile === 'DOMINANT_CORE' && pops[0] >= 0.3 * P && pops[1] <= 0.6 * pops[0] && pops.every((p, k) => k === 0 || p <= pops[k - 1] * 1.1) && S.every((s) => s.rank && s.regionalImportance > 0), `primary ${Math.round((100 * pops[0]) / P)}%, second ${Math.round((100 * pops[1]) / P)}%, ${S.length} settlements`);
+  check(`${P / 1e6}M institutions are allocated by the region, not given to every settlement`, S.some((s) => !I(s).universities) && I(S[0]).universities >= 1 && I(S[0]).hospitals > I(S[S.length - 1]).hospitals && new Set(S.map((s) => I(s).stationClass)).size >= 3 && I(S[0]).stationClass === 'HUB' && I(S[0]).subCentres > I(S[S.length - 1]).subCentres && S.some((s) => I(s).subCentres === 0), `universities ${S.map((s) => I(s).universities).join('')}, sub-centres ${S.map((s) => I(s).subCentres).join('')}, stations ${[...new Set(S.map((s) => I(s).stationClass))].join(' ')}`);
+}
+for (const st of ['MONOCENTRIC', 'POLYCENTRIC', 'TWIN_CORE', 'LINEAR_CORRIDOR']) {
+  const r = generateRegionSync({ seed: 'hier-test', regionalPopulationTarget: 5000000, structure: st }, { settlements: false }), p = r.settlements.map((s) => s.populationTarget);
+  check(`population profile ${st}`, r.populationProfile === st && (st !== 'TWIN_CORE' || p[1] >= 0.65 * p[0]) && (st !== 'POLYCENTRIC' || p[0] < 0.3 * 5e6) && (st !== 'MONOCENTRIC' || p[0] >= 0.5 * 5e6), `primary ${Math.round(p[0] / 5e4)}%, second ${Math.round(p[1] / 5e4)}%`);
+}
+{
+  const S = regions.flatMap((r) => r.settlements).filter((s) => s.summary);
+  const fp = S.map((s) => s.summary.footprint).filter(Boolean);
+  check('settlement footprints are not one-axis strips without a reason', fp.length > 0 && fp.every((f) => f.aspectRatio <= 2.2 || f.elongationReason !== 'none'), `aspect ratios ${Math.min(...fp.map((f) => f.aspectRatio))} - ${Math.max(...fp.map((f) => f.aspectRatio))}`);
+  const links = S.flatMap((s) => s.model.reinforcement?.links || []), rej = S.flatMap((s) => s.model.reinforcement?.rejected || []);
+  check('reinforcement links carry a usefulness score; rejected ones say why', links.every((l) => l.utilityComponents && l.utility >= 0.3) && rej.every((l) => l.rejectedReason && l.utilityComponents), `${links.length} accepted, ${rej.length} rejected`);
+  const built = (s, t) => s.model.anchors.filter((a) => a.type === t).length;
+  check('built anchors follow the allocation', S.every((s) => built(s, 'university') <= s.institutions.universities && built(s, 'secondary') <= s.institutions.subCentres && (s.institutions.stationClass !== 'NONE' || built(s, 'station') === 0)), `${S.filter((s) => built(s, 'university')).length} of ${S.length} settlements have a university`);
 }
 
 console.log(failed ? `\n${failed} FAILED` : '\nALL PASSED');

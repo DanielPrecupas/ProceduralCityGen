@@ -63,11 +63,18 @@ export class RegionRenderer {
       if (layers.anchors && !regional) r.drawAnchors(ctx, view, s.model, null, { style, maxTier: view.scale < 0.05 ? 1 : D.maxAnchorTier });
       ctx.restore();
     }
-    // interface zones and the seams they preserve
-    for (const z of region.interfaceZones) {
-      ctx.fillStyle = INTERFACE_COLORS[z.type] + (z.relation === 'SEPARATE' ? '40' : '59'); trace(ctx, z.polygon, true); ctx.fill();
-      ctx.strokeStyle = INTERFACE_COLORS[z.type]; ctx.lineWidth = 1.2 * px; ctx.setLineDash([]); ctx.stroke();
-      ctx.strokeStyle = '#4a3f57'; ctx.lineWidth = 1.6 * px; ctx.setLineDash([7 * px, 4 * px]); trace(ctx, z.seamLine); ctx.stroke(); ctx.setLineDash([]);
+    // streets carried across a shared boundary: the fabric of one settlement runs on into the next
+    ctx.lineJoin = 'round'; ctx.lineCap = 'round';
+    for (const pass of [0, 1]) for (const c of region.seamConnections || []) {
+      if (c.rank <= 2 && view.scale < 0.03) continue; // local links only once the streets themselves are visible
+      const wpx = c.rank >= 4 ? interp([[0.01, 1.6], [0.1, 5], [0.5, 9]], view.scale) : c.rank === 3 ? interp([[0.01, 1.1], [0.1, 3.4], [0.5, 7]], view.scale) : interp([[0.03, 0.8], [0.1, 2.2], [0.5, 5]], view.scale);
+      ctx.strokeStyle = pass === 0 ? (style === 'map' ? '#c9c2b6' : '#3a3a3a') : style === 'map' ? (c.rank >= 4 ? '#fbe9a8' : '#ffffff') : c.rank >= 4 ? '#e0a23c' : c.rank === 3 ? '#b98a4a' : '#8a8a8a';
+      ctx.lineWidth = (wpx + (pass === 0 ? 1.6 : 0)) * px; trace(ctx, c.points); ctx.stroke();
+    }
+    // the administrative boundary between two neighbours stays where it was
+    if (layers.seams !== false) for (const rel of region.relations) {
+      if (!rel.seamLine) continue;
+      ctx.strokeStyle = 'rgba(110,70,130,0.7)'; ctx.lineWidth = 1.2 * px; ctx.setLineDash([6 * px, 4 * px]); trace(ctx, rel.seamLine); ctx.stroke(); ctx.setLineDash([]);
     }
     // administrative extents at regional zoom
     if (regional) for (const s of region.settlements) {
@@ -134,7 +141,6 @@ export class RegionRenderer {
       if (put(s.name, x, y, `${s.rank === 1 ? 700 : 600} ${SCALE_SIZE[s.scale]}px system-ui, sans-serif`, '#1f1f1f') && view.scale > 0.008)
         put(`${Math.round((s.modelledPopulation || s.populationTarget) / 1000)}k · ${s.role === 'MIXED' ? s.scale.replace(/_/g, ' ').toLowerCase() : s.role.toLowerCase()}`, x, y + 14, '500 10px system-ui, sans-serif', '#555');
     }
-    if (view.scale > 0.012) for (const z of region.interfaceZones) put(z.type.replace(/_/g, ' ').toLowerCase(), z.position.x * view.scale + view.ox, z.position.y * view.scale + view.oy, 'italic 500 10px system-ui, sans-serif', '#5b4a66');
     for (const a of region.regionalAnchors) if (a.type === 'AIRPORT') put('Airport', a.position.x * view.scale + view.ox, a.position.y * view.scale + view.oy + 14, '500 10px system-ui, sans-serif', '#3e4d6b');
   }
 
@@ -149,8 +155,8 @@ export class RegionRenderer {
     const inPoly = (poly) => { let c = false; for (let i = 0, j = poly.length - 1; i < poly.length; j = i++) if ((poly[i].y > p.y) !== (poly[j].y > p.y) && p.x < ((poly[j].x - poly[i].x) * (p.y - poly[i].y)) / (poly[j].y - poly[i].y) + poly[i].x) c = !c; return c; };
     for (const a of region.regionalAnchors) if (Math.hypot(a.position.x - p.x, a.position.y - p.y) < tol * 1.6) out.push(a);
     for (const l of region.regionalRail) if (l.points.length > 1 && near(l.points) < tol) out.push(l);
+    for (const c of region.seamConnections || []) if (near(c.points) < tol) out.push(c);
     for (const r of region.regionalRoads) if (r.points.length > 1 && near(r.points) < tol) out.push(r);
-    for (const z of region.interfaceZones) if (inPoly(z.polygon)) out.push(z);
     const inside = region.settlements.filter((s) => Math.hypot(s.position.x - p.x, s.position.y - p.y) < s.radius * 1.1).sort((a, b) => Math.hypot(a.position.x - p.x, a.position.y - p.y) / a.radius - Math.hypot(b.position.x - p.x, b.position.y - p.y) / b.radius);
     for (const s of inside) out.push(describeSettlement(region, s));
     for (const pr of region.protectedAreas) if (pr.polygon ? inPoly(pr.polygon) : near(pr.points) < pr.width / 2) out.push(pr);
@@ -165,7 +171,9 @@ export function describeSettlement(region, s) {
   return {
     id: s.id, type: 'settlement', createdByStage: 'sites', reason: s.reason, name: s.name,
     scale: s.scale, role: s.role, centreStrength: s.centreStrength, populationTarget: s.populationTarget, modelledPopulation: s.modelledPopulation ?? null, capacityLimited: s.capacityLimited || null,
-    planningProfile: s.planningProfile, citySize: s.citySize,
+    planningProfile: s.planningProfile, citySize: s.citySize, rank: s.rank, regionalImportance: s.regionalImportance,
+    macroGrowthPattern: s.macroGrowthPattern, macroGrowthReason: s.macroGrowthReason,
+    streetsAcrossBoundaries: region.relations.filter((r) => r.seamStats && (r.a === s.id || r.b === s.id)).map((r) => `${name(r.a === s.id ? r.b : r.a)}: ${r.seamStats.mode.toLowerCase()} boundary, ${r.seamStats.connections} streets cross (${r.seamStats.majorAvenues} avenues)`).join('; ') || 'none',
     administrativeId: s.administrativeId, urbanContinuityGroup: s.urbanContinuityGroup, continuity: s.continuity, metroRegionId: s.metroRegionId,
     relationships: rels.length ? rels.join('; ') : 'free-standing: no neighbour within 5 km',
     regionalRoads: region.regionalRoads.filter((r) => r.from === s.id || r.to === s.id || r.passesThrough.includes(s.id)).map((r) => `${r.type.toLowerCase().replace(/_/g, ' ')} to ${r.from === s.id ? (r.to ? name(r.to) : 'the ' + r.exit) : name(r.from)}${r.passesThrough.includes(s.id) ? ' (passing through)' : ''}`).join('; ') || 'none',

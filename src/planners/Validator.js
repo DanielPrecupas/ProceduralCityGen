@@ -190,7 +190,7 @@ export function validate(model) {
   const urbanBlocks = model.blocks.filter((b) => b.use === 'urban');
   const meanA = urbanBlocks.reduce((s, b) => s + b.area, 0) / Math.max(1, urbanBlocks.length);
   const cv = Math.sqrt(urbanBlocks.reduce((s, b) => s + (b.area - meanA) ** 2, 0) / Math.max(1, urbanBlocks.length)) / Math.max(1, meanA);
-  const expected = { small: 1, medium: 3, major: 5, metropolis: 6 }[model.config.citySize];
+  const expected = { small: 1, medium: 3, major: 5, metropolis: 6, megacity: 6 }[model.config.citySize];
   if (bigObjects < expected || cv < 0.45) warn('warning', 'excessive_uniform_urban_fabric', null, `${bigObjects} large non-street objects (expected at least ${expected}); block-size variation ${cv.toFixed(2)}.`);
 
   // ---------- DISTRICTS

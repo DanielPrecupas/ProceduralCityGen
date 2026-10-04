@@ -13,6 +13,7 @@
 // Nothing of CityGen is duplicated: a settlement is a CityModel. Settlements are never merged,
 // even when their fabrics touch; each keeps its administrative identity, centre and street grid.
 
+import { seamModeOf, stitchSeams, SEAM_MODES } from './SeamStitcher.js';
 import { SeededRandom, makeNoise2D, fbm } from '../core/SeededRandom.js';
 import { DEFAULT_CONFIG, SIZE_PRESETS, createCityModel, record } from '../core/CityModel.js';
 import { runPipelineSync, runPipeline } from '../core/Pipeline.js';
@@ -27,12 +28,23 @@ export const SETTLEMENT_SCALES = ['PRIMARY_CITY', 'MAJOR_CITY', 'SECONDARY_CITY'
 export const SETTLEMENT_ROLES = ['MIXED', 'INDUSTRIAL', 'PORT', 'UNIVERSITY', 'ADMINISTRATIVE', 'LOGISTICS', 'RESORT', 'MILITARY'];
 export const INTERFACE_TYPES = ['URBAN_INFILL', 'COMMERCIAL_CORRIDOR', 'INDUSTRIAL_BUFFER', 'GREEN_WEDGE', 'TRANSPORT_CORRIDOR', 'MIXED_EDGE', 'HARD_INFRASTRUCTURE_EDGE'];
 export const RELATIONS = ['SEPARATE', 'NEAR_TOUCHING', 'GLUED', 'CONTINUOUS_METROPOLITAN'];
-export const DEFAULT_REGION_CONFIG = { seed: 'region-1', regionalPopulationTarget: 1000000, structure: 'auto', coast: 'auto' };
+// How the regional population is shared out. `share` is the primary city's part of the whole,
+// `alpha` the rank-size exponent of the cities below it, `twin` a second city nearly as large.
+export const POPULATION_PROFILES = {
+  DOMINANT_CORE: { share: [0.36, 0.48], alpha: 1.3, ranked: 0.86 },
+  MONOCENTRIC: { share: [0.52, 0.64], alpha: 1.7, ranked: 0.84 },
+  POLYCENTRIC: { share: [0.17, 0.24], alpha: 0.65, ranked: 0.92 },
+  TWIN_CORE: { share: [0.27, 0.34], alpha: 1.3, ranked: 0.86, twin: [0.72, 0.93] },
+  LINEAR_CORRIDOR: { share: [0.3, 0.4], alpha: 1.05, ranked: 0.88 },
+};
+const LEGACY_STRUCTURE = { dominant: 'DOMINANT_CORE', balanced: 'DOMINANT_CORE', polycentric: 'POLYCENTRIC' };
+const MAX_SETTLEMENTS = 26;
+export const DEFAULT_REGION_CONFIG = { seed: 'region-1', regionalPopulationTarget: 1000000, structure: 'auto', coast: 'auto', roadIntensity: 'normal', railIntensity: 'normal' };
 
 const CELL = 250; // regional raster cell (m)
 const DENSITY = 9100; // people per km2 of urban land, as in the city brief
 const radiusFor = (pop) => Math.sqrt(pop / DENSITY / Math.PI) * 1000;
-const sizeFor = (pop) => (pop > 700000 ? 'metropolis' : pop >= 250000 ? 'major' : pop >= 80000 ? 'medium' : 'small');
+const sizeFor = (pop) => (pop > SIZE_PRESETS.metropolis.popRange[1] ? 'megacity' : pop > 700000 ? 'metropolis' : pop >= 250000 ? 'major' : pop >= 80000 ? 'medium' : 'small');
 const clamp = (v, a, b) => Math.max(a, Math.min(b, v));
 const smooth = (a, b, x) => { const t = clamp((x - a) / (b - a), 0, 1); return t * t * (3 - 2 * t); };
 
@@ -120,19 +132,43 @@ const NAME_B = ['mora', 'th', 'ia', 'den', 'holm', 'ova', 'ine', 'ara', 'wick', 
 
 function planSettlementSystem(region, rng, log) {
   const P = region.regionalPopulationTarget, cfg = region.config;
-  const structure = cfg.structure !== 'auto' ? cfg.structure : rng.pick(['dominant', 'dominant', 'balanced', 'polycentric']);
-  const share = { dominant: rng.range(0.42, 0.55), balanced: rng.range(0.3, 0.38), polycentric: rng.range(0.2, 0.27) }[structure];
-  const alpha = { dominant: 1.0, balanced: 0.78, polycentric: 0.55 }[structure];
-  const primary = clamp(Math.round((share * P) / 1000) * 1000, 120000, SIZE_PRESETS.metropolis.popRange[1]);
-  // rank-size: the k-th settlement is primary / k^alpha, until the regional target is met
+  const T = region.terrain;
+  let land = 0, good = 0; for (let i = 0; i < T.n; i++) if (!T.water[i]) { land++; if (T.buildability[i] > 0.6) good++; }
+  const rugged = good / Math.max(1, land) < 0.72;
+  // the usual region has one clearly dominant city; the other forms are possible, not the default
+  const weights = { DOMINANT_CORE: 0.52, MONOCENTRIC: 0.14, POLYCENTRIC: rugged ? 0.26 : 0.12, TWIN_CORE: 0.1, LINEAR_CORRIDOR: T.coastal ? 0.16 : 0.07 };
+  let profile = LEGACY_STRUCTURE[cfg.structure] || (POPULATION_PROFILES[cfg.structure] ? cfg.structure : null);
+  const auto = !profile;
+  if (auto) { let u = rng.next() * Object.values(weights).reduce((x, y) => x + y, 0); for (const [k, v] of Object.entries(weights)) { u -= v; if (u <= 0) { profile = k; break; } } profile = profile || 'DOMINANT_CORE'; }
+  const spec = POPULATION_PROFILES[profile], cap = SIZE_PRESETS.megacity.popRange[1], alpha = spec.alpha;
+  const structure = profile.toLowerCase();
+  const primary = clamp(Math.round((rng.range(spec.share[0], spec.share[1]) * P) / 1000) * 1000, 120000, cap);
+  // rank-size: the k-th city is primary / k^alpha. The ranked cities take most of the region;
+  // what is left is spread over a tail of small cities and towns, each smaller than the last.
   const pops = [primary];
-  let sum = primary;
-  for (let k = 2; k <= 40 && sum < P * 0.985; k++) {
-    let p = primary / k ** alpha * rng.range(0.85, 1.15);
-    p = clamp(Math.round(p / 1000) * 1000, 20000, Math.min(primary * 0.92, SIZE_PRESETS.metropolis.popRange[1]));
-    if (sum + p > P * 1.03) p = Math.round((P - sum) / 1000) * 1000;
+  let sum = primary, prev = primary;
+  const tailStart = Math.max(70000, 0.035 * primary);
+  for (let k = 2; pops.length < MAX_SETTLEMENTS - 4 && sum < P * spec.ranked; k++) {
+    let p = spec.twin && k === 2 ? primary * rng.range(spec.twin[0], spec.twin[1]) : (primary / (spec.twin ? k - 0.7 : k) ** alpha) * rng.range(0.88, 1.12);
+    p = Math.round(Math.min(p, prev * 0.96) / 1000) * 1000;
+    if (p < tailStart) break;
+    if (sum + p > P * 1.02) break;
+    pops.push(p); sum += p; prev = p;
+  }
+  // the tail starts no larger than a town, unless that many towns could not hold what is left
+  const slots = MAX_SETTLEMENTS - pops.length, left = P * 0.985 - sum;
+  const tail0 = Math.min(prev * 0.9, Math.max(Math.min(prev * 0.85, 120000), slots > 0 ? (left * 0.1) / (1 - 0.9 ** slots) : 0));
+  for (let t = tail0; pops.length < MAX_SETTLEMENTS && sum < P * 0.985 && t >= 20000; t *= 0.9) {
+    let p = Math.round((t * rng.range(0.92, 1.08)) / 1000) * 1000;
+    if (sum + p > P * 1.02) p = Math.round((P - sum) / 1000) * 1000;
     if (p < 20000) break;
     pops.push(p); sum += p;
+  }
+  // if the list is full and people are still unhoused (a primary city at its limit), every lower rank grows in proportion: the order is kept
+  if (sum < P * 0.95 && pops.length > 1) {
+    const f = (P * 0.985 - primary) / (sum - primary);
+    sum = primary;
+    for (let k = 1; k < pops.length; k++) { pops[k] = Math.round(Math.min(pops[k] * f, pops[k - 1] * 0.96, cap) / 1000) * 1000; sum += pops[k]; }
   }
   const names = new Set();
   const settlements = pops.map((pop, k) => {
@@ -140,11 +176,13 @@ function planSettlementSystem(region, rng, log) {
     let name; do { name = rng.pick(NAME_A) + rng.pick(NAME_B); } while (names.has(name)); names.add(name);
     // centres are not equal: the regional hierarchy gives each a different weight
     const centreStrength = k === 0 ? 'DOMINANT' : k === 1 && pop > 0.45 * primary ? 'STRONG' : pop >= 60000 ? 'ORDINARY' : rng.chance(0.5) ? 'ORDINARY' : 'WEAK';
-    return { id: `settlement_${String(k + 1).padStart(2, '0')}`, type: 'settlement', createdByStage: 'regionalPlan', name, rank: k + 1, scale, role: 'MIXED', populationTarget: pop, centreStrength, citySize: sizeFor(pop), radius: radiusFor(pop) };
+    return { id: `settlement_${String(k + 1).padStart(2, '0')}`, type: 'settlement', createdByStage: 'regionalPlan', name, rank: k + 1, regionalImportance: Math.round(100 * (pop / primary) ** 0.6) / 100, scale, role: 'MIXED', populationTarget: pop, centreStrength, citySize: sizeFor(pop), radius: radiusFor(pop) };
   });
-  region.regionalPlan = { structure, primaryShare: primary / P, rankSizeExponent: alpha, allocatedPopulation: sum, settlementCount: settlements.length };
+  region.populationProfile = profile;
+  const axis = profile === 'LINEAR_CORRIDOR' ? (T.coastal ? T.seaAngle + Math.PI / 2 : rng.range(0, Math.PI)) : null;
+  region.regionalPlan = { structure, populationProfile: profile, profileChosenBy: auto ? (rugged && profile === 'POLYCENTRIC' ? 'broken_terrain_favours_several_centres' : T.coastal && profile === 'LINEAR_CORRIDOR' ? 'coast_draws_the_settlements_into_a_line' : 'usual_form_for_a_region') : 'set_by_the_user', primaryShare: primary / P, secondShare: (pops[1] || 0) / P, rankSizeExponent: alpha, allocatedPopulation: sum, dispersedPopulation: Math.max(0, P - sum), settlementCount: settlements.length, corridorAxis: axis };
   region.settlements = settlements;
-  log(`${structure} region: ${settlements.length} settlements, primary city ${(primary / 1000).toFixed(0)}k (${Math.round((100 * primary) / P)}% of ${(P / 1e6).toFixed(2)}M), ${settlements.filter((s) => s.scale === 'MAJOR_CITY').length} major, ${settlements.filter((s) => s.scale === 'SECONDARY_CITY').length} secondary, ${settlements.filter((s) => s.scale === 'SMALL_CITY').length} small, ${settlements.filter((s) => s.scale === 'LOCAL_TOWN').length} towns`);
+  log(`${profile} region: ${settlements.length} settlements, primary city ${(primary / 1000).toFixed(0)}k (${Math.round((100 * primary) / P)}% of ${(P / 1e6).toFixed(2)}M), ${settlements.filter((s) => s.scale === 'MAJOR_CITY').length} major, ${settlements.filter((s) => s.scale === 'SECONDARY_CITY').length} secondary, ${settlements.filter((s) => s.scale === 'SMALL_CITY').length} small, ${settlements.filter((s) => s.scale === 'LOCAL_TOWN').length} towns`);
 }
 
 // ---------------------------------------------------------------- 3. sites and relations
@@ -166,6 +204,8 @@ function planSites(region, rng, log) {
     return 2.2 * land + (wd < 4500 ? 0.35 * (1 - Math.abs(wd - 1500) / 4500) : 0) + 0.25 * boxMean(x, y, s.radius * 2.2); // room to grow
   };
   const placed = [], relations = [];
+  // in a LINEAR_CORRIDOR region the settlements keep to one line through the primary city
+  const axis = region.regionalPlan.corridorAxis, offAxis = (x, y) => (axis == null || !placed.length ? 0 : (2.4 * Math.abs(-(x - placed[0].position.x) * Math.sin(axis) + (y - placed[0].position.y) * Math.cos(axis))) / (0.25 * size));
   const clearOf = (x, y, s, host, factor) => placed.every((o) => { const need = (s.radius + o.radius) * (o === host ? factor : 1) + (o === host ? 0 : 1200); return Math.hypot(x - o.position.x, y - o.position.y) >= need; });
   // how tightly the region is knit: large regions are metropolitan, small ones a scatter of towns
   const pGlue = P >= 4e6 ? 0.42 : P >= 1.8e6 ? 0.3 : P >= 9e5 ? 0.18 : 0.08, pNear = P >= 1.8e6 ? 0.25 : 0.18;
@@ -191,7 +231,7 @@ function planSites(region, rng, log) {
         for (let k = 0; k < 40; k++) for (const f of [1, 0.94, 1.07]) {
           const a = (k / 40) * Math.PI * 2, x = Math.round((host.position.x + Math.cos(a) * D * f) / CELL) * CELL, y = Math.round((host.position.y + Math.sin(a) * D * f) / CELL) * CELL;
           if (!clearOf(x, y, s, host, factor)) continue;
-          const sc = suitability(x, y, s) + rng.range(0, 0.12);
+          const sc = suitability(x, y, s) + rng.range(0, 0.12) - offAxis(x, y);
           if (sc > -Infinity && (!b || sc > b.sc)) b = { x, y, sc };
         }
         return b;
@@ -227,6 +267,7 @@ function planSites(region, rng, log) {
     else if (seaD < s.radius + 1500 && s.populationTarget < 60000 && rng.chance(0.5)) role = 'RESORT';
     else { const u = rng.next(); role = u < 0.22 ? 'INDUSTRIAL' : u < 0.32 && !used.has('UNIVERSITY') ? 'UNIVERSITY' : u < 0.42 && !used.has('LOGISTICS') ? 'LOGISTICS' : u < 0.45 && !used.has('MILITARY') ? 'MILITARY' : 'MIXED'; }
     used.add(role); s.role = role;
+    if (role === 'ADMINISTRATIVE' || role === 'PORT' || role === 'UNIVERSITY' || role === 'LOGISTICS') s.regionalImportance = Math.min(1, Math.round(100 * (s.regionalImportance + 0.08)) / 100);
     if (s.scale === 'LOCAL_TOWN' && role !== 'MIXED') s.scale = 'SPECIALIZED_TOWN';
     // each settlement is planned in its own way
     const pool = s.rank === 1 ? ['default', 'radial_formal', 'polycentric', 'centralised'] : role === 'INDUSTRIAL' || role === 'LOGISTICS' ? ['strong_grid', 'default', 'flat_loose'] : role === 'RESORT' ? ['organic', 'flat_loose'] : ['default', 'strong_grid', 'organic', 'radial_formal', 'centralised', 'flat_loose', 'rugged'];
@@ -306,7 +347,33 @@ function planInfrastructure(region, rng, log) {
     for (const i of inTree) for (let j = 0; j < S.length; j++) { if (inTree.includes(j)) continue; const d = dist2(S[i], S[j]) / (S[i].populationTarget ** 0.15); if (!best || d < best.d) best = { d, i, j }; }
     links.push([best.i, best.j, 'network_tree']); inTree.push(best.j);
   }
-  for (let j = 1; j < S.length; j++) if (S[j].populationTarget >= 150000 && !links.some((l) => (l[0] === 0 && l[1] === j) || (l[1] === 0 && l[0] === j))) links.push([0, j, 'direct_link_between_major_cities']);
+  // A direct road between two large cities is redundancy, and redundancy alone is not a reason:
+  // it is built only where it saves a real detour for a real flow of traffic.
+  const rejected = [], utilityOf = new Map();
+  {
+    const treeDist = (from) => { const d = new Array(S.length).fill(Infinity); d[from] = 0; const q = [from]; while (q.length) { const u = q.shift(); for (const [a, b] of links) { const v = a === u ? b : b === u ? a : -1; if (v >= 0 && d[v] === Infinity) { d[v] = d[u] + dist2(S[u], S[v]); q.push(v); } } } return d; };
+    const cands = [];
+    for (let i = 0; i < S.length; i++) for (let j = i + 1; j < S.length; j++) {
+      if (Math.min(S[i].populationTarget, S[j].populationTarget) < 150000 || links.some((l) => (l[0] === i && l[1] === j) || (l[1] === i && l[0] === j))) continue;
+      if (i > 0 && Math.min(S[i].populationTarget, S[j].populationTarget) < 300000) continue; // between secondary cities only when both are large
+      cands.push([i, j]);
+    }
+    const scored = [];
+    for (const [i, j] of cands) {
+      const direct = dist2(S[i], S[j]), viaTree = treeDist(i)[j], detour = viaTree / direct;
+      const flow = (S[i].populationTarget * S[j].populationTarget) / (direct * direct), flow0 = (S[0].populationTarget * (S[1] ? S[1].populationTarget : S[0].populationTarget)) / (20000 * 20000);
+      const c = { detourReduction: clamp((detour - 1) / 0.8, 0, 1), settlementDemand: clamp(Math.sqrt(flow / flow0), 0, 1), regionalConnectivity: i === 0 ? 0.6 : 0.3, parallelsExistingRoute: detour < 1.2 ? 1 : 0, longEmptyRun: clamp((direct - 30000) / 40000, 0, 1) };
+      const utility = 0.45 * c.detourReduction + 0.35 * c.settlementDemand + 0.2 * c.regionalConnectivity - 0.4 * c.parallelsExistingRoute - 0.25 * c.longEmptyRun;
+      scored.push({ i, j, utility, c, detour });
+    }
+    scored.sort((a, b) => b.utility - a.utility || a.i - b.i || a.j - b.j);
+    for (const o of scored) {
+      const direct = dist2(S[o.i], S[o.j]), detour = treeDist(o.i)[o.j] / direct; // earlier links may already have shortened the way
+      if (o.utility >= ({ sparse: 0.58, dense: 0.28 }[region.config.roadIntensity] ?? 0.42) && detour >= 1.25) { links.push([o.i, o.j, 'direct_link_saving_a_' + Math.round((detour - 1) * 100) + '_percent_detour_between']); utilityOf.set(`${o.i}:${o.j}`, { utility: Math.round(o.utility * 100) / 100, utilityComponents: o.c }); }
+      else rejected.push({ type: 'regional_link', createdByStage: 'infrastructure', from: S[o.i].id, to: S[o.j].id, utility: Math.round(o.utility * 100) / 100, utilityComponents: o.c, rejectedReason: detour < 1.25 ? 'an_existing_road_already_makes_this_journey_almost_directly' : o.c.longEmptyRun > 0.5 ? 'a_long_road_across_empty_country_for_too_little_traffic' : 'would_only_close_a_loop_in_the_network_without_carrying_enough_traffic' });
+    }
+  }
+  region.rejectedLinks = rejected;
   const roads = [];
   const settleById = new Map(S.map((s) => [s.id, s]));
   for (const s of S) { s.gateways = []; s.railEntries = []; s.throughPairs = []; }
@@ -359,12 +426,12 @@ function planInfrastructure(region, rng, log) {
     }
     roads.push({ id, type: cls, createdByStage: 'infrastructure', reason: `${why}_${a.name.toLowerCase()}_to_${b ? b.name.toLowerCase() : 'beyond_the_region_' + exit.name}`, system: cls === 'REGIONAL_HIGHWAY' ? 'LIMITED_ACCESS' : 'STREET', from: a.id, to: b ? b.id : null, exit: b ? null : exit.name, points: geometry, routed: pts, length: polylineLength(geometry), handedOverAtSeam: !!seam, passesThrough: through });
   };
-  for (const [i, j, why] of links) addRoad(S[i], S[j], null, why);
+  for (const [i, j, why] of links) { addRoad(S[i], S[j], null, why); const u = utilityOf.get(`${i}:${j}`); if (u && roads.length) Object.assign(roads[roads.length - 1], u); }
   for (const ex of exits.slice(0, S.length > 4 ? 3 : 2)) addRoad(prim, null, ex, 'road_out_of_the_region_from');
   region.regionalRoads = roads;
 
   // --- rail: one main line through the largest cities, branches to the others that warrant it
-  const railS = S.filter((s) => s.populationTarget >= 60000 || ['PORT', 'INDUSTRIAL', 'LOGISTICS'].includes(s.role));
+  const railS = S.filter((s) => s.populationTarget >= ({ sparse: 130000, dense: 30000 }[region.config.railIntensity] ?? 60000) || ['PORT', 'INDUSTRIAL', 'LOGISTICS'].includes(s.role));
   for (const s of S) s.rail = railS.includes(s);
   const lines = [];
   let lid = 0;
@@ -406,6 +473,8 @@ function planInfrastructure(region, rng, log) {
     }
   }
   region.regionalRail = lines;
+  allocateInstitutions(region, log);
+  assignMacroGrowth(region, log);
 
   // --- regional anchors and protected land
   const anchors = [];
@@ -431,31 +500,92 @@ function planInfrastructure(region, rng, log) {
   log(`${roads.length} regional roads (${roads.filter((r) => r.type === 'REGIONAL_HIGHWAY').length} highways, ${roads.filter((r) => r.handedOverAtSeam).length} handed over at a shared boundary, ${roads.filter((r) => r.passesThrough.length).length} passing through a settlement), ${lines.length} rail lines (${lines.filter((l) => l.type === 'INTERCITY_RAIL').length} main line sections), ${S.filter((s) => !s.rail).length} settlements without rail, ${anchors.length} regional anchors, ${prot.length} protected areas`);
 }
 
+// Institutions belong to the region, not to every town. The region's demand for each kind is
+// worked out from its population and then handed down the hierarchy: the largest and most
+// important settlements are served first, and a place too small to support one gets none.
+const INSTITUTION_DEMAND = {
+  universities: { per: 600000, minPop: 180000, cap: { megacity: 4, metropolis: 3, major: 2, medium: 1, small: 1 }, role: 'UNIVERSITY' },
+  hospitals: { per: 280000, minPop: 90000, cap: { megacity: 6, metropolis: 4, major: 2, medium: 1, small: 1 } },
+  stadiums: { per: 1100000, minPop: 200000, cap: { megacity: 3, metropolis: 2, major: 1, medium: 1, small: 0 } },
+  culturalComplexes: { per: 800000, minPop: 250000, cap: { megacity: 3, metropolis: 2, major: 1, medium: 1, small: 0 }, role: 'ADMINISTRATIVE' },
+};
+function allocateInstitutions(region, log) {
+  const S = region.settlements, P = region.regionalPopulationTarget, demand = {};
+  for (const s of S) s.institutions = { universities: 0, colleges: 0, hospitals: 0, stadiums: 0, culturalComplexes: 0, subCentres: 0, stationClass: 'NONE', reasons: [] };
+  for (const [kind, d] of Object.entries(INSTITUTION_DEMAND)) {
+    demand[kind] = Math.max(1, Math.round(P / d.per));
+    const weight = (s) => s.populationTarget ** 1.1 * (0.6 + 0.4 * s.regionalImportance) * (d.role && s.role === d.role ? 2.5 : 1);
+    const eligible = (s) => s.populationTarget >= d.minPop || (d.role && s.role === d.role && s.populationTarget >= d.minPop / 3);
+    for (let k = 0; k < demand[kind]; k++) {
+      let best = null, bv = 0;
+      for (const s of S) { if (!eligible(s) || s.institutions[kind] >= d.cap[s.citySize]) continue; const v = weight(s) / (s.institutions[kind] + 1); if (v > bv) { bv = v; best = s; } }
+      if (!best) break;
+      best.institutions[kind]++;
+    }
+  }
+  const main = new Set(region.regionalRail.filter((l) => l.type === 'INTERCITY_RAIL').flatMap((l) => [l.from, l.to]));
+  for (const s of S) {
+    const I = s.institutions, pop = s.populationTarget;
+    // a town without a university may still have a college
+    if (!I.universities && pop >= 60000) I.colleges = 1;
+    // the station is as large as the place it serves
+    I.stationClass = !s.rail ? 'NONE' : s.rank === 1 ? 'HUB' : pop >= 250000 ? 'MAIN' : pop >= 100000 ? 'SIMPLE' : 'STOP';
+    // sub-centres: one for every catchment the main centre cannot reach, more where a main station or a university cluster gives a second focus
+    const catchment = Math.max(0, 3.6 * (pop / 1e6) ** 0.62 - 0.75), causes = [];
+    let n = Math.floor(catchment);
+    if (n) causes.push(`${n}_population_catchment${n > 1 ? 's' : ''}_beyond_reach_of_the_main_centre`);
+    const frac = catchment - Math.floor(catchment);
+    if (pop >= 90000 && frac >= 0.2 && (I.stationClass === 'HUB' || I.stationClass === 'MAIN' || (main.has(s.id) && frac >= 0.45))) { n++; causes.push('main_line_station_gives_a_second_focus'); }
+    else if (pop >= 90000 && frac >= 0.35 && (I.universities >= 1 || ['INDUSTRIAL', 'PORT', 'LOGISTICS'].includes(s.role))) { n++; causes.push(I.universities ? 'university_cluster_gives_a_second_focus' : 'employment_cluster_gives_a_second_focus'); }
+    I.subCentres = Math.min(n, SIZE_PRESETS[s.citySize].maxSecondary); I.subCentreCauses = causes;
+    I.reasons.push(`rank_${s.rank}_of_${S.length}_importance_${s.regionalImportance}`);
+  }
+  region.institutionDemand = { ...demand, allocated: Object.fromEntries(Object.keys(INSTITUTION_DEMAND).map((k) => [k, S.reduce((a, s) => a + s.institutions[k], 0)])), railHubs: S.filter((s) => s.institutions.stationClass === 'HUB' || s.institutions.stationClass === 'MAIN').length };
+  log(`regional demand: ${Object.entries(demand).map(([k, v]) => `${v} ${k}`).join(', ')}; ${S.filter((s) => s.institutions.universities).length} of ${S.length} settlements have a university, ${S.filter((s) => s.institutions.stationClass === 'NONE').length} have no station, ${S.filter((s) => !s.institutions.subCentres).length} have no sub-centre`);
+}
+
+// MACRO GROWTH. How a settlement spreads over its site is decided from the site: coast, river,
+// broken ground, the roads that reach it, its neighbours, its size and how it is planned. Each
+// pattern has its own idea of compactness, and each choice carries its reason.
+export const MACRO_GROWTH = { CONCENTRIC: 1.35, GRID_EXPANSION: 1.7, RADIAL_CORRIDOR: 1.9, MULTINODAL: 1.9, ASYMMETRIC: 1.9, BIDIRECTIONAL: 2.3, LINEAR: 2.6 }; // how far, in radii, growth may reach
+function assignMacroGrowth(region, log) {
+  const T = region.terrain, { w, h } = T, S = region.settlements, byId = new Map(S.map((s) => [s.id, s]));
+  const scan = (s, mask, r) => { let n = 0, tot = 0, sx = 0, sy = 0; const c = Math.ceil(r / CELL), x0 = Math.floor(s.position.x / CELL), y0 = Math.floor(s.position.y / CELL); for (let y = y0 - c; y <= y0 + c; y++) for (let x = x0 - c; x <= x0 + c; x++) { if ((x - x0) ** 2 + (y - y0) ** 2 > c * c) continue; tot++; if (x < 0 || y < 0 || x >= w || y >= h) continue; if (mask(y * w + x)) { n++; sx += x - x0; sy += y - y0; } } return { share: n / Math.max(1, tot), angle: Math.atan2(sy, sx) }; };
+  for (const s of S) {
+    const sea = scan(s, (i) => T.sea[i], s.radius * 1.3), river = scan(s, (i) => T.water[i] && !T.sea[i], s.radius * 0.9), steep = scan(s, (i) => !T.water[i] && T.buildability[i] < 0.4, s.radius * 1.4);
+    const glued = region.relations.filter((r) => r.relation !== 'SEPARATE' && (r.a === s.id || r.b === s.id) && r.relation === 'GLUED').map((r) => byId.get(r.a === s.id ? r.b : r.a)).filter((o) => o.populationTarget >= 0.5 * s.populationTarget);
+    const roads = s.gateways.length, big = s.citySize === 'megacity' || s.citySize === 'metropolis';
+    let pattern, why, axis = null, bias = null;
+    if (region.populationProfile === 'LINEAR_CORRIDOR' && s.rank > 1) { pattern = 'LINEAR'; axis = region.regionalPlan.corridorAxis; why = 'the_region_is_a_corridor_and_its_settlements_stretch_along_it'; }
+    else if (sea.share > 0.12 && !big) { pattern = sea.share > 0.28 || s.role === 'RESORT' ? 'LINEAR' : 'BIDIRECTIONAL'; axis = sea.angle + Math.PI / 2; why = pattern === 'LINEAR' ? 'the_sea_takes_one_side_so_the_town_runs_along_the_shore' : 'grows_both_ways_along_the_coast'; }
+    else if (steep.share > 0.3) { pattern = river.share > 0.02 ? 'LINEAR' : 'ASYMMETRIC'; axis = steep.angle + Math.PI / 2; bias = steep.angle + Math.PI; why = pattern === 'LINEAR' ? 'a_valley_between_steep_ground_leaves_one_direction_to_grow' : 'steep_ground_on_one_side_pushes_growth_to_the_other'; }
+    else if (glued.length) { const g = glued[0]; pattern = 'ASYMMETRIC'; why = // no bias needed: the shared boundary itself closes that side, and the fabric still grows right up to it
+      `${g.name.toLowerCase()}_closes_one_side_so_growth_goes_the_other_way`; }
+    else if (sea.share > 0.12) { pattern = 'ASYMMETRIC'; bias = sea.angle + Math.PI; why = 'a_large_city_on_the_coast_can_only_grow_inland'; }
+    else if (s.citySize === 'megacity' || s.planningProfile === 'polycentric') { pattern = 'MULTINODAL'; axis = s.orientation; why = s.citySize === 'megacity' ? 'too_large_for_one_centre_several_centres_grow_and_merge' : 'planned_round_several_centres'; }
+    else if (roads >= 4 && s.populationTarget >= 200000) { pattern = 'RADIAL_CORRIDOR'; why = `${roads}_regional_roads_meet_here_and_growth_follows_them`; }
+    else if ((s.planningProfile === 'strong_grid' || s.planningProfile === 'flat_loose') && steep.share < 0.08) { pattern = 'GRID_EXPANSION'; axis = s.orientation; why = 'flat_open_land_laid_out_in_successive_grid_extensions'; }
+    else if (river.share > 0.05 && s.populationTarget < 150000) { pattern = 'BIDIRECTIONAL'; axis = river.angle + Math.PI / 2; why = 'a_river_town_grows_up_and_down_the_valley'; }
+    else { pattern = 'CONCENTRIC'; why = s.planningProfile === 'centralised' || s.planningProfile === 'radial_formal' ? 'open_land_and_a_centralising_plan_growth_in_rings_round_one_core' : 'open_land_on_every_side_of_one_dominant_core'; }
+    s.macroGrowthPattern = pattern; s.macroGrowthReason = why; s.macroGrowth = { pattern, reason: why, axis, bias, reachFactor: MACRO_GROWTH[pattern] };
+  }
+  log(`macro growth: ${Object.keys(MACRO_GROWTH).map((k) => [k, S.filter((s) => s.macroGrowthPattern === k).length]).filter(([, c]) => c).map(([k, c]) => `${c} ${k.toLowerCase()}`).join(', ')}`);
+}
+
 // ---------------------------------------------------------------- 5. interface zones
 function planInterfaces(region, rng, log) {
-  const S = new Map(region.settlements.map((s) => [s.id, s])), zones = [];
+  // No interface zones: what lies between two neighbours is their own street fabric. The stage
+  // only decides how open each shared boundary is; the streets are joined after both exist.
+  const S = new Map(region.settlements.map((s) => [s.id, s]));
   for (const rel of region.relations) {
-    if (rel.gap > 4000) continue;
-    const a = S.get(rel.a), b = S.get(rel.b), tx = -rel.seam.ny, ty = rel.seam.nx;
-    const halfLen = Math.min(a.radius, b.radius) * 0.95, halfWid = Math.max(260, rel.gap / 2 + 180);
-    const corner = (u, v) => ({ x: rel.seam.x + tx * u + rel.seam.nx * v, y: rel.seam.y + ty * u + rel.seam.ny * v });
-    const polygon = [corner(-halfLen, -halfWid), corner(halfLen, -halfWid), corner(halfLen, halfWid), corner(-halfLen, halfWid)];
-    const near = (line) => line.points.some((p) => Math.abs((p.x - rel.seam.x) * tx + (p.y - rel.seam.y) * ty) < halfLen && Math.abs((p.x - rel.seam.x) * rel.seam.nx + (p.y - rel.seam.y) * rel.seam.ny) < halfWid + 300);
-    const rail = region.regionalRail.some(near), highway = region.regionalRoads.some((r) => r.type === 'REGIONAL_HIGHWAY' && !(r.from === a.id && r.to === b.id) && !(r.from === b.id && r.to === a.id) && near(r));
-    const linked = region.regionalRoads.some((r) => (r.from === a.id && r.to === b.id) || (r.from === b.id && r.to === a.id));
-    const T = region.terrain, ci = Math.max(0, Math.min(T.n - 1, Math.floor(rel.seam.y / CELL) * T.w + Math.floor(rel.seam.x / CELL))), wet = T.water[ci] || T.slope[ci] > 0.07;
-    const industrial = [a.role, b.role].some((r) => r === 'INDUSTRIAL' || r === 'LOGISTICS' || r === 'MILITARY');
-    let type, why;
-    if (highway) [type, why] = ['HARD_INFRASTRUCTURE_EDGE', 'a_regional_highway_runs_between_the_two_settlements'];
-    else if (wet) [type, why] = ['GREEN_WEDGE', 'water_or_steep_ground_keeps_the_two_apart'];
-    else if (rail && rel.relation !== 'GLUED') [type, why] = ['TRANSPORT_CORRIDOR', 'the_railway_occupies_the_land_between_them'];
-    else if (industrial) [type, why] = ['INDUSTRIAL_BUFFER', 'industry_and_yards_of_one_settlement_face_the_other'];
-    else if (rel.relation === 'GLUED') [type, why] = linked ? ['COMMERCIAL_CORRIDOR', 'the_road_between_the_two_centres_became_a_commercial_spine_across_the_boundary'] : ['URBAN_INFILL', 'the_two_fabrics_have_grown_into_each_other'];
-    else [type, why] = rng.chance(0.5) ? ['GREEN_WEDGE', 'planning_policy_keeps_the_gap_open'] : ['MIXED_EDGE', 'scattered_edge_uses_between_two_towns'];
-    zones.push({ id: `interface_${String(zones.length + 1).padStart(2, '0')}`, type, createdByStage: 'interfaces', reason: why, a: a.id, b: b.id, relation: rel.partOf || rel.relation, gap: rel.gap, polygon, seamLine: [corner(-halfLen, 0), corner(halfLen, 0)], preserveSeam: true, streetGridsBlended: false, position: { x: rel.seam.x, y: rel.seam.y } });
+    if (rel.relation === 'SEPARATE') continue;
+    const a = S.get(rel.a), b = S.get(rel.b), tx = -rel.seam.ny, ty = rel.seam.nx, half = Math.min(a.radius, b.radius) * 0.95;
+    [rel.seamMode, rel.seamModeReason] = seamModeOf(region, rel, a, b);
+    rel.seamLine = [{ x: rel.seam.x - tx * half, y: rel.seam.y - ty * half }, { x: rel.seam.x + tx * half, y: rel.seam.y + ty * half }];
   }
-  region.interfaceZones = zones;
-  log(`${zones.length} interface zones: ${INTERFACE_TYPES.map((t) => [t, zones.filter((z) => z.type === t).length]).filter(([, c]) => c).map(([t, c]) => `${c} ${t.toLowerCase()}`).join(', ') || 'none'}`);
+  region.interfaceZones = []; // kept empty for older callers
+  const adj = region.relations.filter((r) => r.seamMode);
+  log(`${adj.length} shared boundaries: ${SEAM_MODES.map((m) => [m, adj.filter((r) => r.seamMode === m).length]).filter(([, c]) => c).map(([m, c]) => `${c} ${m.toLowerCase()}`).join(', ') || 'none'}`);
 }
 
 // ---------------------------------------------------------------- 6. settlements
@@ -478,7 +608,7 @@ export function settlementConfig(region, s) {
     seed: `${region.seed}/${s.id}`, citySize: s.citySize, targetPopulation: clamp(s.populationTarget, lo, hi),
     heightmap: { width: N, height: N, data, metres: true },
     bypass: s.throughPairs.length ? 'always' : 'auto',
-    regionalContext: { regionSeed: region.seed, settlementId: s.id, role: s.role, scale: s.scale, exclusions, gateways: s.gateways, railEntries: s.rail ? s.railEntries : [], rail: s.rail && s.railEntries.length > 0, railApproaches: s.railEntries.length, throughPairs: s.throughPairs },
+    regionalContext: { regionSeed: region.seed, settlementId: s.id, role: s.role, scale: s.scale, rank: s.rank, regionalImportance: s.regionalImportance, institutions: s.institutions, populationProfile: region.populationProfile, macroGrowth: s.macroGrowth, exclusions, gateways: s.gateways, railEntries: s.rail ? s.railEntries : [], rail: s.rail && s.railEntries.length > 0, railApproaches: s.railEntries.length, throughPairs: s.throughPairs },
   };
 }
 
@@ -488,6 +618,7 @@ function finishSettlement(region, s) {
   s.capacityLimited = m.brief.population < s.populationTarget * 0.95;
   s.summary = {
     areaKm2: m.districts.reduce((a, d) => a + d.area, 0) / 1e6, streetKm: live.reduce((a, e) => a + e.len, 0) / 1000,
+    anchors: m.anchors.reduce((o, a) => { if (a.type !== 'neighbourhood' && a.type !== 'gateway') o[a.type] = (o[a.type] || 0) + 1; return o; }, {}), builtInstitutions: m.institutions.reduce((o, a) => { o[a.type] = (o[a.type] || 0) + 1; return o; }, {}), footprint: m.brief.footprint || null, reinforcementRejected: m.reinforcement?.rejected?.length ?? 0, reinforcementLinks: m.reinforcement?.links?.length ?? 0,
     districts: m.districts.length, hasStation: !!(m.rail && m.rail.stationComplex), stationTracks: m.rail?.stationComplex?.platformTracks ?? 0, stationConfiguration: m.rail?.stationComplex?.configuration ?? null,
     railLines: m.rail ? m.rail.lines.length : 0, corridors: m.corridors.length, civicAxisAngle: m.civicComposition.axisAngle,
     regionalRoadDecisions: m.regionalRoadDecisions.map((d) => d.behaviour), warnings: m.validation.warnings.length,
@@ -512,6 +643,7 @@ function finishSettlement(region, s) {
 }
 
 function finishRegion(region) {
+  if (region.settlements.every((s) => s.model)) stitchSeams(region); else { region.seamConnections = []; region.metropolitanCorridors = []; }
   for (const r of region.regionalRoads) { if (r.seamEnds && r.seamEnds.length >= 2) r.points = r.seamEnds.slice(0, 2); r.length = polylineLength(r.points); }
   for (const l of region.regionalRail) l.length = polylineLength(l.points);
   const S = region.settlements, by = (k) => S.reduce((o, s) => { o[s[k]] = (o[s[k]] || 0) + 1; return o; }, {});
@@ -523,7 +655,7 @@ function finishRegion(region) {
     largestContinuousGroup: Math.max(...Object.values(S.reduce((o, s) => { o[s.urbanContinuityGroup] = (o[s.urbanContinuityGroup] || 0) + 1; return o; }, {}))),
     regionalRoadKm: region.regionalRoads.reduce((a, r) => a + r.length, 0) / 1000, regionalRailKm: region.regionalRail.reduce((a, l) => a + l.length, 0) / 1000,
     streetKm: S.reduce((a, s) => a + (s.summary?.streetKm || 0), 0), urbanAreaKm2: S.reduce((a, s) => a + (s.summary?.areaKm2 || 0), 0),
-    stations: S.filter((s) => s.summary?.hasStation).length, interfaceZones: region.interfaceZones.length,
+    stations: S.filter((s) => s.summary?.hasStation).length, interfaceZones: 0, seamConnections: region.seamConnections.length, sharedBoundaries: region.relations.filter((r) => r.seamMode).length, metropolitanCorridors: region.metropolitanCorridors.length,
   };
 }
 

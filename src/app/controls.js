@@ -93,8 +93,23 @@ export function initControls(app) {
 // ---------- region mode
 export function syncMode(app) {
   for (const b of $('modeToggle').children) b.classList.toggle('on', b.dataset.mode === app.mode);
-  $('cityControls').hidden = app.mode !== 'city';
+  const opened = app.mode === 'city' ? app.openedSettlement : null;
+  // a settlement opened from the region is the region's: its parameters are shown, not edited
+  $('cityControls').hidden = app.mode !== 'city' || !!opened;
   $('regionControls').hidden = app.mode !== 'region';
+  $('inheritedPanel').hidden = !opened;
+  if (opened) {
+    const s = opened, c = s.model.config, I = s.institutions || {}, words = (v) => esc(String(v).replace(/_/g, ' ').toLowerCase());
+    const rows = [['Seed', esc(c.seed)], ['Scale', words(s.scale)], ['City size', words(s.citySize)], ['Rank in region', `${s.rank} (importance ${s.regionalImportance})`],
+      ['Population target', s.populationTarget.toLocaleString()], ['Population modelled', (s.modelledPopulation || 0).toLocaleString()], ['Role', words(s.role)], ['Planning profile', words(s.planningProfile)],
+      ['Growth pattern', `${words(s.macroGrowthPattern || 'concentric')}<br><span class="sub">${words(s.macroGrowthReason || '')}</span>`], ['Terrain', 'window of the regional terrain'],
+      ['Map', `${s.mapSize / 1000} km square`], ['Station', words(I.stationClass || 'none')], ['Institutions', `${I.universities || 0} universities, ${I.hospitals || 0} hospitals, ${I.subCentres || 0} sub-centres`],
+      ['Continuity', words(s.continuity || '')], ['Administrative id', esc(s.administrativeId || '')],
+      ...['centralization', 'gridPreference', 'radialPreference', 'civicOrder', 'polycentricity', 'terrainAdaptation'].filter((k) => c[k] != null).map((k) => [k.replace(/([A-Z])/g, ' $1').toLowerCase(), Number(c[k]).toFixed(2)])];
+    $('inheritedPanel').innerHTML = `<h2>Settlement (from the region)</h2><p class="sub">These values were set by the region and are read-only here. To design a city freely, press <b>City</b> above and generate a standalone one.</p>` + rows.map(([k, v]) => `<div class="row wide" style="align-items:flex-start"><span>${esc(k)}</span><span style="text-align:right;max-width:62%">${v}</span></div>`).join('') + (s.model.notes?.length ? `<p class="note">${s.model.notes.map(esc).join('<br>')}</p>` : '');
+  }
+  // the reality profile describes one city: it has no meaning for a whole region
+  for (let el = $('realityHead'); el && el.id !== 'pipelineHead'; el = el.nextElementSibling) el.hidden = app.mode === 'region';
   $('backToRegion').hidden = !(app.mode === 'city' && app.openedSettlement);
   $('openedNote').textContent = app.mode === 'city' && app.openedSettlement ? `Showing ${app.openedSettlement.name}, a settlement of region "${app.region.seed}".` : '';
 }
@@ -107,7 +122,7 @@ export function showRegion(app) {
   $('log').onclick = (e) => { const el = e.target.closest('[data-settlement]'); if (el) app.focusSettlement(el.dataset.settlement); };
   $('settlementList').innerHTML = r.settlements.map((s) => `<div class="srow"><div data-focus="${s.id}"><b>${esc(s.name)}</b><span>${esc(s.scale.replace(/_/g, ' ').toLowerCase())}${s.role === 'MIXED' ? '' : ' · ' + esc(s.role.toLowerCase())} · ${Math.round((s.modelledPopulation || s.populationTarget) / 1000)}k</span></div><button data-open="${s.id}">Open</button></div>`).join('');
   $('settlementList').onclick = (e) => { const o = e.target.closest('[data-open]'), f = e.target.closest('[data-focus]'); if (o) app.openSettlement(o.dataset.open); else if (f) app.focusSettlement(f.dataset.focus); };
-  $('valSummary').innerHTML = Object.entries({ settlements: st.settlements, 'continuous groups': st.continuousGroups, 'interface zones': st.interfaceZones, stations: st.stations }).map(([k, v]) => `<span>${esc(k)} ${v}</span>`).join('');
+  $('valSummary').innerHTML = Object.entries({ settlements: st.settlements, 'continuous groups': st.continuousGroups, 'shared boundaries': st.sharedBoundaries, 'streets across boundaries': st.seamConnections, 'cross-boundary corridors': st.metropolitanCorridors, stations: st.stations }).map(([k, v]) => `<span>${esc(k)} ${v}</span>`).join('');
   $('warnings').innerHTML = '';
   $('realityTable').innerHTML = '<span class="sub">Open a settlement to see its reality profile.</span>';
   $('status').textContent = `region "${r.seed}" · ${(st.modelledPopulation / 1e6).toFixed(2)}M people in ${st.settlements} settlements · ${Math.round(st.regionalRoadKm)} km regional roads · ${Math.round(st.regionalRailKm)} km regional rail · ${r.terrain.size / 1000} km square`;
@@ -115,10 +130,11 @@ export function showRegion(app) {
 
 export function initRegionControls(app) {
   const c = app.regionConfig;
-  $('modeToggle').addEventListener('click', (e) => { const m = e.target.dataset.mode; if (!m || app.busy) return; if (m === 'region' && !app.region) { app.setMode('region'); app.generateRegion(); } else if (m === 'region') app.backToRegion(); else app.setMode('city'); });
+  $('modeToggle').addEventListener('click', (e) => { const m = e.target.dataset.mode; if (!m || app.busy) return; if (m === 'region' && !app.region) { app.setMode('region'); app.generateRegion(); } else if (m === 'region') app.backToRegion(); else { app.openedSettlement = null; app.setMode('city'); } });
   $('regionSeed').value = c.seed; $('regionSeed').addEventListener('change', (e) => { c.seed = e.target.value; });
   $('regionPopulation').value = String(c.regionalPopulationTarget); $('regionPopulation').addEventListener('change', (e) => { c.regionalPopulationTarget = Number(e.target.value); });
   $('regionStructure').value = c.structure; $('regionStructure').addEventListener('change', (e) => { c.structure = e.target.value; });
+  for (const [id, key] of [['regionCoast', 'coast'], ['regionRoads', 'roadIntensity'], ['regionRail', 'railIntensity']]) { $(id).value = c[key]; $(id).addEventListener('change', (e) => { c[key] = e.target.value; }); }
   $('genRegion').addEventListener('click', () => app.generateRegion());
   $('newRegionSeed').addEventListener('click', () => { c.seed = `region-${Math.floor(Math.random() * 9000 + 1000)}`; $('regionSeed').value = c.seed; app.generateRegion(); });
   $('backToRegion').addEventListener('click', () => app.backToRegion());

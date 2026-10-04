@@ -7,6 +7,7 @@ export const SIZE_PRESETS = {
   medium: { mapSize: 10000, popRange: [80000, 350000], defaultPop: 180000, gestureBudget: 2, maxSecondary: 2 },
   major: { mapSize: 13000, popRange: [250000, 700000], defaultPop: 400000, gestureBudget: 3, maxSecondary: 3 },
   metropolis: { mapSize: 18000, popRange: [600000, 1600000], defaultPop: 900000, gestureBudget: 3, maxSecondary: 4 },
+  megacity: { mapSize: 28000, popRange: [1400000, 4200000], defaultPop: 2500000, gestureBudget: 3, maxSecondary: 8 }, // the primary city of a large region
 };
 
 export const TERRAIN_PRESETS = {

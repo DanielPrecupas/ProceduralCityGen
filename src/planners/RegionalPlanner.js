@@ -4,7 +4,7 @@
 
 import { record } from '../core/CityModel.js';
 import { summedArea, boxSum, boxBlur, labelComponents } from '../core/Raster.js';
-import { TAU, bell } from '../core/Geometry.js';
+import { TAU, bell, clamp } from '../core/Geometry.js';
 import { costFlood } from '../algorithms/LeastCostPath.js';
 
 export const BRIDGEABLE = 160; // water cells this close to land can be spanned by a bridge
@@ -51,9 +51,50 @@ export function planRegion(model, ctx) {
   const order = [];
   const own = (i) => !(T.foreign && T.foreign[i]); // land beyond a boundary with a neighbouring settlement is not ours to build on
   for (let i = 0; i < n; i++) if (!T.water[i] && T.buildability[i] >= 0.25 && accessCost[i] < Infinity && own(i)) order.push(i);
-  order.sort((a, b) => accessCost[a] - accessCost[b] || a - b);
-  const urbanCount = Math.min(order.length, Math.round(B.urbanArea / (cell * cell)));
+  // MACRO GROWTH. In a region the settlement has a growth pattern, chosen from its site. It bends
+  // the order in which land is taken: along an axis, along the regional roads, towards several
+  // nodes, on a grid, or away from whatever closes one side. Without one, growth is by cost alone.
+  const macro = cfg.regionalContext?.macroGrowth || null;
+  if (macro && macro.pattern !== 'CONCENTRIC') {
+    const gw = (cfg.regionalContext.gateways || []).map((g) => Math.atan2(g.y - core.y, g.x - core.x));
+    const lobes = macro.pattern === 'MULTINODAL' ? [0, 1, 2, 3, 4].map((k) => (macro.axis || 0) + (k * TAU) / 5 + 0.35 * Math.sin(k * 2.4)) : gw;
+    const ax = Math.cos(macro.axis || 0), ay = Math.sin(macro.axis || 0), bx = Math.cos(macro.bias || 0), by = Math.sin(macro.bias || 0);
+    const shape = (i) => {
+      const dx = R.centerX(i) - core.x, dy = R.centerY(i) - core.y, d = Math.hypot(dx, dy) || 1, ux = dx / d, uy = dy / d, al = ux * ax + uy * ay, ac = -ux * ay + uy * ax;
+      switch (macro.pattern) {
+        case 'LINEAR': return Math.hypot(0.5 * al, 1.6 * ac);
+        case 'BIDIRECTIONAL': return Math.hypot(0.62 * al, 1.35 * ac);
+        case 'GRID_EXPANSION': return Math.max(Math.abs(al), Math.abs(ac)) * 1.12; // square sectors on the grid's own axes
+        case 'ASYMMETRIC': return macro.bias == null ? 1 : 1 - 0.38 * (ux * bx + uy * by);
+        default: { let m = 0; for (const a of lobes) { const c = Math.cos(Math.atan2(uy, ux) - a); if (c > 0) m = Math.max(m, c ** (macro.pattern === 'MULTINODAL' ? 3 : 8)); } return 1 - (macro.pattern === 'MULTINODAL' ? 0.36 : 0.42) * m * Math.min(1, d / (0.5 * B.urbanRadius)); }
+      }
+    };
+    const key = new Float64Array(n);
+    for (const i of order) key[i] = accessCost[i] * shape(i);
+    order.sort((a, b) => key[a] - key[b] || a - b);
+  } else order.sort((a, b) => accessCost[a] - accessCost[b] || a - b);
+  // FOOTPRINT SHAPE. A city grows in several directions round its centre. It may stretch a long
+  // way along one axis only where something makes it: water, steep ground, or a region that is
+  // deliberately fp_linear. A neighbour's boundary or the edge of the plan is not such a reason - a
+  // city squeezed by those is smaller, not a strip.
+  let fp_nat = 0, fp_tot = 0;
+  { const rr = Math.ceil((1.25 * B.urbanRadius) / cell), cx = coreIdx % w, cy = (coreIdx - cx) / w;
+    for (let y = cy - rr; y <= cy + rr; y++) for (let x = cx - rr; x <= cx + rr; x++) { if ((x - cx) ** 2 + (y - cy) ** 2 > rr * rr) continue; fp_tot++; if (x < 0 || y < 0 || x >= w || y >= h) continue; const i = y * w + x; if (own(i) && (T.water[i] || T.buildability[i] < 0.25)) fp_nat++; } }
+  const fp_natural = fp_nat / Math.max(1, fp_tot), fp_linear = false;
+  const fpReachFactor = Math.max(macro ? macro.reachFactor : 0, clamp(1.35 + 2.4 * fp_natural, 1.35, 2.4)), fp_reach = fpReachFactor * B.urbanRadius;
+  const fp_within = (i, f) => Math.hypot(R.centerX(i) - core.x, R.centerY(i) - core.y) <= fp_reach * f;
+  const fp_near = order.filter((i) => fp_within(i, 1));
+  let urbanCount = Math.min(order.length, Math.round(B.urbanArea / (cell * cell)));
   const eventualCount = Math.min(order.length, Math.round(B.eventualArea / (cell * cell)));
+  const fp_wanted = urbanCount;
+  if (fp_near.length < urbanCount) {
+    urbanCount = fp_near.length;
+    const f = urbanCount / fp_wanted;
+    B.population = Math.round(B.population * f); B.urbanArea *= f; B.eventualPopulation = Math.round(B.eventualPopulation * f);
+    const note = `The site allows growth in too few directions for the target; rather than stretch into a strip the founding population is reduced to ${B.population.toLocaleString()}.`;
+    model.notes.push(note); ctx.log(note);
+  }
+  { const fp_rest = order.filter((i) => !fp_within(i, 1)); order.length = 0; for (const i of fp_near) order.push(i); for (const i of fp_rest) order.push(i); }
   let urbanMask = new Uint8Array(n);
   const reserveMask = new Uint8Array(n);
   for (let k = 0; k < urbanCount; k++) urbanMask[order[k]] = 1;
@@ -192,6 +233,12 @@ export function planRegion(model, ctx) {
     if (gateways.length >= wanted) break;
     if (gateways.every((g) => angSep(g.angle, s.angle) > 1.0)) gateways.push({ ...R.center(s.idx), angle: s.angle });
   }
+
+  // measured shape of the founding extent: principal-axis aspect ratio
+  { let n0 = 0, mx = 0, my = 0; for (let i = 0; i < n; i++) if (urbanMask[i]) { n0++; mx += R.centerX(i); my += R.centerY(i); } mx /= n0 || 1; my /= n0 || 1;
+    let sxx = 0, syy = 0, sxy = 0; for (let i = 0; i < n; i++) if (urbanMask[i]) { const dx = R.centerX(i) - mx, dy = R.centerY(i) - my; sxx += dx * dx; syy += dy * dy; sxy += dx * dy; }
+    const tr = sxx + syy, det = sxx * syy - sxy * sxy, dd = Math.sqrt(Math.max(0, tr * tr / 4 - det)), l1 = tr / 2 + dd, l2 = Math.max(1e-6, tr / 2 - dd);
+    B.footprint = { aspectRatio: Math.round(Math.sqrt(l1 / l2) * 100) / 100, naturalConstraintShare: Math.round(fp_natural * 100) / 100, reachFactor: Math.round(fpReachFactor * 100) / 100, areaKept: Math.round((urbanCount / Math.max(1, fp_wanted)) * 100) / 100, macroGrowthPattern: macro ? macro.pattern : null, elongationReason: macro && macro.pattern !== 'CONCENTRIC' ? `macro_growth_${macro.pattern.toLowerCase()}` : fp_natural > 0.25 ? 'water_or_steep_ground_beside_the_centre' : fp_natural > 0.1 ? 'some_water_or_steep_ground' : 'none' }; }
 
   model.regionalPlan = {
     core, coreIdx, accessCost, urbanMask, reserveMask, protectedMask,

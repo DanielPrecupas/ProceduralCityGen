@@ -63,6 +63,7 @@ const app = {
     const s = app.region?.settlements.find((x) => x.id === id);
     if (!s || !s.model) return;
     app.openedSettlement = s; app.model = s.model;
+    if (app.mode === 'region') app.regionView = { scale: app.view.scale, ox: app.view.ox, oy: app.view.oy }; // come back to the same place
     mapRenderer.prepare(app.model); debugRenderer.prepare(app.model);
     labels = labelCandidates(app.model);
     app.selected = null; app.selectedId = null;
@@ -71,12 +72,20 @@ const app = {
     showModel(app); chrome.modelChanged(); reality.modelChanged();
     viewport.resetView(0);
   },
-  backToRegion() { if (!app.region) return; app.setMode('region'); showRegion(app); app.select([]); viewport.resetView(0); },
+  backToRegion() {
+    if (!app.region) return;
+    const s = app.openedSettlement;
+    app.setMode('region'); showRegion(app);
+    if (app.regionView) { Object.assign(app.view, app.regionView); app.redraw(); } else viewport.resetView(0);
+    app.select(s ? [describeSettlement(app.region, s)] : []); // the settlement just visited stays selected
+  },
 
   async generate(from = 'terrain') {
     if (app.busy) return;
     app.busy = true;
     try {
+      // a settlement's model belongs to its region: city controls never regenerate it in place
+      if (app.region && app.region.settlements.some((x) => x.model === app.model)) { from = 'terrain'; app.model = null; }
       if (from === 'terrain' || !app.model) { app.model = createCityModel(app.config); from = 'terrain'; app.openedSettlement = null; }
       else {
         // later stages pick up edited planning parameters; seed and terrain stay as generated

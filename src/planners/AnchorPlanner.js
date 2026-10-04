@@ -33,6 +33,7 @@ export function lineClear(T, a, b, maxSlope = 0.14) {
 export function planAnchors(model, ctx) {
   const T = model.terrain, R = T.raster, { w, h, cell } = R, RP = model.regionalPlan, B = model.brief, cfg = model.config;
   const k = B.scale, core = RP.core, Ru = B.urbanRadius;
+  const inst = cfg.regionalContext?.institutions || null; // what the region has allocated to this settlement
   const cands = [];
   for (let y = 1; y < h - 1; y += 3) for (let x = 1; x < w - 1; x += 3) {
     const i = y * w + x;
@@ -88,6 +89,11 @@ export function planAnchors(model, ctx) {
     return 1.2 * bell(d, dT, 0.25 * dT) + 0.5 * (u.x * dirG.x + u.y * dirG.y) + (lineClear(T, civic.position, c) ? 1 : 0) + 0.4 * T.buildability[c.i] - (T.waterDist[c.i] < 250 ? 0.5 : 0);
   });
   const station = stationC ? add('station', stationC, 'on_regional_approach_with_sightline_to_civic_centre') : null;
+  // a station is as important as the place it serves: a hub in the primary city, a halt in a town
+  if (station && inst) {
+    const sc = { HUB: ['Central Station', 2, 1.0, 1.4], MAIN: ['Main Station', 2, 0.9, 1], SIMPLE: ['Station', 3, 0.6, 0.6], STOP: ['Railway Halt', 3, 0.35, 0.3] }[inst.stationClass];
+    if (sc) { station.name = sc[0]; station.tier = sc[1]; station.importance = sc[2]; station.jobs = Math.round(station.jobs * sc[3]); station.visitors = Math.round(station.visitors * sc[3]); station.stationClass = inst.stationClass; }
+  }
 
   // commercial centre: off the civic axis, forming a triangle with civic centre and station
   if (station) {
@@ -114,12 +120,17 @@ export function planAnchors(model, ctx) {
   if (parkC) add('main_park', parkC, T.scenic[parkC.i] > 0.5 ? 'landscape_feature_within_reach_of_centre' : 'central_open_space_for_inner_districts');
 
   // university / cultural area: a calmer scenic site, a tram-ride from the centre
-  const uniC = pick((c) => {
-    const d = dist(c, civic.position);
-    if (nearestAnchor(c) < 900 * k) return -Infinity;
-    return bell(d, 2500 * k, 700 * k) + 0.7 * T.scenic[c.i] + 0.4 * T.buildability[c.i];
-  });
-  if (uniC) add('university', uniC, 'scenic_site_apart_from_but_near_the_centre');
+  // In a region universities are allocated by regional demand: most towns have none, the primary city several.
+  const campuses = inst ? inst.universities : 1;
+  for (let u = 0; u < campuses; u++) {
+    const reach = (2500 + 1500 * u) * k;
+    const uniC = pick((c) => {
+      const d = dist(c, civic.position);
+      if (nearestAnchor(c) < 900 * k || (u > 0 && nearestAnchor(c, (a) => a.type === 'university') < 2800 * k)) return -Infinity;
+      return bell(d, reach, 700 * k) + 0.7 * T.scenic[c.i] + 0.4 * T.buildability[c.i];
+    });
+    if (uniC) add('university', uniC, u === 0 ? (inst ? 'regional_university_allocated_to_this_city_on_a_scenic_site_near_the_centre' : 'scenic_site_apart_from_but_near_the_centre') : 'further_campus_of_a_city_large_enough_for_several', u === 0 ? 'University' : `University Campus ${u + 1}`);
+  }
 
   // industrial / employment: large flat land, near a regional approach, away from prime areas
   const satB = summedArea(T.buildability, w, h);
@@ -155,10 +166,11 @@ export function planAnchors(model, ctx) {
   // secondary centres: seeds of a future polycentric city, out along the growth directions
   for (let s = 0; s < B.secondaryCentres; s++) {
     const g = RP.growthDirections[s % Math.max(1, RP.growthDirections.length)];
-    const ang = g ? g.angle + (s >= RP.growthDirections.length ? 0.9 : 0) : (s / B.secondaryCentres) * TAU;
-    const target = { x: core.x + Math.cos(ang) * Ru * 0.72, y: core.y + Math.sin(ang) * Ru * 0.72 };
+    const round = Math.floor(s / Math.max(1, RP.growthDirections.length));
+    const ang = g ? g.angle + 0.9 * round : (s / B.secondaryCentres) * TAU;
+    const target = { x: core.x + Math.cos(ang) * Ru * (round % 2 ? 0.5 : 0.72), y: core.y + Math.sin(ang) * Ru * (round % 2 ? 0.5 : 0.72) };
     const c = pick((q) => (nearestAnchor(q) < 1300 * k || T.buildability[q.i] < 0.6 ? -Infinity : -dist(q, target)));
-    if (c && dist(c, target) < Ru * 0.6) add('secondary', c, `future_centre_on_${bearingName(ang)}_growth_direction`, `Sub-centre ${'ABC'[counters.secondary || 0]}`);
+    if (c && dist(c, target) < Ru * 0.6) add('secondary', c, inst && inst.subCentreCauses?.length ? `${inst.subCentreCauses[Math.min(s, inst.subCentreCauses.length - 1)]}_placed_on_${bearingName(ang)}_growth_direction` : `future_centre_on_${bearingName(ang)}_growth_direction`, `Sub-centre ${'ABCDEFGHIJ'[counters.secondary || 0]}`);
   }
 
   // neighbourhood centres: the future residential areas, spaced so each can become a district

@@ -159,7 +159,7 @@ function attempt(model, ctx, banned) {
   // the junction's role calls for one, and only kept if it is eligible. No quotas.
   const r1Roads = model.roads.filter((r) => r.cls === 'R1' && r.points.length >= 2);
   const nearR1 = (p, d) => r1Roads.some((r) => pointPolylineDistance(p, r.points) < d);
-  const big = cfg.citySize === 'metropolis' ? 3 : cfg.citySize === 'major' ? 2 : cfg.citySize === 'medium' ? 1 : 0;
+  const big = cfg.citySize === 'metropolis' || cfg.citySize === 'megacity' ? 3 : cfg.citySize === 'major' ? 2 : cfg.citySize === 'medium' ? 1 : 0;
   const CAP = { TRIANGULAR_PLAZA: 1 + big + (big > 1 ? 1 : 0) };
   const formCount = {};
   const used = (f) => formCount[f] || 0;
