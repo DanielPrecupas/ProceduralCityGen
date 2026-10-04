@@ -17,7 +17,7 @@ import { routeMajorNetwork } from './MajorNetworkPlanner.js';
 
 const STAGE = 'reinforcement';
 const STRONG = new Set(['R1', 'R2', 'R3']);
-const BUDGET = { small: 3, medium: 5, major: 10 };
+const BUDGET = { small: 3, medium: 5, major: 10, metropolis: 16 };
 
 // Abstract graph of the strong network: nodes are road ends, edges are road sections.
 function buildGraph(model) {

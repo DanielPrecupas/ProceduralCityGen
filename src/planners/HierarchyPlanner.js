@@ -17,27 +17,40 @@ import { buildStrokes } from '../algorithms/Strokes.js';
 import { profileNameOf } from '../core/TransportProfiles.js';
 
 const STAGE = 'hierarchy';
-export const HIERARCHY = ['LOCAL', 'LOCAL_HIGH_STREET', 'DISTRICT_CONNECTOR', 'SECONDARY_AVENUE', 'PRIMARY_AVENUE', 'METROPOLITAN_ARTERIAL', 'REGIONAL'];
+// Roads are not one hierarchy. The STREET SYSTEM is the city's own network of frontage streets;
+// the LIMITED-ACCESS SYSTEM (expressways) serves metropolitan movement and is not a bigger
+// avenue; rail is a third system (core/TransportProfiles.js). The levels below are ordered so
+// that "this level and everything above it" is meaningful for the coherence check.
+export const HIERARCHY = ['LOCAL', 'LOCAL_HIGH_STREET', 'DISTRICT_CONNECTOR', 'SECONDARY_AVENUE', 'PRIMARY_AVENUE', 'GRAND_BOULEVARD', 'METROPOLITAN_ARTERIAL', 'URBAN_EXPRESSWAY', 'REGIONAL_HIGHWAY'];
+export const ROAD_SYSTEMS = {
+  STREET: ['GRAND_BOULEVARD', 'METROPOLITAN_ARTERIAL', 'PRIMARY_AVENUE', 'SECONDARY_AVENUE', 'DISTRICT_CONNECTOR', 'LOCAL_HIGH_STREET', 'LOCAL'],
+  LIMITED_ACCESS: ['REGIONAL_HIGHWAY', 'URBAN_EXPRESSWAY'],
+  RAIL: ['INTERCITY_RAIL', 'REGIONAL_RAIL', 'FREIGHT_RAIL'],
+};
+export const systemOf = (level) => (ROAD_SYSTEMS.LIMITED_ACCESS.includes(level) ? 'LIMITED_ACCESS' : ROAD_SYSTEMS.RAIL.includes(level) ? 'RAIL' : 'STREET');
 export const HIERARCHY_RANK = Object.fromEntries(HIERARCHY.map((h, i) => [h, i]));
 const CIVIC_TYPES = new Set(['civic_square', 'station_square', 'subcentre_square', 'civic_garden', 'main_park', 'CULTURAL_COMPLEX', 'CIVIC_COMPOUND']);
 
 export function resetHierarchy(m) {
   m.corridors = [];
   m.civicConflicts = (m.civicConflicts || []).filter((c) => c.createdByStage !== STAGE);
-  if (m.network) for (const e of m.network.edges) { delete e.hierarchy; delete e.corridorId; }
-  for (const r of m.roads) { delete r.hierarchy; delete r.corridorId; delete r.transportProfile; }
+  if (m.network) for (const e of m.network.edges) { delete e.hierarchy; delete e.system; delete e.corridorId; }
+  for (const r of m.roads) { delete r.hierarchy; delete r.system; delete r.corridorId; delete r.transportProfile; }
+  delete m.metadata.avenueMesh;
   delete m.metadata.hierarchyCoherence;
 }
 
 export function planHierarchy(model, ctx) {
-  const g = model.network, nodes = g.nodes;
+  const g = model.network, nodes = g.nodes, cfg = model.config;
   const roadOf = new Map(model.roads.map((r) => [r.id, r]));
   const roundabouts = new Set(model.reservations.filter((rv) => rv.type === 'roundabout').map((rv) => rv.id));
   const live = g.edges.filter((e) => !e.removed && e.cls !== 'rail');
   const isPlace = (e) => { const r = roadOf.get(e.roadId); return e.sub === 'frame' || e.sub === 'circle_street' || (r && roundabouts.has(r.reservationId)); };
   const group = (e) => (isPlace(e) ? 'place' : e.cls === 'R1' || e.cls === 'R2' || e.cls === 'R3' ? 'major' : e.cls === 'R4' ? 'collector' : 'local');
   const other = (e, n) => (e.a === n ? e.b : e.a);
+  const urbanArea = model.districts.reduce((s, d) => s + (d.type === 'park' ? 0 : d.area), 0);
   const extent = Math.sqrt(model.districts.reduce((s, d) => s + d.area, 0)) || 5000;
+  const R = model.terrain.raster, urbanMask = model.regionalPlan.urbanMask;
 
   // direction in which an edge leaves a node, read ~45 m along the road so short pieces do not jitter
   const armDir = (e, from) => {
@@ -148,13 +161,87 @@ export function planHierarchy(model, ctx) {
     const entersFromRegion = regional.length > 0 || gatewayAt(c.start) || gatewayAt(c.end);
     c.metro = urbanLen >= 0.32 * extent || entersFromRegion || between >= 0.22;
     c.why = entersFromRegion ? 'carries_a_regional_approach_into_the_city' : urbanLen >= 0.32 * extent ? `runs_${Math.round((100 * urbanLen) / extent)}_percent_of_the_way_across_the_city` : between >= 0.22 ? 'carries_a_large_share_of_cross_city_paths' : 'links_centres_within_one_part_of_the_city';
-    setLevel(regional, 'REGIONAL'); setLevel(urban, c.metro ? 'METROPOLITAN_ARTERIAL' : 'PRIMARY_AVENUE');
+    // limited-access system: an expressway inside the urban area, a regional highway outside it
+    for (const e of regional) { const i = R.index((nodes[e.a].x + nodes[e.b].x) / 2, (nodes[e.a].y + nodes[e.b].y) / 2); level.set(e.id, HIERARCHY_RANK[i >= 0 && urbanMask[i] ? 'URBAN_EXPRESSWAY' : 'REGIONAL_HIGHWAY']); }
+    // street system: formal boulevards are their own level
+    for (const e of urban) { const r = roadOf.get(e.roadId), formal = r && (r.designRole === 'GRAND_BOULEVARD' || r.designRole === 'CIVIC_AXIS'); level.set(e.id, HIERARCHY_RANK[formal ? 'GRAND_BOULEVARD' : c.metro ? 'METROPOLITAN_ARTERIAL' : 'PRIMARY_AVENUE']); }
   }
   for (const e of live) if (isPlace(e)) level.set(e.id, HIERARCHY_RANK.DISTRICT_CONNECTOR); // refined below from what arrives
+  // Spacing between parallel routes is judged against roads of similar bearing only, so a
+  // promoted street may cross an avenue but should not shadow one.
+  const bearing = (e) => { const a = Math.atan2(nodes[e.b].y - nodes[e.a].y, nodes[e.b].x - nodes[e.a].x); return a < 0 ? a + Math.PI : a; };
+  const makeCover = (REACH) => {
+    const CELL = Math.max(80, REACH * 0.55), cover = new Map();
+    return {
+      stamp(edges) {
+        for (const e of edges) {
+          const mx = (nodes[e.a].x + nodes[e.b].x) / 2, my = (nodes[e.a].y + nodes[e.b].y) / 2, b = bearing(e);
+          for (let y = Math.floor((my - REACH) / CELL); y <= Math.floor((my + REACH) / CELL); y++) for (let x = Math.floor((mx - REACH) / CELL); x <= Math.floor((mx + REACH) / CELL); x++) {
+            const k = x * 100003 + y; let l = cover.get(k); if (!l) { l = []; cover.set(k, l); }
+            if (l.length < 8 && !l.some((v) => Math.abs(v - b) < 0.1)) l.push(b);
+          }
+        }
+      },
+      shadowed(edges) {
+        let cov = 0, tot = 0;
+        for (const e of edges) {
+          const l = cover.get(Math.floor((nodes[e.a].x + nodes[e.b].x) / 2 / CELL) * 100003 + Math.floor((nodes[e.a].y + nodes[e.b].y) / 2 / CELL)), b = bearing(e);
+          tot += e.len;
+          if (l && l.some((v) => { const d = Math.abs(v - b); return Math.min(d, Math.PI - d) < 0.44; })) cov += e.len;
+        }
+        return tot ? cov / tot : 1;
+      },
+    };
+  };
+  const { stamp, shadowed } = makeCover(210);
+
+  // --- THE AVENUE MESH. Its size follows the urbanised AREA, not the number of anchors: for a
+  // target spacing S between avenues, a city of area A needs about 2A / S of avenue-or-better
+  // street. Existing continuous chains (collector spines first, then long through streets) are
+  // promoted, best first, until that length is reached. Each promoted chain must hang on the
+  // avenue network at both ends and must not shadow a parallel avenue.
+  const S = cfg.avenueSpacing, isAvenue = (rk) => rk >= HIERARCHY_RANK.PRIMARY_AVENUE && rk <= HIERARCHY_RANK.METROPOLITAN_ARTERIAL;
+  const avenueKm = () => live.reduce((t, e) => t + (isAvenue(level.get(e.id) ?? -1) && !isPlace(e) ? e.len : 0), 0) / 1000;
+  const targetKm = (2 * urbanArea) / S / 1000, before = avenueKm();
+  const mesh = makeCover(S * 0.42);
+  mesh.stamp(live.filter((e) => isAvenue(level.get(e.id) ?? -1) && !isPlace(e)));
+  const onAvenue = (n) => g.roadEdgesAt(nodes[n]).some((eid) => (level.get(eid) ?? -1) >= HIERARCHY_RANK.PRIMARY_AVENUE);
+  let avenuesPromoted = 0, have = before;
+  for (let pass = 0; pass < 5 && have < targetKm; pass++) {
+    let any = false;
+    const pool = corridors.filter((c) => (c.grp === 'collector' || c.grp === 'local') && !c.avenueMesh && c.length >= 700)
+      .sort((a, b) => (b.edges[0].sub === 'avenue') - (a.edges[0].sub === 'avenue') || (b.grp === 'collector') - (a.grp === 'collector') || b.length - a.length || a.edges[0].id - b.edges[0].id);
+    for (const c of pool) {
+      if (have >= targetKm) break;
+      let cur = c.start, first = -1, last = -1;
+      if (onAvenue(cur)) first = 0;
+      c.edges.forEach((e, i) => { cur = other(e, cur); if (onAvenue(cur)) { if (first < 0) first = i + 1; last = i; } });
+      if (first < 0) continue; // does not touch the avenue network (yet)
+      // a line laid out as an avenue is taken whole once it touches the network (it may run on to
+      // the edge of the city); any other chain only between the avenues it links
+      const laid = c.edges[0].sub === 'avenue';
+      if (!laid && last < first) continue;
+      const part = laid ? c.edges : c.edges.slice(first, last + 1), len = part.reduce((t, e) => t + e.len, 0);
+      const a = nodes[c.start], z = nodes[c.end];
+      if (len < 700 || (!laid && Math.hypot(z.x - a.x, z.y - a.y) < 0.5 * c.length) || mesh.shadowed(part) > 0.45) continue;
+      c.avenueMesh = true; c.part = part; c.avenue = true;
+      c.why = c.edges[0].sub === 'avenue' ? 'avenue_line_laid_out_for_the_area_wide_mesh' : c.grp === 'collector' ? 'collector_spine_promoted_into_the_avenue_mesh_the_urban_area_calls_for' : 'continuous_through_street_promoted_into_the_avenue_mesh_the_urban_area_calls_for';
+      setLevel(part, 'PRIMARY_AVENUE'); mesh.stamp(part); have += len / 1000; avenuesPromoted++; any = true;
+    }
+    if (!any) break;
+  }
+  // how much of the city is still more than one spacing away from any avenue
+  let urbanCells = 0, farCells = 0;
+  { const near = new Uint8Array(R.n), rc = Math.ceil(S / R.cell);
+    for (const e of live) if ((level.get(e.id) ?? -1) >= HIERARCHY_RANK.PRIMARY_AVENUE) { const cx = Math.floor((nodes[e.a].x + nodes[e.b].x) / 2 / R.cell), cy = Math.floor((nodes[e.a].y + nodes[e.b].y) / 2 / R.cell); if (near[cy * R.w + cx] === 2) continue; near[cy * R.w + cx] = 2; for (let y = Math.max(0, cy - rc); y <= Math.min(R.h - 1, cy + rc); y++) for (let x = Math.max(0, cx - rc); x <= Math.min(R.w - 1, cx + rc); x++) if ((x - cx) ** 2 + (y - cy) ** 2 <= rc * rc && !near[y * R.w + x]) near[y * R.w + x] = 1; }
+    for (let i = 0; i < R.n; i++) if (model.districtGrid[i] >= 0 && model.districts[model.districtGrid[i]].type !== 'park') { urbanCells++; if (!near[i]) farCells++; } }
+  model.metadata.avenueMesh = { targetSpacing: S, urbanAreaKm2: urbanArea / 1e6, targetKm, plannedKm: before, promotedKm: have - before, achievedKm: have, chainsPromoted: avenuesPromoted, underservedShare: urbanCells ? farCells / urbanCells : 0 };
+
   for (const c of corridors) {
     if (c.grp !== 'collector') continue;
     // the stretch of a collector between the first and last avenue-or-better road it meets is an avenue itself
-    setLevel(c.edges, 'DISTRICT_CONNECTOR');
+    setLevel(c.edges.filter((e) => (level.get(e.id) ?? -1) < HIERARCHY_RANK.PRIMARY_AVENUE), 'DISTRICT_CONNECTOR');
+    if (c.avenueMesh) continue;
     let cur = c.start, first = -1, last = -1;
     const meets = (n) => g.roadEdgesAt(nodes[n]).some((eid) => (level.get(eid) ?? -1) >= HIERARCHY_RANK.PRIMARY_AVENUE && !isPlace(g.edges[eid]));
     if (meets(cur)) first = 0;
@@ -165,33 +252,13 @@ export function planHierarchy(model, ctx) {
     if (c.avenue) setLevel(part, 'SECONDARY_AVENUE');
   }
 
-  // promotion of existing local streets into the missing middle. Spacing is judged against roads
-  // of similar bearing only, so a connector may cross an avenue but should not shadow one.
-  const CELL = 120, REACH = 210, cover = new Map();
-  const bearing = (e) => { const a = Math.atan2(nodes[e.b].y - nodes[e.a].y, nodes[e.b].x - nodes[e.a].x); return a < 0 ? a + Math.PI : a; };
-  const stamp = (edges) => {
-    for (const e of edges) {
-      const mx = (nodes[e.a].x + nodes[e.b].x) / 2, my = (nodes[e.a].y + nodes[e.b].y) / 2, b = bearing(e);
-      for (let y = Math.floor((my - REACH) / CELL); y <= Math.floor((my + REACH) / CELL); y++) for (let x = Math.floor((mx - REACH) / CELL); x <= Math.floor((mx + REACH) / CELL); x++) {
-        const k = x * 100003 + y; let l = cover.get(k); if (!l) { l = []; cover.set(k, l); }
-        if (l.length < 8 && !l.some((v) => Math.abs(v - b) < 0.1)) l.push(b);
-      }
-    }
-  };
-  const shadowed = (edges) => {
-    let cov = 0, tot = 0;
-    for (const e of edges) {
-      const l = cover.get(Math.floor((nodes[e.a].x + nodes[e.b].x) / 2 / CELL) * 100003 + Math.floor((nodes[e.a].y + nodes[e.b].y) / 2 / CELL)), b = bearing(e);
-      tot += e.len;
-      if (l && l.some((v) => { const d = Math.abs(v - b); return Math.min(d, Math.PI - d) < 0.44; })) cov += e.len;
-    }
-    return tot ? cov / tot : 1;
-  };
+  // promotion of existing local streets into the lower middle of the hierarchy
   stamp(live.filter((e) => (level.get(e.id) ?? -1) >= HIERARCHY_RANK.DISTRICT_CONNECTOR && !isPlace(e)));
   let promoted = 0;
   const locals = corridors.filter((c) => c.grp === 'local').sort((a, b) => b.length - a.length || a.edges[0].id - b.edges[0].id);
   for (const c of locals) {
     if (c.length < 700) break;
+    if (c.avenueMesh) continue;
     // only the part between the first and the last higher road it meets: a connector links two of them
     let cur = c.start, first = -1, last = -1;
     const meets = (n) => rankAt(n) >= HIERARCHY_RANK.DISTRICT_CONNECTOR;
@@ -262,7 +329,7 @@ export function planHierarchy(model, ctx) {
   model.metadata.hierarchyCoherence = coherence;
 
   // --- 5. write levels and corridor records
-  for (const e of live) e.hierarchy = HIERARCHY[level.get(e.id)];
+  for (const e of live) { e.hierarchy = HIERARCHY[level.get(e.id)]; e.system = systemOf(e.hierarchy); }
   const records = [];
   const slugLevel = (h) => h.toLowerCase();
   const promotedParts = corridors.filter((c) => c.grp === 'local' && c.part).map((c) => ({ ...c, grp: 'promoted', edges: c.part, length: c.part.reduce((x, e) => x + e.len, 0), bends: [] }));
@@ -296,7 +363,7 @@ export function planHierarchy(model, ctx) {
     let dom = (0.5 * Math.atan2(sn, cs) * 180) / Math.PI; if (dom < 0) dom += 180;
     const id = ctx.id('corridor');
     records.push(record(id, 'corridor', STAGE, `${slugLevel(top)}_${c.why || 'continuous_route'}`, {
-      hierarchy: top, designRole: roles.size ? [...roles.entries()].sort((p, q) => q[1] - p[1])[0][0] : null,
+      hierarchy: top, system: systemOf(top), designRole: roles.size ? [...roles.entries()].sort((p, q) => q[1] - p[1])[0][0] : null,
       segments: roadIds, edgeIds: c.edges.map((e) => e.id),
       length: c.length, lengthShareOfCity: c.length / extent,
       continuityScore: Math.max(0, 1 - meanBend / 0.6), straightness: c.length ? Math.min(1, Math.hypot(z.x - a.x, z.y - a.y) / c.length) : 1,
@@ -312,7 +379,7 @@ export function planHierarchy(model, ctx) {
   for (const r of model.roads) {
     const o = perRoad.get(r.id);
     if (!o) continue;
-    r.hierarchy = HIERARCHY[o.rank]; r.transportProfile = profileNameOf(r);
+    r.hierarchy = HIERARCHY[o.rank]; r.system = systemOf(r.hierarchy); r.transportProfile = profileNameOf(r);
     if (o.cor.size) r.corridorId = [...o.cor.entries()].sort((p, q) => q[1] - p[1])[0][0];
   }
 
@@ -337,5 +404,7 @@ export function planHierarchy(model, ctx) {
 
   const km = (h) => (live.reduce((s, e) => s + (e.hierarchy === h ? e.len : 0), 0) / 1000).toFixed(0);
   const major = records.filter((c) => HIERARCHY_RANK[c.hierarchy] >= HIERARCHY_RANK.PRIMARY_AVENUE).sort((a, b) => b.length - a.length);
+  const am = model.metadata.avenueMesh;
+  ctx.log(`avenue mesh: target spacing ${S} m over ${am.urbanAreaKm2.toFixed(1)} km2 = ${am.targetKm.toFixed(0)} km; ${am.plannedKm.toFixed(0)} km planned + ${am.promotedKm.toFixed(0)} km promoted (${avenuesPromoted} chains) = ${am.achievedKm.toFixed(0)} km; ${Math.round(am.underservedShare * 100)}% of the urban area is further than ${S} m from an avenue`);
   ctx.log(`${HIERARCHY.slice().reverse().map((h) => `${h.toLowerCase()} ${km(h)} km`).join(', ')}; ${records.length} corridors (longest major ${major.length ? (major[0].length / 1000).toFixed(1) : 0} km across ${major.length ? major[0].segments.length : 0} road sections), ${promoted} local streets promoted to connectors, ${highStreets.length} high streets, ${demoted} fragment pieces demoted`);
 }

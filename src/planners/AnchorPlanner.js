@@ -188,7 +188,18 @@ export function planAnchors(model, ctx) {
     if (best) add('neighbourhood', best, 'centre_of_urban_land_separated_by_water', `Neighbourhood ${(counters.neighbourhood || 0) + 1}`);
   }
 
-  RP.gateways.forEach((g) => add('gateway', g, 'regional_approach_at_edge_of_plan', `Gateway ${bearingName(g.angle)}`));
+  RP.gateways.forEach((g) => {
+    const a = add('gateway', g, g.regionalRoadId ? (g.seam ? 'regional_road_crosses_the_boundary_with_a_neighbouring_settlement_here' : 'regional_road_enters_the_settlement_here') : 'regional_approach_at_edge_of_plan', g.towards ? `Road to ${g.towards}` : `Gateway ${bearingName(g.angle)}`);
+    if (g.regionalRoadId) { a.regionalRoadId = g.regionalRoadId; a.seam = !!g.seam; }
+  });
+  // ROLE. In a region a settlement has a role, which shifts the weight of its anchors; a town
+  // that no railway reaches has no station.
+  const rc = cfg.regionalContext;
+  if (rc) {
+    const EMPHASIS = { INDUSTRIAL: ['industrial'], PORT: ['port', 'industrial'], UNIVERSITY: ['university'], ADMINISTRATIVE: ['civic'], LOGISTICS: ['industrial', 'gateway'], RESORT: ['main_park'], MILITARY: ['industrial'], MIXED: [] }[rc.role] || [];
+    for (const a of anchors) if (EMPHASIS.includes(a.type)) { a.importance = Math.min(1, a.importance + 0.3); a.jobs = Math.round(a.jobs * 2.2); a.roleEmphasis = rc.role; if (a.tier > 2) a.tier = 2; }
+    if (rc.rail === false) { const i = anchors.findIndex((a) => a.type === 'station'); if (i >= 0) anchors.splice(i, 1); }
+  }
 
   const hoods = anchors.filter((a) => a.type === 'neighbourhood');
   for (const a of hoods) a.residents = Math.round((B.population * 0.8) / Math.max(1, hoods.length));

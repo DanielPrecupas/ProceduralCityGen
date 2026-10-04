@@ -59,8 +59,8 @@ for (const c of corpus.cities) {
 for (const i of [0, 1, 2, 3, 4, 14]) {
   const { profileName, config } = batchConfig(i), m = createCityModel(config);
   runPipelineSync(m);
-  writeFileSync(join(OUT, `citygen-${config.seed}.svg`), plot(GeneratedCityAnalyzer.network(m), `CityGen ${config.seed}`, `generated · ${profileName}, ${config.citySize}, ${config.terrainPreset}`));
-  made.push([`citygen-${config.seed}.svg`, `CityGen ${config.seed} (${profileName})`]);
+  writeFileSync(join(OUT, `beta-citygen-${config.seed}.svg`), plot(GeneratedCityAnalyzer.network(m), `CityGen ${config.seed} (Beta)`, `generated · ${profileName}, ${config.citySize}, ${config.terrainPreset}`));
+  made.push([`beta-citygen-${config.seed}.svg`, `CityGen ${config.seed} (${profileName})`]);
 }
 writeFileSync(join(OUT, 'index.html'), `<!doctype html><meta charset="utf-8"><title>Calibration plots</title><body style="margin:16px;font-family:system-ui;background:#eee"><h3>Central 4 km x 4 km window, same scale and style</h3><div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(360px,1fr));gap:12px">${made.map(([f]) => `<div style="background:#fff">${readFileSync(join(OUT, f), 'utf8').replace(/width="\d+" height="\d+"/, 'width="100%"').replace(/id="c"/, `id="c-${f}"`).replace(/url\(#c\)/, `url(#c-${f})`)}</div>`).join('')}</div>`);
 console.log(`${made.length} plots -> ${OUT}`);

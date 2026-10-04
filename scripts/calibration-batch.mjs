@@ -11,22 +11,13 @@ import { DEFAULT_CONFIG, SIZE_PRESETS, createCityModel } from '../src/core/CityM
 import { runPipelineSync } from '../src/core/Pipeline.js';
 import { GeneratedCityAnalyzer } from '../src/analysis/GeneratedCityAnalyzer.js';
 import { METRIC_KEYS, percentiles } from '../src/analysis/Metrics.js';
+import { PLANNING_PROFILES } from '../src/region/PlanningProfiles.js';
 
 const ROOT = join(dirname(fileURLToPath(import.meta.url)), '..');
 const arg = (k, d) => { const i = process.argv.indexOf(`--${k}`); return i > 0 ? process.argv[i + 1] : d; };
 const COUNT = Number(arg('count', 72)), OUT = arg('out', join(ROOT, 'calibration/citygen-batch.json'));
 
-// planning profiles: the brief parameters a user would vary, around the current defaults
-export const PLANNING_PROFILES = {
-  default: {},
-  strong_grid: { gridPreference: 0.9, radialPreference: 0.1, streetIrregularity: 0.1 },
-  radial_formal: { gridPreference: 0.3, radialPreference: 0.7, civicOrder: 1 },
-  organic: { gridPreference: 0.2, radialPreference: 0.2, streetIrregularity: 0.8, terrainAdaptation: 0.9 },
-  polycentric: { polycentricity: 0.8, centralization: 0.3 },
-  centralised: { polycentricity: 0.15, centralization: 0.9 },
-  rugged: { terrainInfluence: 0.9, terrainAdaptation: 0.85, streetIrregularity: 0.45 },
-  flat_loose: { terrainInfluence: 0.3, gridPreference: 0.45, streetIrregularity: 0.5, parkAmount: 0.7 },
-};
+export { PLANNING_PROFILES };
 const SIZES = ['major', 'medium', 'major', 'small', 'major', 'medium', 'major', 'medium', 'small', 'major'];
 const TERRAINS = ['coast_river', 'river_valley', 'coast'];
 const POP = [0.7, 1, 1.3, 0.85, 1.15]; // population around the size's default
@@ -66,7 +57,7 @@ if (process.argv[1] && fileURLToPath(import.meta.url) === process.argv[1]) {
   const pooledDist = {};
   for (const s of ['district', 'neighbourhood']) { pooledDist[s] = {}; for (const k of METRIC_KEYS) pooledDist[s][k] = percentiles(pooled[s][k]); }
   const out = {
-    schema: 'citygen-calibration-batch/1', generator: 'CityGen 3.0.0-alpha.2', count: COUNT,
+    schema: 'citygen-calibration-batch/1', generator: 'CityGen 3.0.0-beta.1', count: COUNT,
     design: { planningProfiles: PLANNING_PROFILES, sizes: SIZES, terrains: TERRAINS, populationFactors: POP, seeds: 'cal-001 ...', note: 'config i = batchConfig(i) in scripts/calibration-batch.mjs' },
     pooledWindows: pooledDist,
     pooledNeighbourhoodByRing: Object.fromEntries(Object.entries(byRing).map(([ring, o]) => [ring, Object.fromEntries(METRIC_KEYS.map((k) => [k, percentiles(o[k])]))])),

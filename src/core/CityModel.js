@@ -6,6 +6,7 @@ export const SIZE_PRESETS = {
   small: { mapSize: 7000, popRange: [20000, 120000], defaultPop: 60000, gestureBudget: 1, maxSecondary: 1 },
   medium: { mapSize: 10000, popRange: [80000, 350000], defaultPop: 180000, gestureBudget: 2, maxSecondary: 2 },
   major: { mapSize: 13000, popRange: [250000, 700000], defaultPop: 400000, gestureBudget: 3, maxSecondary: 3 },
+  metropolis: { mapSize: 18000, popRange: [600000, 1600000], defaultPop: 900000, gestureBudget: 3, maxSecondary: 4 },
 };
 
 export const TERRAIN_PRESETS = {
@@ -31,9 +32,13 @@ export const DEFAULT_CONFIG = {
   streetIrregularity: 0.25,
   parkAmount: 0.5,
   blockPreset: 'EOXIAL_DEFAULT', // see core/BlockPresets.js
+  avenueSpacing: 650, // target distance (m) between avenues; the avenue mesh scales with urban area
+  bypass: 'auto', // 'auto' | 'none' | 'always': whether a regional road passes the city as an expressway
   urbanExpressway: false, // exception: let the regional road reach the station as R1
   rail: { civicPenalty: 6, civicRadius: 450 }, // rail near the civic centre is costly, not forbidden
   engineering: { moderate: 0.06, steep: 0.12, verySteep: 0.22 }, // slope thresholds of the terrain regimes
+  // set by RegionGen when the city is one settlement of a region: { settlementId, role, exclusions, gateways, railEntries, rail, railApproaches, throughPairs }
+  regionalContext: null,
   heightmap: null, // optional {width, height, data: Float32Array 0..1} replacing procedural terrain
 };
 
@@ -86,7 +91,8 @@ export function createCityModel(inputConfig) {
     anchors: [],
     demandGraph: { edges: [] },
     roads: [], // explainable road records (all classes)
-    urbanGateways: [], // where regional roads become urban arterials
+    urbanGateways: [],
+    regionalRoadDecisions: [], // what each regional road does at the city: bypass, skirt, pass through, or become an arterial // where regional roads become urban arterials
     reinforcement: null, // {links, before, after}: topology metrics and the links added to fix them
     civicComposition: { gestures: [] },
     civicEnsembles: [], // authored compositions of axes, plazas, gardens and vistas
@@ -102,6 +108,7 @@ export function createCityModel(inputConfig) {
     field: null, // tensor field used for street directions
     network: null, // RoadGraph: authoritative planar topology
     blocks: [],
+    deadEnds: [], // intended dead ends, each with the cause that explains it
     corridors: [], // continuous routes through junctions, each with a hierarchy level
     civicConflicts: [], // how each major road / railway meeting a civic object was resolved
     districtSeams: [], // how neighbouring districts' street grids meet

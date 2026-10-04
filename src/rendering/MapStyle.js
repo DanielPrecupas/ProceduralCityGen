@@ -2,7 +2,7 @@
 // muted land-use fills. Reads the same cached paths as the planning style; pure presentation.
 
 import { widthPx, visibleTiles } from './Lod.js';
-import { terrainPaint, spaceVisible } from './MapRenderer.js';
+import { terrainPaint, spaceVisible, drawStationComplex } from './MapRenderer.js';
 
 export const MAP_COLORS = { land: '#f2efe9', water: '#aad3df' };
 export const MAP_LANDUSE = {
@@ -20,7 +20,9 @@ export const MAP_ROADS = {
 };
 // V3 hierarchy levels, from the top down: drawn instead of the classes when the plan has them
 export const MAP_HIERARCHY = {
-  REGIONAL: { ...MAP_ROADS.R1, label: 'regional' },
+  REGIONAL_HIGHWAY: { ...MAP_ROADS.R1, label: 'regional highway' },
+  URBAN_EXPRESSWAY: { fill: '#e7a0c4', casing: '#a31f6b', low: '#c75a98', stops: MAP_ROADS.R1.stops, physical: 26, label: 'urban expressway' },
+  GRAND_BOULEVARD: { fill: '#f6a38f', casing: '#9e2f1c', low: '#d86a4f', stops: [[0.02, 1.3], [0.05, 2.3], [0.1, 4], [0.3, 7]], physical: 34, label: 'grand boulevard' },
   METROPOLITAN_ARTERIAL: { ...MAP_ROADS.R3, label: 'metropolitan arterial' },
   PRIMARY_AVENUE: { ...MAP_ROADS.R2, label: 'primary avenue' },
   SECONDARY_AVENUE: { ...MAP_ROADS.R4, stops: [[0.02, 0.8], [0.05, 1.5], [0.1, 2.7], [0.3, 4.4]], physical: 16, label: 'secondary avenue' },
@@ -39,7 +41,7 @@ const trace = (ctx, pts, close) => { ctx.beginPath(); pts.forEach((pt, i) => (i 
 
 export function drawMapStyle(ctx, view, layers, c, D) {
   const m = c.model, px = 1 / view.scale, T = c.terrain;
-  if (T) {
+  if (T && !layers.noBase) {
     if (layers.terrain || layers.water) {
       ctx.imageSmoothingEnabled = true;
       ctx.drawImage(terrainPaint(c, 'map', !!layers.terrain), 0, 0, T.size, T.size);
@@ -111,7 +113,7 @@ export function drawMapStyle(ctx, view, layers, c, D) {
   if (H) {
     const tiled = (lvl) => (tiles ? tiles.map((t) => c.tiles.hier[lvl][t]).filter(Boolean) : H[lvl] ? [H[lvl]] : []);
     if (layers.local && D.local) order.push(['LOCAL', tiled('LOCAL'), D.localAlpha], ['LOCAL_HIGH_STREET', tiled('LOCAL_HIGH_STREET'), D.localAlpha]);
-    if (layers.major) for (const lvl of D.minorMajorRoads ? ['DISTRICT_CONNECTOR', 'SECONDARY_AVENUE', 'PRIMARY_AVENUE', 'METROPOLITAN_ARTERIAL', 'REGIONAL'] : ['PRIMARY_AVENUE', 'METROPOLITAN_ARTERIAL', 'REGIONAL']) if (H[lvl]) order.push([lvl, [H[lvl]], 1]);
+    if (layers.major) for (const lvl of D.regional ? ['METROPOLITAN_ARTERIAL', 'GRAND_BOULEVARD', 'URBAN_EXPRESSWAY', 'REGIONAL_HIGHWAY'] : D.minorMajorRoads ? ['DISTRICT_CONNECTOR', 'SECONDARY_AVENUE', 'PRIMARY_AVENUE', 'METROPOLITAN_ARTERIAL', 'GRAND_BOULEVARD', 'URBAN_EXPRESSWAY', 'REGIONAL_HIGHWAY'] : ['PRIMARY_AVENUE', 'METROPOLITAN_ARTERIAL', 'GRAND_BOULEVARD', 'URBAN_EXPRESSWAY', 'REGIONAL_HIGHWAY']) if (H[lvl]) order.push([lvl, [H[lvl]], 1]);
   } else {
     if (layers.local && D.local) order.push(['local', tiles ? tiles.map((t) => c.tiles.local[t]).filter(Boolean) : [c.roadPaths.local], D.localAlpha]);
     if (layers.major) {
@@ -171,6 +173,7 @@ export function drawMapStyle(ctx, view, layers, c, D) {
 
   // --- rail: a thin dark line far out; the classic dashed track when close
   if (layers.rail && m.rail) {
+    drawStationComplex(ctx, m.rail.stationComplex, px, D, true);
     ctx.lineJoin = 'round'; ctx.lineCap = 'butt';
     for (const l of m.rail.lines) {
       const freight = l.railClass === 'RAIL_FREIGHT', w = widthPx(RAIL.stops, RAIL.physical, view.scale) * (freight ? 0.7 : 1) * px;

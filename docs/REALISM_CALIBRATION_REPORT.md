@@ -1,9 +1,12 @@
 # Realism calibration report (V3.0 Alpha.2)
 
+> This report describes the Alpha.2 generator. The four biases it confirmed were addressed in
+> V3.0 Beta; the rerun of the same study is in [REALISM_BETA_CHECK.md](REALISM_BETA_CHECK.md).
+
 Measurement only. No generation rule was changed for this study; the generator is the V3.0
 Alpha.1 generator. Every number below comes from
 [calibration/DATA_TABLES.md](calibration/DATA_TABLES.md), which is rebuilt by
-`node scripts/calibration-report.mjs`. Data extracted 2026-10-04.
+`node scripts/calibration-report.mjs --batch calibration/citygen-batch-alpha2.json --tables docs/calibration/DATA_TABLES.md --summary calibration/summary-alpha2.json`. Data extracted 2026-10-04.
 
 There is no overall realism score. Each finding names a metric, a scale and the reference cities
 that expose it.

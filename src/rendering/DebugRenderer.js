@@ -4,7 +4,7 @@ import { ROAD_STYLE, PARK_COLORS, EDGE_COLORS, ROLE_COLORS, INSTITUTION_COLORS }
 
 const REINFORCEMENT_COLORS = { additional_bridge: '#0277bd', bypass: '#5d4037', cross_town_boulevard: '#6b3fa0', direct_centre_link: '#c2185b', second_access: '#ef6c00', tangential_arterial: '#2e7d32' };
 export const HIERARCHY_STYLE = {
-  REGIONAL: ['#b71c1c', 4.4], METROPOLITAN_ARTERIAL: ['#e65100', 3.8], PRIMARY_AVENUE: ['#f9a825', 3.2], SECONDARY_AVENUE: ['#2e7d32', 2.6],
+  REGIONAL_HIGHWAY: ['#b71c1c', 4.6], URBAN_EXPRESSWAY: ['#ad1457', 4.4], GRAND_BOULEVARD: ['#6b3fa0', 4.0], METROPOLITAN_ARTERIAL: ['#e65100', 3.8], PRIMARY_AVENUE: ['#f9a825', 3.2], SECONDARY_AVENUE: ['#2e7d32', 2.6],
   DISTRICT_CONNECTOR: ['#1565c0', 2.0], LOCAL_HIGH_STREET: ['#8e24aa', 1.7], LOCAL: ['#9e9e9e', 0.6],
 };
 export const SEAM_COLORS = { SOFT_BLEND: '#8d99a6', HARD_GRID_CHANGE: '#d81b60', ARTERIAL_BOUNDARY: '#e65100', RAIL_BOUNDARY: '#212121', GREEN_BOUNDARY: '#2e7d32', WATER_BOUNDARY: '#0277bd' };
@@ -13,7 +13,7 @@ const TIER_RADIUS = { N1: 13, N2: 10, N3: 7, N4: 5 };
 
 export const REGIME_COLORS = {
   ORTHOGONAL: '#4c78a8', WARPED_GRID: '#59b3ad', RADIAL_CIVIC: '#e45756', CONTOUR_FOLLOWING: '#b07aa1',
-  WATERFRONT: '#3d9bc9', STATION_DENSE: '#f58518', INDUSTRIAL_LARGE_BLOCK: '#7f7f7f', NONE: '#6fb463',
+  WATERFRONT: '#3d9bc9', STATION_DENSE: '#f58518', IRREGULAR_ORDERED: '#9c755f', INDUSTRIAL_LARGE_BLOCK: '#7f7f7f', NONE: '#6fb463',
 };
 const TERRAIN_REGIME_RGBA = [null, [240, 210, 70, 90], [240, 140, 40, 130], [200, 40, 40, 150], [40, 170, 200, 150]];
 const maskCanvas = (R, colorOf) => {
@@ -37,7 +37,7 @@ export class DebugRenderer {
     if (!paths) return;
     const px = 1 / view.scale;
     ctx.lineCap = 'round'; ctx.lineJoin = 'round';
-    for (const lvl of ['LOCAL_HIGH_STREET', 'DISTRICT_CONNECTOR', 'SECONDARY_AVENUE', 'PRIMARY_AVENUE', 'METROPOLITAN_ARTERIAL', 'REGIONAL']) {
+    for (const lvl of ['LOCAL_HIGH_STREET', 'DISTRICT_CONNECTOR', 'SECONDARY_AVENUE', 'PRIMARY_AVENUE', 'METROPOLITAN_ARTERIAL', 'GRAND_BOULEVARD', 'URBAN_EXPRESSWAY', 'REGIONAL_HIGHWAY']) {
       if (!paths[lvl]) continue;
       const [color, wdt] = HIERARCHY_STYLE[lvl];
       ctx.strokeStyle = color; ctx.lineWidth = Math.max(wdt * px, wdt * 4); ctx.stroke(paths[lvl]);
@@ -48,7 +48,7 @@ export class DebugRenderer {
   drawCorridors(ctx, view, m) {
     const px = 1 / view.scale;
     ctx.lineCap = 'round'; ctx.lineJoin = 'round';
-    const shown = (m.corridors || []).filter((c) => ['REGIONAL', 'METROPOLITAN_ARTERIAL', 'PRIMARY_AVENUE', 'SECONDARY_AVENUE'].includes(c.hierarchy));
+    const shown = (m.corridors || []).filter((c) => ['REGIONAL_HIGHWAY', 'URBAN_EXPRESSWAY', 'GRAND_BOULEVARD', 'METROPOLITAN_ARTERIAL', 'PRIMARY_AVENUE', 'SECONDARY_AVENUE'].includes(c.hierarchy));
     shown.forEach((c, k) => {
       ctx.strokeStyle = `hsla(${(k * 67) % 360}, 75%, 42%, 0.85)`; ctx.lineWidth = Math.max(5 * px, 26);
       for (const path of c.paths) { polyPath(ctx, path); ctx.stroke(); }

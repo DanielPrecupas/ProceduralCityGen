@@ -72,6 +72,27 @@ export function planDemand(model, ctx) {
   if (vista && budget > 0 && !ringPlanned && cfg.civicOrder >= 0.5 && cfg.radialPreference >= 0.2 && vista.distance < 2600 && used.every((u) => sep(u, bearing(civic, park)) > 0.45)) {
     vista.ceremonial = 'vista'; vista.cls = 'R3'; budget--;
   }
+  // LIMITED-ACCESS SYSTEM. A larger city is not only a destination: regional traffic also has
+  // to get past it. One expressway links the two regional approaches that lie most nearly
+  // opposite each other, routed around the core (a bypass, or a route that skirts the city).
+  // It is a different thing from an avenue: no frontage, no local street joins it.
+  const gates = byType('gateway');
+  const wantBypass = cfg.bypass === 'always' || (cfg.bypass === 'auto' && (cfg.citySize === 'major' || cfg.citySize === 'metropolis' || (cfg.citySize === 'medium' && B.population >= 220000)));
+  let bypass = null;
+  if (wantBypass && gates.length >= 2 && civic) {
+    let best = null;
+    const pairs = cfg.regionalContext?.throughPairs; // a region may say which approaches carry through traffic
+    for (let i = 0; i < gates.length; i++) for (let j = i + 1; j < gates.length; j++) {
+      const s2 = sep(bearing(civic, gates[i]), bearing(civic, gates[j]));
+      const forced = pairs && pairs.some((pr) => pr.includes(gates[i].regionalRoadId) && pr.includes(gates[j].regionalRoadId));
+      const score = s2 + (forced ? 10 : 0);
+      if ((s2 > 1.6 || forced) && (!best || score > best.score)) best = { score, a: gates[i], b: gates[j] };
+    }
+    if (best) {
+      bypass = link(best.a, best.b, 0.5, 'regional_through_traffic_passes_the_city_on_an_expressway');
+      if (bypass) { bypass.cls = 'R1'; bypass.bypass = true; bypass.avoidCore = true; bypass.demand = 0.01; } // routed last, around the core
+    }
+  }
   edges.sort((p, q) => (q.ceremonial ? 1 : 0) - (p.ceremonial ? 1 : 0) || q.demand - p.demand || (p.id < q.id ? -1 : 1));
   model.demandGraph = { edges, ringPlanned: ringPlanned && budget > 0 };
   ctx.log(`${edges.length} demand links, ${edges.filter((e) => e.ceremonial).length} ceremonial`);

@@ -21,6 +21,8 @@ export function planRegion(model, ctx) {
   // --- primary city location: most buildable land within reach, with a relationship to water
   const sat = summedArea(T.buildability, w, h);
   const rc = Math.round(B.urbanRadius / cell);
+  // in a region the settlement was sited at the middle of its window: stay close to that
+  const centrePull = cfg.regionalContext ? (x, y) => 1.6 * Math.hypot(x - w / 2, y - h / 2) / (w / 2) : () => 0;
   let coreIdx = -1, bestScore = -Infinity;
   for (let y = 2; y < h - 2; y += 3) for (let x = 2; x < w - 2; x += 3) {
     const i = y * w + x;
@@ -30,7 +32,7 @@ export function planRegion(model, ctx) {
     // leave room for the whole city (and its growth) inside the planning region
     const border = Math.min(x, y, w - 1 - x, h - 1 - y) * cell;
     const edge = Math.max(0, 1 - border / (B.urbanRadius * 1.15));
-    const s = fill + waterfront + 0.1 * T.scenic[i] - 0.9 * edge + ctx.rng.next() * 0.02;
+    const s = fill + waterfront + 0.1 * T.scenic[i] - 0.9 * edge + ctx.rng.next() * 0.02 - (T.foreign && T.foreign[i] ? 9 : 0) - centrePull(x, y);
     if (s > bestScore) { bestScore = s; coreIdx = i; }
   }
   const core = R.center(coreIdx);
@@ -47,7 +49,8 @@ export function planRegion(model, ctx) {
 
   // --- founding urban extent = cheapest buildable land; next-cheapest = expansion reserve
   const order = [];
-  for (let i = 0; i < n; i++) if (!T.water[i] && T.buildability[i] >= 0.25 && accessCost[i] < Infinity) order.push(i);
+  const own = (i) => !(T.foreign && T.foreign[i]); // land beyond a boundary with a neighbouring settlement is not ours to build on
+  for (let i = 0; i < n; i++) if (!T.water[i] && T.buildability[i] >= 0.25 && accessCost[i] < Infinity && own(i)) order.push(i);
   order.sort((a, b) => accessCost[a] - accessCost[b] || a - b);
   const urbanCount = Math.min(order.length, Math.round(B.urbanArea / (cell * cell)));
   const eventualCount = Math.min(order.length, Math.round(B.eventualArea / (cell * cell)));
@@ -61,7 +64,7 @@ export function planRegion(model, ctx) {
     const i = y * w + x;
     let c = 0;
     for (let dy = -1; dy <= 1; dy++) for (let dx = -1; dx <= 1; dx++) if (dx || dy) c += urbanMask[i + dy * w + dx];
-    const ok = !T.water[i] && T.buildability[i] >= 0.25;
+    const ok = !T.water[i] && T.buildability[i] >= 0.25 && own(i);
     smooth[i] = ok && (c >= 5 || (urbanMask[i] && c >= 3)) ? 1 : 0;
     if (smooth[i]) reserveMask[i] = 0;
   }
@@ -157,7 +160,34 @@ export function planRegion(model, ctx) {
     return { ...s, score: align - s.cost / 60000 };
   }).sort((a, b) => b.score - a.score);
   const gateways = [];
-  const wanted = cfg.citySize === 'small' ? 2 : 3;
+  const given = cfg.regionalContext?.gateways;
+  if (given) {
+    // Inside a region the approaches are not invented here: each regional road arrives at a
+    // known point (on the edge of the plan, or on the boundary with a neighbouring settlement).
+    // The gateway is the nearest usable cell to that point.
+    for (const gw of given) {
+      let best = -1, bd = 1400;
+      const cx = Math.floor(gw.x / cell), cy = Math.floor(gw.y / cell), rr = Math.ceil(1400 / cell);
+      for (let y = Math.max(1, cy - rr); y <= Math.min(h - 2, cy + rr); y++) for (let x = Math.max(1, cx - rr); x <= Math.min(w - 2, cx + rr); x++) {
+        const i = y * w + x;
+        if (T.water[i] || T.buildability[i] < 0.3 || accessCost[i] === Infinity) continue;
+        const d = Math.hypot((x + 0.5) * cell - gw.x, (y + 0.5) * cell - gw.y);
+        if (d < bd) { bd = d; best = i; }
+      }
+      if (best < 0) { // the planned point is water or cut off: take the nearest usable edge of the plan instead
+        bd = Infinity;
+        const consider2 = (i) => { if (T.water[i] || T.buildability[i] < 0.3 || accessCost[i] === Infinity) return; const d = Math.hypot(R.centerX(i) - gw.x, R.centerY(i) - gw.y); if (d < bd) { bd = d; best = i; } };
+        for (let x = 1; x < w - 1; x++) { consider2(w + x); consider2((h - 2) * w + x); }
+        for (let y = 1; y < h - 1; y++) { consider2(y * w + 1); consider2(y * w + w - 2); }
+        ctx.log(`regional road ${gw.regionalRoadId} moved ${Math.round(bd)} m along the edge to reach usable land`);
+      }
+      if (best < 0) { ctx.log(`regional road ${gw.regionalRoadId} cannot reach this settlement`); continue; }
+      const p = R.center(best);
+      if (gateways.some((g) => Math.hypot(g.x - p.x, g.y - p.y) < 300)) continue;
+      gateways.push({ ...p, angle: (Math.atan2(p.y - core.y, p.x - core.x) + TAU) % TAU, regionalRoadId: gw.regionalRoadId, towards: gw.towards || null, seam: !!gw.seam });
+    }
+  }
+  const wanted = given ? 0 : cfg.citySize === 'small' ? 2 : 3;
   for (const s of scored) {
     if (gateways.length >= wanted) break;
     if (gateways.every((g) => angSep(g.angle, s.angle) > 1.0)) gateways.push({ ...R.center(s.idx), angle: s.angle });

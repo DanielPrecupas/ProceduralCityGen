@@ -9,7 +9,7 @@
 // are forbidden; the civic core is merely expensive.
 
 import { record } from '../core/CityModel.js';
-import { dist, simplifyDP, polylineLength, resamplePolyline, pointSegment, pointInPolygon, pointPolylineDistance } from '../core/Geometry.js';
+import { dist, simplifyDP, polygonBBox, polylineLength, resamplePolyline, pointSegment, pointInPolygon, pointPolylineDistance } from '../core/Geometry.js';
 import { leastCostPath, NEIGH16 } from '../algorithms/LeastCostPath.js';
 import { BRIDGEABLE } from './RegionalPlanner.js';
 import { REGIME } from './TerrainPlanner.js';
@@ -139,6 +139,24 @@ export function planRail(model, ctx) {
     for (let y = 1; y < h - 1; y++) { consider(y * w + 1); consider(y * w + w - 2); }
     return best;
   }).filter((p) => p !== null);
+  // inside a region the railway arrives where the regional rail plan says it does
+  const entries = model.config.regionalContext?.railEntries;
+  const portalInfo = new Map();
+  if (entries) {
+    portals.length = 0;
+    for (const en of entries) {
+      let best = -1, bd = 1500;
+      const cx = Math.floor(en.x / cell), cy = Math.floor(en.y / cell), rr = Math.ceil(1500 / cell);
+      for (let y = Math.max(1, cy - rr); y <= Math.min(h - 2, cy + rr); y++) for (let x = Math.max(1, cx - rr); x <= Math.min(w - 2, cx + rr); x++) {
+        const i = y * w + x;
+        if (!(base[i] < 3)) continue;
+        const d = Math.hypot((x + 0.5) * cell - en.x, (y + 0.5) * cell - en.y);
+        if (d < bd) { bd = d; best = i; }
+      }
+      if (best >= 0 && !portals.includes(best)) { portals.push(best); portalInfo.set(best, en); }
+    }
+  }
+  rail.portals = portals.map((c) => ({ ...R.center(c), regionalRailId: portalInfo.get(c)?.regionalRailId || null }));
   let pair = null, pc = Infinity;
   for (const p1 of portals) for (const p2 of portals) {
     if (p1 === p2) continue;
@@ -152,20 +170,22 @@ export function planRail(model, ctx) {
   for (let s = 0; s <= 40; s++) { const i = R.index(throat.e1.x + ((throat.e2.x - throat.e1.x) * s) / 40, throat.e1.y + ((throat.e2.y - throat.e1.y) * s) / 40); if (i >= 0 && !throatCells.includes(i)) throatCells.push(i); }
   const branches = [];
   turnK = TRANSPORT_PROFILES.INTERCITY_RAIL.turnCost;
+  // a single approach: the line runs from the throat end that faces it, and the station is a terminus
+  if (!pair && portals.length === 1) { const c = R.center(portals[0]); pair = (c.x - throat.q.x) * throat.px + (c.y - throat.q.y) * throat.py >= 0 ? [portals[0], null] : [null, portals[0]]; }
   if (pair) {
-    const ends = [[throat.e1, throat.px, throat.py, pair[0]], [throat.e2, -throat.px, -throat.py, pair[1]]];
+    const ends = [[throat.e1, throat.px, throat.py, pair[0]], [throat.e2, -throat.px, -throat.py, pair[1]]].filter((x) => x[3] !== null);
     for (const [e, dx, dy, portal] of ends) {
       const start = R.index(e.x, e.y), gx = portal % w, gy = (portal - gx) / w;
       avoid = new Uint8Array(n);
       for (const c of throatCells) if (c !== start) avoid[c] = 1; // do not double back over the platforms
       for (const b of branches) for (const c of b.cells) avoid[c] = 1; // the two branches stay apart
       const path = route(start, { goal: portal, startDir: nearestDir(dx, dy), heuristic: (i) => 0.25 * cell * Math.hypot((i % w) - gx, Math.floor(i / w) - gy) });
-      if (path) branches.push({ cells: path.cells, pts: smooth(path.cells, e) });
+      if (path) branches.push({ cells: path.cells, pts: smooth(path.cells, e), from: e });
     }
   }
   avoid = new Uint8Array(n);
   if (branches.length) {
-    const pts = branches.length === 2 ? [...[...branches[0].pts].reverse(), throat.q, ...branches[1].pts] : [throat.e2, throat.q, ...branches[0].pts];
+    const pts = branches.length === 2 ? [...[...branches[0].pts].reverse(), throat.q, ...branches[1].pts] : [branches[0].from === throat.e1 ? throat.e2 : throat.e1, throat.q, ...branches[0].pts];
     const cells = branches.length === 2 ? [...[...branches[0].cells].reverse(), ...throatCells, ...branches[1].cells] : [...throatCells, ...branches[0].cells];
     // the platforms stay dead straight: the throat is pinned and the curves begin beyond it
     const lead = branches.length === 2 ? polylineLength([...branches[0].pts].reverse()) : 0;
@@ -174,15 +194,16 @@ export function planRail(model, ctx) {
 
   // --- spurs join existing track away from the station platforms
   const joinable = (c) => rail.mask[c] && Math.hypot(R.centerX(c) - throat.q.x, R.centerY(c) - throat.q.y) > 600;
-  const spur = (anchor, railClass, reason, offset) => {
-    if (!anchor) return null;
+  const spur = (anchor, railClass, reason, offset, from = null, goal = joinable) => {
+    if (!anchor && from === null) return null;
+    if (from !== null) anchor = { position: R.center(from) };
     // the yard / platform sits beside the anchor, on its far side from the civic centre
     const d = dist(anchor.position, civic.position) || 1;
-    let start = R.index(anchor.position.x + ((anchor.position.x - civic.position.x) / d) * offset, anchor.position.y + ((anchor.position.y - civic.position.y) / d) * offset);
+    let start = from !== null ? from : R.index(anchor.position.x + ((anchor.position.x - civic.position.x) / d) * offset, anchor.position.y + ((anchor.position.y - civic.position.y) / d) * offset);
     if (start < 0 || base[start] > 3) start = R.index(anchor.position.x, anchor.position.y);
     if (start < 0 || base[start] === Infinity) return null;
     turnK = TRANSPORT_PROFILES[profileNameOf({ railClass })].turnCost;
-    const path = route(start, { isGoal: joinable });
+    const path = route(start, { isGoal: goal });
     if (!path || path.cells.length < 4) return null;
     // a branch leaves the line it joins tangentially: its last stretch runs along that line
     const pts = smooth(path.cells), end = pts[pts.length - 1], before = pts[pts.length - 2];
@@ -225,6 +246,59 @@ export function planRail(model, ctx) {
     }
     return { line, at: R.center(start) };
   };
+  // --- further approach lines: a larger city is reached by more than one main line. Each extra
+  // regional approach is routed from its portal and merges, tangentially, into the main line a
+  // little way out from the station, so that several lines converge on one throat.
+  const sizeRank = { small: 0, medium: 1, major: 2, metropolis: 3 }[model.config.citySize] ?? 1;
+  const extraWanted = model.config.regionalContext?.railApproaches != null ? Math.max(0, model.config.regionalContext.railApproaches - 2) : sizeRank >= 3 ? 2 : sizeRank >= 2 ? 1 : 0;
+  let extraLines = 0;
+  if (pair && branches.length) {
+    const nearThroat = (c) => { const dq = Math.hypot(R.centerX(c) - throat.q.x, R.centerY(c) - throat.q.y); return rail.mask[c] && dq > 700 && dq < 2200; };
+    for (const portal of portals) {
+      if (extraLines >= extraWanted) break;
+      if (pair.includes(portal)) continue;
+      const b = spur(null, 'RAIL_REGIONAL', 'second_main_line_converging_on_the_central_station', 0, portal, nearThroat);
+      if (b) { b.line.approachLine = true; extraLines++; }
+    }
+  }
+
+  // --- CENTRAL STATION COMPLEX: not a point on a line but a throat. The approach lines converge,
+  // fan out into parallel platform tracks, and (in a through station) gather again beyond them.
+  // Geometry only: no signals, switches or exact turnouts.
+  {
+    const through = branches.length === 2, halfLen = dist(throat.e1, throat.e2) / 2;
+    const approaches = rail.lines.filter((l) => l.railClass !== 'RAIL_FREIGHT');
+    const N = Math.min(12, [2, 4, 6, 10][sizeRank] + 2 * extraLines), GAP = 7.5;
+    const platformHalf = Math.min(halfLen * 0.62, 210 + 25 * sizeRank), ux = throat.px, uy = throat.py, nx = -uy, ny = ux;
+    const at = (u, v) => ({ x: throat.q.x + ux * u + nx * v, y: throat.q.y + uy * u + ny * v });
+    const ease = (t) => 0.5 - 0.5 * Math.cos(Math.PI * Math.min(1, Math.max(0, t)));
+    const tracks = [], platforms = [];
+    for (let k = 0; k < N; k++) {
+      const d = (k - (N - 1) / 2) * GAP, pts = [];
+      // from the throat mouth (all tracks on the running line) out to the platform offset and back
+      // a terminal ends at the buffer stops; its open side is the end the line leaves from
+      const open = !through && branches.length && branches[0].from === throat.e2 ? -1 : 1;
+      const u0 = through || open < 0 ? -halfLen : -platformHalf, uEnd = through || open > 0 ? halfLen : platformHalf;
+      for (let u = u0; u <= uEnd + 0.01; u += 15) {
+        const fan = Math.abs(u) <= platformHalf ? 1 : ease((halfLen - Math.abs(u)) / (halfLen - platformHalf));
+        pts.push(at(u, d * fan));
+      }
+      tracks.push(pts);
+      if (k % 2 === 0 && k + 1 < N) platforms.push([at(-platformHalf, d + 2), at(platformHalf, d + 2), at(platformHalf, d + GAP - 2), at(-platformHalf, d + GAP - 2)]); // an island platform between each pair
+    }
+    const halfW = (N * GAP) / 2 + 10;
+    const footprint = [at(-platformHalf - 40, -halfW), at(platformHalf + 40, -halfW), at(platformHalf + 40, halfW), at(-platformHalf - 40, halfW)];
+    rail.stationComplex = record(ctx.id('stationcomplex'), 'CENTRAL_STATION', STAGE,
+      `${through ? 'through' : 'terminal'}_station_with_${N}_platform_tracks_fed_by_${approaches.length}_line${approaches.length === 1 ? '' : 's'}`, {
+        configuration: through ? 'THROUGH_STATION' : 'TERMINAL_STATION', platformTracks: N, platformLength: Math.round(2 * platformHalf), throatLength: Math.round(2 * halfLen),
+        approachLines: approaches.map((l) => ({ lineId: l.id, profile: l.profile, joins: l.joins || 'throat' })), convergingLines: 1 + extraLines,
+        position: throat.q, angle: Math.atan2(uy, ux), tracks, platforms, polygon: footprint, stationId: centralStation.id,
+      });
+    centralStation.complexId = rail.stationComplex.id; centralStation.platformTracks = N; centralStation.configuration = rail.stationComplex.configuration;
+    // the yard is reserved land: no street or block may enter it
+    model.reservations.push(record(ctx.id('railyardres'), 'station_yard', STAGE, 'platform_tracks_and_throat_of_the_central_station', { polygon: footprint, anchorId: station.id, clip: false, bbox: polygonBBox(footprint) }));
+  }
+
   const industrial = model.anchors.find((a) => a.type === 'industrial'), port = model.anchors.find((a) => a.type === 'port');
   const freight = spur(industrial, 'RAIL_FREIGHT', 'freight_spur_serving_the_industrial_zone', 180);
   if (freight) rail.stations.push(record(ctx.id('railstation'), 'rail_station', STAGE, 'freight_yard_of_the_industrial_zone', { kind: 'freight_yard', position: freight.at, anchorId: industrial.id, tier: 3 }));
@@ -257,5 +331,6 @@ export function planRail(model, ctx) {
     st.trackRadius = Number.isFinite(local) ? Math.round(local) : null;
     if (!st.alignment) st.alignment = local > 4000 ? 'STRAIGHT' : local > 900 ? 'GENTLE_CURVE' : 'CURVED';
   }
+  if (rail.stationComplex) ctx.log(`central station: ${rail.stationComplex.configuration.toLowerCase()}, ${rail.stationComplex.platformTracks} platform tracks, ${rail.stationComplex.convergingLines} main line${rail.stationComplex.convergingLines === 1 ? '' : 's'} converging`);
   ctx.log(`${rail.lines.map((l) => `${l.profile.replace('_RAIL', '').toLowerCase()} ${(l.length / 1000).toFixed(1)} km (min radius ${l.alignment.minRadiusAchieved ?? 'straight'} m)`).join(', ')}; ${rail.stations.length} stations`);
 }

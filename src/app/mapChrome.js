@@ -91,7 +91,7 @@ export function createChrome(app, canvas, viewport, mapRenderer) {
     modelChanged() { targets = app.model ? jumpTargets(app.model) : []; input.value = ''; buildThumb(); },
     // per frame: scale bar and the viewport outline on the minimap
     update(D, ms) {
-      const v = app.view, n = app.model?.terrain?.size;
+      const v = app.view, n = app.mode === 'region' ? null : app.model?.terrain?.size;
       const maxM = 120 / v.scale, p = Math.pow(10, Math.floor(Math.log10(maxM))), m = [5, 2, 1].map((f) => f * p).find((x) => x <= maxM);
       $('scaleBar').style.width = `${(m * v.scale).toFixed(1)}px`;
       $('scaleText').textContent = m >= 1000 ? `${m / 1000} km` : `${m} m`;

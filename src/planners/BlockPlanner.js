@@ -9,7 +9,7 @@
 
 import { record } from '../core/CityModel.js';
 import { polygonArea, polygonPerimeter, polygonCentroid, polygonMinAngle, polygonBBox, pointInPolygon, segSegIntersection } from '../core/Geometry.js';
-import { prunableEdge } from './StreetPlanner.js';
+import { prunableEdge, plannedEdge } from './StreetPlanner.js';
 
 const STAGE = 'blocks';
 
@@ -109,7 +109,7 @@ export function planBlocks(model, ctx) {
       if (!isSliver(b) || reservationOf(b.inner)) continue;
       if (!isInvalid(b) && b.area >= 600 && (2 * b.area) / b.perimeter >= 10 && causeOf(b)) continue; // awkward but valid: leave it alone
       let longest = null;
-      for (const eid of b.face.edges) { const e = g.edges[eid]; if (!e.removed && e.cls === 'local' && !e.required && (!longest || e.len > longest.len)) longest = e; }
+      for (const eid of b.face.edges) { const e = g.edges[eid]; if (!e.removed && e.cls === 'local' && !e.required && !e.keepDeadEnd && (!longest || e.len > longest.len)) longest = e; }
       if (longest) { g.removeEdge(longest); removed++; }
     }
     if (!removed) break;
@@ -118,7 +118,7 @@ export function planBlocks(model, ctx) {
     // street loops left unattached by the removals are not part of the network
     const { comp, count } = g.components();
     const size = new Int32Array(count), keep = new Uint8Array(count);
-    for (const e of g.edges) if (!e.removed && e.cls !== 'rail') { size[comp[e.a]]++; if (!prunableEdge(e)) keep[comp[e.a]] = 1; }
+    for (const e of g.edges) if (!e.removed && e.cls !== 'rail') { size[comp[e.a]]++; if (plannedEdge(e)) keep[comp[e.a]] = 1; }
     for (const e of g.edges) if (!e.removed && e.cls !== 'rail' && !keep[comp[e.a]] && size[comp[e.a]] < 60) g.removeEdge(e);
   }
 
@@ -180,6 +180,8 @@ export function planBlocks(model, ctx) {
       edgeIds: [...new Set(b.face.edges)], use: rv ? 'reserved' : 'urban', reservationId: rv ? rv.id : null, pedestrianCuts,
     }));
   }
+  // intended dead ends that block repair left without a network to hang on are no longer dead ends
+  if (model.deadEnds) model.deadEnds = model.deadEnds.filter((d) => { const nd = g.nodes.find((q) => q.x === d.position.x && q.y === d.position.y); return nd && g.roadEdgesAt(nd).length === 1; });
   model.blocks = blocks;
   const urban = blocks.filter((b) => b.use === 'urban');
   const mean = urban.reduce((s, b) => s + b.area, 0) / Math.max(1, urban.length);

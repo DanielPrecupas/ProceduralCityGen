@@ -9,7 +9,7 @@ export function createViewport(app, canvas) {
   let fly = null, zoom = null, wasActive = false, last = 0;
   const vel = { x: 0, y: 0 }, keyVel = { x: 0, y: 0 }, keys = new Set();
   const still = window.matchMedia?.('(prefers-reduced-motion: reduce)').matches;
-  const mapSize = () => app.model?.terrain?.size || 13000;
+  const mapSize = () => (app.worldSize ? app.worldSize() : app.model?.terrain?.size || 13000);
   const W = () => canvas.clientWidth, H = () => canvas.clientHeight;
   const fitScale = () => (Math.min(W(), H()) / mapSize()) * 0.98;
   const clampScale = (s) => Math.min(6, Math.max(fitScale() * 0.6, s));
@@ -85,7 +85,7 @@ export function createViewport(app, canvas) {
     const r = canvas.getBoundingClientRect(), dy = e.deltaY * (e.deltaMode === 1 ? 16 : 1);
     vp.zoomAt(e.clientX - r.left, e.clientY - r.top, Math.exp(-dy * (e.ctrlKey ? 0.012 : 0.0016))); // ctrl = trackpad pinch
   }, { passive: false });
-  canvas.addEventListener('dblclick', (e) => { const r = canvas.getBoundingClientRect(); vp.zoomAt(e.clientX - r.left, e.clientY - r.top, e.shiftKey ? 0.5 : 2); });
+  canvas.addEventListener('dblclick', (e) => { if (app.onDoubleClick && app.onDoubleClick(e)) return; const r = canvas.getBoundingClientRect(); vp.zoomAt(e.clientX - r.left, e.clientY - r.top, e.shiftKey ? 0.5 : 2); });
 
   const typing = (e) => /^(INPUT|SELECT|TEXTAREA)$/.test(e.target.tagName);
   window.addEventListener('keydown', (e) => {

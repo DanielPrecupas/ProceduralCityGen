@@ -22,6 +22,7 @@ export const STREET_REGIMES = {
   RADIAL_CIVIC: { grid: 0.6, align: 1.0, contour: 0.1, water: 0.4, radial: 1, noise: 0, reach: 170 },
   CONTOUR_FOLLOWING: { grid: 0.35, align: 0.6, contour: 1.6, water: 0.6, radial: 0, noise: 0.6, reach: 150 },
   WATERFRONT: { grid: 0.7, align: 0.7, contour: 0.4, water: 1.5, radial: 0, noise: 0.25, reach: 150 },
+  IRREGULAR_ORDERED: { grid: 0.75, align: 1.0, contour: 0.6, water: 0.8, radial: 0, noise: 2.6, reach: 170 },
   STATION_DENSE: { grid: 1.7, align: 0.55, contour: 0.1, water: 0.5, radial: 0.25, noise: 0.04, reach: 110 },
   INDUSTRIAL_LARGE_BLOCK: { grid: 1.8, align: 0.5, contour: 0.1, water: 0.6, radial: 0, noise: 0, reach: 130 },
   NONE: { grid: 0.5, align: 0.6, contour: 1, water: 0.8, radial: 0, noise: 0.3, reach: 150 },

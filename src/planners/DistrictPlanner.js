@@ -20,8 +20,8 @@ const TYPES = {
   civic: { targetDensity: 0.7, w: [80, 95], l: [120, 140], gridStrength: 1.0, radialInfluence: 1.0, terrainInfluence: 0.2, irregularity: 0.15, commercialIntensity: 0.5, speed: 0.85 },
   central: { targetDensity: 0.95, w: [60, 82], l: [90, 118], gridStrength: 0.95, radialInfluence: 0.4, terrainInfluence: 0.2, irregularity: 0.3, commercialIntensity: 1.0, speed: 1.25 },
   commercial: { targetDensity: 0.75, w: [78, 98], l: [108, 136], gridStrength: 0.9, radialInfluence: 0.3, terrainInfluence: 0.35, irregularity: 0.5, commercialIntensity: 0.8, speed: 0.7 },
-  residential: { targetDensity: 0.45, w: [88, 108], l: [135, 168], gridStrength: 0.8, radialInfluence: 0.0, terrainInfluence: 0.8, irregularity: 1.0, commercialIntensity: 0.15, speed: 1.0 },
-  waterfront: { targetDensity: 0.55, w: [80, 100], l: [120, 155], gridStrength: 0.6, radialInfluence: 0.0, terrainInfluence: 0.6, irregularity: 0.9, commercialIntensity: 0.3, speed: 1.0 },
+  residential: { targetDensity: 0.45, w: [78, 96], l: [150, 190], gridStrength: 0.8, radialInfluence: 0.0, terrainInfluence: 0.8, irregularity: 1.0, commercialIntensity: 0.15, speed: 1.0 },
+  waterfront: { targetDensity: 0.55, w: [74, 92], l: [130, 170], gridStrength: 0.6, radialInfluence: 0.0, terrainInfluence: 0.6, irregularity: 0.9, commercialIntensity: 0.3, speed: 1.0 },
   university: { targetDensity: 0.35, w: [140, 190], l: [200, 250], gridStrength: 0.7, radialInfluence: 0.2, terrainInfluence: 0.7, irregularity: 0.9, commercialIntensity: 0.1, speed: 0.8 },
   industrial: { targetDensity: 0.2, w: [200, 270], l: [300, 420], gridStrength: 0.95, radialInfluence: 0.0, terrainInfluence: 0.3, irregularity: 0.3, commercialIntensity: 0.05, speed: 1.15 },
   park: { targetDensity: 0, w: [0, 0], l: [0, 0], gridStrength: 0, radialInfluence: 0, terrainInfluence: 0, irregularity: 0, commercialIntensity: 0, speed: 0 },
@@ -94,7 +94,10 @@ export function planDistricts(model, ctx) {
     const central = clamp(dist(centroid, civicPos) / (model.brief.urbanRadius * 1.1) + ctx.rng.range(-0.1, 0.1), 0, 1);
     const tier2 = s.anchor.tier === 2 && type === 'commercial';
     const ps = type === 'industrial' ? { blockWidthScale: 1, blockDepthScale: 1 } : BLOCK_PRESETS[cfg.blockPreset]; // block preset hook
-    const bw = (t.w[0] + (t.w[1] - t.w[0]) * (tier2 ? 0 : central)) * ps.blockWidthScale, bl = (t.l[0] + (t.l[1] - t.l[0]) * (tier2 ? 0 : central)) * ps.blockDepthScale;
+    // each district draws its own block proportion: the area stays what the type asks for, the
+    // shape ranges from compact to long (residential and waterfront blocks often 2:1 to 3:1)
+    const stretch = type === 'residential' || type === 'waterfront' ? ctx.rng.range(0.8, 1.7) : type === 'civic' || type === 'central' ? ctx.rng.range(0.9, 1.15) : ctx.rng.range(0.85, 1.35);
+    const bw = ((t.w[0] + (t.w[1] - t.w[0]) * (tier2 ? 0 : central)) * ps.blockWidthScale) / Math.sqrt(stretch), bl = (t.l[0] + (t.l[1] - t.l[0]) * (tier2 ? 0 : central)) * ps.blockDepthScale * Math.sqrt(stretch);
     // dominant street regime: regular unless something justifies otherwise
     const meanSlope = c ? slopeSum / c : 0;
     let regime, why;
@@ -103,8 +106,15 @@ export function planDistricts(model, ctx) {
     else if (type === 'industrial') [regime, why] = ['INDUSTRIAL_LARGE_BLOCK', 'large_plots_and_freight_access'];
     else if (type === 'waterfront') [regime, why] = ['WATERFRONT', 'streets_respond_to_the_shoreline'];
     else if (meanSlope > 0.075) [regime, why] = ['CONTOUR_FOLLOWING', 'sloping_site'];
-    else if (type === 'university' || meanSlope > 0.04 || cfg.streetIrregularity > 0.6) [regime, why] = ['WARPED_GRID', type === 'university' ? 'campus_layout' : meanSlope > 0.04 ? 'gently_sloping_site' : 'brief_asks_for_irregular_streets'];
-    else [regime, why] = ['ORTHOGONAL', 'flat_ordinary_district'];
+    else if (type === 'university' || meanSlope > 0.04) [regime, why] = ['WARPED_GRID', type === 'university' ? 'campus_layout' : 'gently_sloping_site'];
+    else {
+      // an ordinary flat district is not automatically a ruled grid: its fabric is drawn from a
+      // distribution that the brief shifts (grid preference towards ORTHOGONAL, irregularity
+      // towards IRREGULAR_ORDERED). Commercial districts lean regular.
+      const wO = (0.2 + 1.1 * cfg.gridPreference ** 1.5) * (type === 'commercial' ? 1.6 : 1), wW = 0.45, wI = 0.2 + 1.3 * cfg.streetIrregularity;
+      const u = ctx.rng.next() * (wO + wW + wI);
+      [regime, why] = u < wO ? ['ORTHOGONAL', 'ordinary_district_laid_out_as_a_regular_grid'] : u < wO + wW ? ['WARPED_GRID', 'ordinary_district_with_a_loosened_grid'] : ['IRREGULAR_ORDERED', 'ordinary_district_with_an_irregular_but_ordered_street_pattern'];
+    }
     return record(ctx.id('district'), type, STAGE, `${type}_district_grown_from_${s.anchor.id}_bounded_by_major_roads_and_terrain`, {
       index: k, name: type === 'waterfront' ? s.name.replace('Neighbourhood', 'Waterfront') : s.name, anchorId: s.anchor.id,
       cells: c, area: c * cell * cell, centroid, tier: s.anchor.tier,
@@ -136,7 +146,12 @@ export function planDistricts(model, ctx) {
     let own = Math.hypot(acc[k].c, acc[k].s) > 1e-6 ? 0.5 * Math.atan2(acc[k].s, acc[k].c) : baseAngle;
     // regular regimes share the city grid unless their arterials clearly point elsewhere
     const regular = ['ORTHOGONAL', 'STATION_DENSE', 'INDUSTRIAL_LARGE_BLOCK'].includes(d.streetRegime);
-    if (d.type === 'civic' || (regular && cfg.gridPreference >= 0.25 && angleDiff180(own, baseAngle) < 0.2 + 0.5 * cfg.gridPreference && !(d.tier === 2 && d.type === 'commercial'))) own = baseAngle;
+    // a regular district may join the city-wide grid; how readily depends on the brief. Otherwise
+    // it keeps its own orientation, and a looser fabric is turned a little further off the grid.
+    const joins = regular && cfg.gridPreference >= 0.25 && angleDiff180(own, baseAngle) < 0.2 + 0.5 * cfg.gridPreference && !(d.tier === 2 && d.type === 'commercial') && (d.type === 'central' || ctx.rng.chance(0.15 + 0.85 * cfg.gridPreference ** 2));
+    if (d.type === 'civic' || joins) own = baseAngle;
+    else if (d.type !== 'park' && d.type !== 'central') own += ctx.rng.range(-0.6, 0.6) * (1 - cfg.gridPreference) * (regular ? 0.7 : 1);
+    d.orientationSource = d.type === 'civic' || joins ? 'city_grid' : 'own_arterials_and_site';
     d.streetOrientation = own;
   });
 

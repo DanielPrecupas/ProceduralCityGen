@@ -67,7 +67,7 @@ export function routeMajorNetwork(model, ctx, edges) {
   const elev = (i) => Math.max(0, T.elevation[i]);
   const roadRank = new Uint8Array(n);
   let routeCls = 'R2'; // class of the link currently being routed
-  let routeAvoidCore = false, bridgeNear = null;
+  let routeAvoidCore = false, routeBypass = false, bridgeNear = null;
   const civicA = model.anchors.find((a) => a.type === 'civic');
   const coreMask = new Uint8Array(n);
   if (civicA) for (let i = 0; i < n; i++) if (Math.hypot(R.centerX(i) - civicA.position.x, R.centerY(i) - civicA.position.y) < 0.42 * model.brief.urbanRadius) coreMask[i] = 1;
@@ -82,6 +82,7 @@ export function routeMajorNetwork(model, ctx, edges) {
       b = (b + m1 + m2) / 3;
     }
     if (routeAvoidCore && coreMask[to]) b *= 5;
+    if (routeBypass) b *= coreMask[to] ? 4 : RP.urbanMask[to] ? 2.4 : 1; // an expressway keeps to the edge of the city
     const len = dirLen[k] * cell;
     const grade = Math.abs(elev(to) - elev(from)) / len;
     const reg = T.regime[to];
@@ -93,7 +94,7 @@ export function routeMajorNetwork(model, ctx, edges) {
     } else c = len * b * (1 + ta * (reg === REGIME.STEEP ? 1.6 : 1) * Math.min(6, (grade / 0.06) ** 2));
     // discount only an existing link, so followers reuse the exact alignment instead of braiding beside it
     const onNetwork = roadRank[to] && roadRank[from] && usage.has(Math.min(from, to) * n + Math.max(from, to));
-    if (onNetwork) c *= 0.4;
+    if (onNetwork && (!routeBypass || roadRank[to] === CLASS_RANK.R1)) c *= 0.4; // an expressway shares only another expressway's alignment
     else if (T.water[to] && !T.water[from]) c += 350; // cost of starting a new bridge
     if (arrival >= 0) {
       const dot = dirX[k] * dirX[arrival] + dirY[k] * dirY[arrival];
@@ -114,7 +115,7 @@ export function routeMajorNetwork(model, ctx, edges) {
   const addPath = (cells, edge, fixed) => {
     const A = anchorById.get(edge.a), Bn = anchorById.get(edge.b);
     const regional = edge.cls === 'R1';
-    const express = regional && cfg.urbanExpressway && (A.type === 'station' || Bn.type === 'station');
+    const express = regional && (edge.bypass || (cfg.urbanExpressway && (A.type === 'station' || Bn.type === 'station')));
     let threshold = cells.length; // index along the route (from the gateway end) where the city begins
     const seq = regional && A.type !== 'gateway' ? [...cells].reverse() : cells;
     if (regional && !express) {
@@ -211,6 +212,7 @@ export function routeMajorNetwork(model, ctx, edges) {
     const gx = goal % w, gy = (goal - gx) / w;
     routeCls = e.cls;
     routeAvoidCore = !!e.avoidCore;
+    routeBypass = !!e.bypass;
     bridgeNear = null;
     if (e.newCrossing) { // forbid water within 700 m of any existing crossing
       bridgeNear = new Uint8Array(n);
@@ -233,7 +235,7 @@ export function routeMajorNetwork(model, ctx, edges) {
     addPath(path.cells, e, false);
     routed++;
   }
-  routeAvoidCore = false; bridgeNear = null;
+  routeAvoidCore = false; routeBypass = false; bridgeNear = null;
 
   // --- tidy junctions: a link is redundant if its ends are also joined by <= 3 other links
   // (routes merging one cell apart leave such triangles / diamonds behind)
@@ -307,7 +309,7 @@ export function routeMajorNetwork(model, ctx, edges) {
       demand: e.demand, ...(e.reinforcement ? { reinforcement: e.reinforcement } : {}),
       bridge: cells.some((ci) => T.water[ci]), length: polylineLength(pts), ...(alignment ? { fit: alignment } : {}),
       engineering, engineeringType: engineering.length ? engineering[0].type : 'NORMAL',
-      ...(first.express && first.cls === 'R1' ? { urbanExpressway: true } : {}),
+      ...(first.express && first.cls === 'R1' ? { urbanExpressway: true, ...(e.bypass ? { bypass: true, gradeSeparated: true } : {}) } : {}),
     }));
     roads[roads.length - 1].endCells = [cells[0], cells[cells.length - 1]];
   };
@@ -326,6 +328,25 @@ export function routeMajorNetwork(model, ctx, edges) {
   }
   model.urbanGateways = gateways;
 
+  // --- what each regional road does when it reaches the city: explicit and recorded
+  const decisions = [];
+  for (const e of edges) {
+    if (e.unroutable || !(e.cls === 'R1' || transitions.size && [...transitions.values()].includes(e))) continue;
+    const mine = roads.filter((r) => r.demandId === e.id && r.points.length > 1);
+    if (!mine.length) continue;
+    const A = anchorById.get(e.a), Bn = anchorById.get(e.b), gate = A.type === 'gateway' ? A : Bn;
+    let behaviour, why;
+    if (e.bypass) {
+      let inUrban = 0, total = 0;
+      for (const r of mine) for (const p of r.points) { const i = R.index(p.x, p.y); total++; if (i >= 0 && RP.urbanMask[i]) inUrban++; }
+      const share = total ? inUrban / total : 0;
+      [behaviour, why] = share > 0.45 ? ['PASS_THROUGH_AS_EXPRESSWAY', 'no_clear_route_around_the_city_so_the_expressway_crosses_it_without_frontage'] : share > 0.12 ? ['SKIRT', 'expressway_runs_along_the_edge_of_the_built_up_area'] : ['BYPASS', 'expressway_passes_the_city_at_a_distance'];
+    } else if (mine.some((r) => r.urbanExpressway)) [behaviour, why] = ['PASS_THROUGH_AS_EXPRESSWAY', 'brief_asks_for_an_urban_expressway_to_the_station'];
+    else [behaviour, why] = ['TRANSITION_TO_URBAN_ARTERIAL', 'regional_road_becomes_an_urban_arterial_at_the_edge_of_the_city'];
+    decisions.push(record(ctx.id('regroad'), 'regional_road_decision', STAGE, why, { behaviour, demandId: e.id, gatewayId: gate.id, roadIds: mine.map((r) => r.id), position: gate.position }));
+  }
+  model.regionalRoadDecisions = decisions;
+
   // --- mid-road crossings: where two strong roads cross without either ending there, both are
   // split so the crossing is a real node of the network (unless one of them is grade separated)
   const atGrade = findCrossings(roads.filter(isStrongRoad)).filter((x) => !isGradeSeparated(x.a) && !isGradeSeparated(x.b));
@@ -342,5 +363,6 @@ export function routeMajorNetwork(model, ctx, edges) {
 
   model.roads = model.roads.filter((r) => r.createdByStage !== STAGE && r.createdByStage !== 'reinforcement').concat(roads);
   model.metadata.majorRoadCells = roadRank;
+  ctx.log(`regional roads: ${decisions.map((d) => d.behaviour.toLowerCase()).join(', ') || 'none'}`);
   ctx.log(`${routed} links routed (${straight} straight alignments, ${failed} unroutable, ${tidied} redundant junction links removed) -> ${roads.length} road sections (${crossed / 2} mid-road crossings made into junctions), ${gateways.length} urban gateways, ${(roads.reduce((s, r) => s + r.length, 0) / 1000).toFixed(0)} km`);
 }

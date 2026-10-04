@@ -35,7 +35,7 @@ export class GeneratedCityAnalyzer {
     const cfg = { ...model.config }; delete cfg.heightmap;
     return {
       ...profile,
-      seed: model.seed, generator: 'CityGen 3.0.0-alpha.2', config: cfg,
+      seed: model.seed, generator: 'CityGen 3.0.0-beta.1', config: cfg,
       population: model.brief.population,
       areaKm2: profile.scales.city.areaKm2,
       plannedAreaKm2: model.districts.reduce((s, d) => s + d.area, 0) / 1e6,

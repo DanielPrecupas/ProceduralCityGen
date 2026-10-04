@@ -81,7 +81,7 @@ export function planMajorReservations(model, ctx) {
 
   const cands = [];
   for (let y = 1; y < h - 1; y += 2) for (let x = 1; x < w - 1; x += 2) { const i = y * w + x; if (grid[i] >= 0 && D[grid[i]].type !== 'park') cands.push({ x: (x + 0.5) * cell, y: (y + 0.5) * cell, i }); }
-  const programme = [...PROGRAMME[cfg.citySize]];
+  const programme = [...(PROGRAMME[cfg.citySize] || PROGRAMME.major)];
   if (cfg.citySize !== 'small' && cfg.civicOrder >= 0.7) programme.push('CIVIC_COMPOUND');
   const scale = Math.min(1, Math.max(0.5, model.brief.scale));
   for (const kind of programme) {

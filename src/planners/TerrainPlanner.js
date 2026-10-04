@@ -20,6 +20,15 @@ export function planTerrain(model, ctx) {
   const R = new Raster(Math.round(size / CELL), Math.round(size / CELL), CELL);
   const src = cfg.heightmap ? heightmapSource(cfg, R) : proceduralSource(cfg, ctx.rng, R);
   model.terrain = { raster: R, size, bounds: { minX: 0, minY: 0, maxX: size, maxY: size }, source: src.kind, features: src.features, river: src.river, ...deriveFields(src.elevation, R, cfg.engineering) };
+  // Inside a region, land beyond the boundary with a neighbouring settlement is not this
+  // settlement's to build on (roads and railways may still cross it). Each exclusion is a half-plane {x, y, nx, ny}: the far side of the
+  // line through (x, y) in the direction of the normal belongs to the neighbour.
+  const ex = cfg.regionalContext?.exclusions;
+  if (ex && ex.length) {
+    const T = model.terrain, foreign = new Uint8Array(R.n);
+    for (let i = 0; i < R.n; i++) { const x = R.centerX(i), y = R.centerY(i); if (ex.some((e) => (x - e.x) * e.nx + (y - e.y) * e.ny > 0)) foreign[i] = 1; }
+    T.foreign = foreign;
+  }
   ctx.log(`${src.kind} terrain ${R.w}x${R.h} cells, ${(model.terrain.waterShare * 100).toFixed(0)}% water`);
 }
 
@@ -66,7 +75,7 @@ function heightmapSource(cfg, R) {
     const x0 = Math.floor(u), y0 = Math.floor(v), x1 = Math.min(hm.width - 1, x0 + 1), y1 = Math.min(hm.height - 1, y0 + 1);
     const tx = u - x0, ty = v - y0;
     const val = (hm.data[y0 * hm.width + x0] * (1 - tx) + hm.data[y0 * hm.width + x1] * tx) * (1 - ty) + (hm.data[y1 * hm.width + x0] * (1 - tx) + hm.data[y1 * hm.width + x1] * tx) * ty;
-    elevation[y * R.w + x] = (val - (hm.seaLevel ?? 0.22)) * relief; // values below sea level become water
+    elevation[y * R.w + x] = hm.metres ? val : (val - (hm.seaLevel ?? 0.22)) * relief; // values below sea level become water (a regional crop is already in metres)
   }
   return { kind: 'heightmap', elevation, river: null, features: {} };
 }

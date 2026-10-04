@@ -90,6 +90,41 @@ export function initControls(app) {
   showLegend(app);
 }
 
+// ---------- region mode
+export function syncMode(app) {
+  for (const b of $('modeToggle').children) b.classList.toggle('on', b.dataset.mode === app.mode);
+  $('cityControls').hidden = app.mode !== 'city';
+  $('regionControls').hidden = app.mode !== 'region';
+  $('backToRegion').hidden = !(app.mode === 'city' && app.openedSettlement);
+  $('openedNote').textContent = app.mode === 'city' && app.openedSettlement ? `Showing ${app.openedSettlement.name}, a settlement of region "${app.region.seed}".` : '';
+}
+
+export function showRegion(app) {
+  const r = app.region, st = r.stats;
+  $('notes').innerHTML = '';
+  $('log').innerHTML = r.metadata.log.map((l) => `<div><em>${l.ms.toFixed(0)} ms</em><b>${esc(l.stage)}</b><br><span>${esc(l.messages.join(' · '))}</span></div>`).join('')
+    + r.settlements.map((s) => `<div class="warn" data-settlement="${s.id}"><b>${esc(s.name)}</b> <span>${esc(s.scale.replace(/_/g, ' ').toLowerCase())} · ${esc(s.role.toLowerCase())} · ${Math.round(s.modelledPopulation / 1000)}k · ${esc(s.continuity.replace(/_/g, ' ').toLowerCase())}</span></div>`).join('');
+  $('log').onclick = (e) => { const el = e.target.closest('[data-settlement]'); if (el) app.focusSettlement(el.dataset.settlement); };
+  $('settlementList').innerHTML = r.settlements.map((s) => `<div class="srow"><div data-focus="${s.id}"><b>${esc(s.name)}</b><span>${esc(s.scale.replace(/_/g, ' ').toLowerCase())}${s.role === 'MIXED' ? '' : ' · ' + esc(s.role.toLowerCase())} · ${Math.round((s.modelledPopulation || s.populationTarget) / 1000)}k</span></div><button data-open="${s.id}">Open</button></div>`).join('');
+  $('settlementList').onclick = (e) => { const o = e.target.closest('[data-open]'), f = e.target.closest('[data-focus]'); if (o) app.openSettlement(o.dataset.open); else if (f) app.focusSettlement(f.dataset.focus); };
+  $('valSummary').innerHTML = Object.entries({ settlements: st.settlements, 'continuous groups': st.continuousGroups, 'interface zones': st.interfaceZones, stations: st.stations }).map(([k, v]) => `<span>${esc(k)} ${v}</span>`).join('');
+  $('warnings').innerHTML = '';
+  $('realityTable').innerHTML = '<span class="sub">Open a settlement to see its reality profile.</span>';
+  $('status').textContent = `region "${r.seed}" · ${(st.modelledPopulation / 1e6).toFixed(2)}M people in ${st.settlements} settlements · ${Math.round(st.regionalRoadKm)} km regional roads · ${Math.round(st.regionalRailKm)} km regional rail · ${r.terrain.size / 1000} km square`;
+}
+
+export function initRegionControls(app) {
+  const c = app.regionConfig;
+  $('modeToggle').addEventListener('click', (e) => { const m = e.target.dataset.mode; if (!m || app.busy) return; if (m === 'region' && !app.region) { app.setMode('region'); app.generateRegion(); } else if (m === 'region') app.backToRegion(); else app.setMode('city'); });
+  $('regionSeed').value = c.seed; $('regionSeed').addEventListener('change', (e) => { c.seed = e.target.value; });
+  $('regionPopulation').value = String(c.regionalPopulationTarget); $('regionPopulation').addEventListener('change', (e) => { c.regionalPopulationTarget = Number(e.target.value); });
+  $('regionStructure').value = c.structure; $('regionStructure').addEventListener('change', (e) => { c.structure = e.target.value; });
+  $('genRegion').addEventListener('click', () => app.generateRegion());
+  $('newRegionSeed').addEventListener('click', () => { c.seed = `region-${Math.floor(Math.random() * 9000 + 1000)}`; $('regionSeed').value = c.seed; app.generateRegion(); });
+  $('backToRegion').addEventListener('click', () => app.backToRegion());
+  syncMode(app);
+}
+
 export function showLegend(app) {
   const map = app.style === 'map';
   const roads = map
@@ -99,7 +134,7 @@ export function showLegend(app) {
 }
 
 export function setBusy(busy, text) {
-  for (const id of ['generate', 'regen', 'newSeed']) $(id).disabled = busy;
+  for (const id of ['generate', 'regen', 'newSeed', 'genRegion', 'newRegionSeed']) $(id).disabled = busy;
   if (text) $('status').textContent = text;
 }
 
@@ -122,7 +157,7 @@ export function showModel(app) {
   $('status').textContent = `seed "${m.seed}" · ${m.brief.population.toLocaleString()} people · ${met.edges ?? 0} road segments · ${met.blocks ?? 0} blocks · ${total.toFixed(0)} ms`;
 }
 
-const HIDE = new Set(['paths', 'segments', 'aIndex', 'bIndex', 'points', 'basePoints', 'polygon', 'polygons', 'edgeIds', 'bbox', 'blockIds', 'index', 'districtIndex', 'strip', 'endCells', 'pedestrianCuts', 'centre', 'blockRange', 'nodeBasePoints', 'engineering']);
+const HIDE = new Set(['routed', 'seamLine', 'seam', 'seamEnds', 'foundingBoundary', 'growthBoundary', 'model', 'paths', 'segments', 'aIndex', 'bIndex', 'points', 'basePoints', 'polygon', 'polygons', 'edgeIds', 'bbox', 'blockIds', 'index', 'districtIndex', 'strip', 'endCells', 'pedestrianCuts', 'centre', 'blockRange', 'nodeBasePoints', 'engineering']);
 function fmt(v) {
   if (typeof v === 'number') return Number.isInteger(v) ? v.toLocaleString() : v.toFixed(Math.abs(v) < 10 ? 2 : 0);
   if (v && typeof v === 'object') {
@@ -134,11 +169,12 @@ function fmt(v) {
 }
 export function showInspector(objects) {
   $('inspector').innerHTML = objects.length ? objects.map((o) => {
+    const open = o.type === 'settlement' ? `<div class="btns"><button data-open="${o.id}">Open ${esc(o.name)} in the city view</button></div>` : '';
     const lead = ['id', 'type', 'createdByStage', 'reason'].filter((k) => k in o);
     const rest = Object.keys(o).filter((k) => !lead.includes(k) && !HIDE.has(k) && o[k] !== null && o[k] !== undefined);
     const tags = [o.hierarchy, o.resolution, o.behaviour, o.hard && 'abrupt', o.form !== 'REGULAR' && o.type === 'block' && o.form, o.profile || o.transportProfile, o.tier != null && (typeof o.tier === 'string' ? o.tier : `tier ${o.tier}`), o.type !== 'block' && o.form, o.interchangeType, o.designRole, o.cls && o.cls !== o.type && o.cls, o.streetRegime, o.level != null && `level ${o.level}`, o.kind, o.engineeringType && o.engineeringType !== 'NORMAL' && o.engineeringType, o.morphology?.preset]
       .filter(Boolean).map((t) => `<span>${esc(String(t).replace(/_/g, ' ').toLowerCase())}</span>`).join('');
     const head = `<div class="oh"><b>${esc(o.name || String(o.type ?? 'object').replace(/_/g, ' '))}</b>${tags ? `<div class="chips">${tags}</div>` : ''}</div>`;
-    return `<div class="obj">${head}<table>${[...lead, ...rest].map((k) => `<tr><td>${k}</td><td>${k === 'reason' ? '<b>' + fmt(o[k]) + '</b>' : fmt(o[k])}</td></tr>`).join('')}</table></div>`;
+    return `<div class="obj">${head}${open}<table>${[...lead, ...rest].map((k) => `<tr><td>${k}</td><td>${k === 'reason' ? '<b>' + fmt(o[k]) + '</b>' : fmt(o[k])}</td></tr>`).join('')}</table></div>`;
   }).join('') : '<span class="sub">Nothing here.</span>';
 }

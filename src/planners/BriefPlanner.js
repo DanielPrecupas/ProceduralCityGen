@@ -6,7 +6,7 @@ import { SIZE_PRESETS } from '../core/CityModel.js';
 export function planBrief(model, ctx) {
   const cfg = model.config, T = model.terrain, cellArea = T.raster.cell ** 2;
   let buildableArea = 0;
-  for (let i = 0; i < T.raster.n; i++) if (T.buildability[i] > 0.3) buildableArea += cellArea;
+  for (let i = 0; i < T.raster.n; i++) if (T.buildability[i] > 0.3 && !(T.foreign && T.foreign[i])) buildableArea += cellArea;
   const grossDensity = 6500 + 4000 * cfg.centralization; // people per km2 of urban land
   let population = cfg.targetPopulation;
   let urbanArea = (population / grossDensity) * 1e6;

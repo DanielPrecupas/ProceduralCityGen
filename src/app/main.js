@@ -7,14 +7,16 @@ import { DebugRenderer } from '../rendering/DebugRenderer.js';
 import { detailFor } from '../rendering/Lod.js';
 import { labelCandidates, drawLabels } from '../rendering/LabelLayer.js';
 import { pointInPolygon, pointPolylineDistance } from '../core/Geometry.js';
-import { initControls, setBusy, showModel, showInspector, showLegend, PLAN_VIEW } from './controls.js';
+import { initControls, setBusy, showModel, showInspector, showLegend, showRegion, syncMode, initRegionControls, PLAN_VIEW } from './controls.js';
 import { createViewport } from './viewport.js';
 import { createChrome } from './mapChrome.js';
 import { createRealityPanel } from './realityPanel.js';
+import { RegionRenderer, describeSettlement } from '../rendering/RegionRenderer.js';
+import { generateRegion, DEFAULT_REGION_CONFIG } from '../region/RegionGen.js';
 
 const canvas = document.getElementById('map');
 const ctx2d = canvas.getContext('2d');
-const mapRenderer = new MapRenderer(), debugRenderer = new DebugRenderer();
+const mapRenderer = new MapRenderer(), debugRenderer = new DebugRenderer(), regionRenderer = new RegionRenderer();
 
 const app = {
   config: { ...DEFAULT_CONFIG },
@@ -27,12 +29,55 @@ const app = {
   selected: null,
   selectedId: null,
   busy: false,
+  mode: 'city',        // 'city': one CityModel; 'region': a RegionModel of several settlements
+  region: null,
+  regionConfig: { ...DEFAULT_REGION_CONFIG },
+  openedSettlement: null, // the settlement whose CityModel is shown in city mode, if it came from the region
+
+  worldSize() { return app.mode === 'region' && app.region ? app.region.terrain.size : app.model?.terrain?.size || 13000; },
+
+  // REGION: settlements are generated one after another; the regional plan exists before any of them
+  async generateRegion() {
+    if (app.busy) return;
+    app.busy = true;
+    try {
+      setBusy(true, 'Planning the region...');
+      await new Promise((r) => setTimeout(r, 0));
+      const region = await generateRegion(app.regionConfig, async (rg, s, k) => { setBusy(true, `Generating settlement ${k} of ${rg.settlements.length}: ${s.name} (${s.scale.replace(/_/g, ' ').toLowerCase()}, ${Math.round(s.populationTarget / 1000)}k)...`); await new Promise((r) => setTimeout(r, 0)); });
+      regionRenderer.prepare(region);
+      app.region = region; app.busy = false;
+      app.setMode('region');
+      app.select([]);
+      showRegion(app);
+      viewport.resetView(0);
+    } catch (err) { console.error(err); setBusy(false, `Region generation failed: ${err.message}`); } finally { app.busy = false; setBusy(false); }
+  },
+  setMode(mode) {
+    app.mode = mode;
+    document.body.classList.toggle('region-mode', mode === 'region');
+    syncMode(app);
+    app.redraw();
+  },
+  // look at one settlement of the region with the full single-city interface
+  openSettlement(id) {
+    const s = app.region?.settlements.find((x) => x.id === id);
+    if (!s || !s.model) return;
+    app.openedSettlement = s; app.model = s.model;
+    mapRenderer.prepare(app.model); debugRenderer.prepare(app.model);
+    labels = labelCandidates(app.model);
+    app.selected = null; app.selectedId = null;
+    document.getElementById('openSelected').hidden = true;
+    app.setMode('city');
+    showModel(app); chrome.modelChanged(); reality.modelChanged();
+    viewport.resetView(0);
+  },
+  backToRegion() { if (!app.region) return; app.setMode('region'); showRegion(app); app.select([]); viewport.resetView(0); },
 
   async generate(from = 'terrain') {
     if (app.busy) return;
     app.busy = true;
     try {
-      if (from === 'terrain' || !app.model) { app.model = createCityModel(app.config); from = 'terrain'; }
+      if (from === 'terrain' || !app.model) { app.model = createCityModel(app.config); from = 'terrain'; app.openedSettlement = null; }
       else {
         // later stages pick up edited planning parameters; seed and terrain stay as generated
         const { config, notes } = normalizeConfig({ ...app.config, seed: app.model.seed });
@@ -61,7 +106,14 @@ const app = {
   fitCity() { const b = mapRenderer.cache?.cityBounds; if (b) viewport.fitBox(b); },
   focus(p) { viewport.flyTo(p.x, p.y, Math.max(app.view.scale, 0.35)); },
   setStyle(style) { app.style = style; chrome.syncStyle(); showLegend(app); app.redraw(); },
-  select(objects) { app.selected = objects[0] || null; app.selectedId = app.selected?.id || null; showInspector(objects); app.redraw(); },
+  select(objects) {
+    app.selected = objects[0] || null; app.selectedId = app.selected?.id || null; showInspector(objects);
+    // in a region, a selected settlement can be opened straight from the map
+    const st = app.mode === 'region' ? objects.find((o) => o.type === 'settlement') : null, btn = document.getElementById('openSelected');
+    btn.hidden = !st;
+    if (st) { btn.textContent = `Open ${st.name} in the city view`; btn.dataset.open = st.id; }
+    app.redraw();
+  },
   drawNow() { if (app.raf) cancelAnimationFrame(app.raf); draw(); },
 
   redraw() { if (!app.raf) app.raf = requestAnimationFrame(draw); },
@@ -78,6 +130,7 @@ function draw() {
   const ctx = ctx2d, v = app.view, m = app.model, L = app.layers;
   v.w = w; v.h = h;
   if (moving) app.redraw();
+  if (app.mode === 'region') { drawRegion(ctx, dpr, t0); return; }
   if (!m || mapRenderer.cache?.model !== m || (app.busy && !drag)) return; // never paint a half-planned model
   const D = app.detail = detailFor(v.scale, app.fullDetail || !!L.mono);
   ctx.setTransform(1, 0, 0, 1, 0, 0);
@@ -112,6 +165,19 @@ function draw() {
   chrome.update(D, performance.now() - t0);
 }
 
+function drawRegion(ctx, dpr, t0) {
+  const v = app.view;
+  if (!app.region || app.busy) return;
+  ctx.setTransform(1, 0, 0, 1, 0, 0);
+  ctx.fillStyle = '#d9dde0'; ctx.fillRect(0, 0, canvas.width, canvas.height);
+  ctx.setTransform(v.scale * dpr, 0, 0, v.scale * dpr, v.ox * dpr, v.oy * dpr);
+  regionRenderer.draw(ctx, v, app.layers, app.style, app.selected);
+  regionRenderer.drawLabels(ctx, v, dpr);
+  const D = detailFor(v.scale);
+  D.name = v.scale < 0.022 ? 'regional' : D.name;
+  chrome.update(D, performance.now() - t0);
+}
+
 // outline of the inspected object, whatever shape it has
 function drawSelection(ctx, v) {
   const o = app.selected;
@@ -142,6 +208,7 @@ const anchorAt = (p) => {
 };
 
 function inspect(p) {
+  if (app.mode === 'region') { app.select(regionRenderer.pick(p, 9 / app.view.scale)); return; }
   const m = app.model, out = [], tol = 7 / app.view.scale, D = app.detail; // only what this zoom shows can be picked
   const a = anchorAt(p);
   if (a) out.push(a);
@@ -186,7 +253,7 @@ function inspect(p) {
 
 let drag = null;
 canvas.addEventListener('mousedown', (e) => {
-  const p = toWorld(e), a = app.busy ? null : anchorAt(p);
+  const p = toWorld(e), a = app.busy || app.mode === 'region' ? null : anchorAt(p);
   drag = a && a.type !== 'gateway'
     ? { kind: 'anchor', anchor: a, origin: { ...a.position }, moved: false }
     : { kind: 'pan', x: e.clientX, y: e.clientY, moved: false, trail: [] };
@@ -194,7 +261,7 @@ canvas.addEventListener('mousedown', (e) => {
   canvas.style.cursor = 'grabbing';
 });
 window.addEventListener('mousemove', (e) => {
-  if (!drag) { canvas.style.cursor = anchorAt(toWorld(e)) ? 'move' : 'grab'; return; }
+  if (!drag) { canvas.style.cursor = app.mode === 'city' && anchorAt(toWorld(e)) ? 'move' : 'grab'; return; }
   if (drag.kind === 'pan') {
     const dx = e.clientX - drag.x, dy = e.clientY - drag.y;
     if (Math.abs(dx) + Math.abs(dy) > 3) drag.moved = true;
@@ -233,6 +300,21 @@ const chrome = createChrome(app, canvas, viewport, mapRenderer);
 const reality = createRealityPanel(app);
 app.reality = reality;
 initControls(app);
+initRegionControls(app);
+document.getElementById('openSelected').addEventListener('click', (e) => app.openSettlement(e.currentTarget.dataset.open));
+// double-click a settlement on the regional map to open it
+app.onDoubleClick = (e) => { if (app.mode !== 'region' || !app.region) return false; const st = regionRenderer.pick(toWorld(e), 9 / app.view.scale).find((o) => o.type === 'settlement'); if (!st) return false; app.openSettlement(st.id); return true; };
+document.getElementById('inspector').addEventListener('click', (e) => { const id = e.target.dataset?.open; if (id) app.openSettlement(id); });
+app.focusSettlement = (id) => { const s = app.region.settlements.find((x) => x.id === id); if (s) { viewport.flyTo(s.position.x, s.position.y, Math.max(app.view.scale, 0.03)); app.select([describeSettlement(app.region, s)]); } };
 chrome.syncStyle();
 window.cityGen = app; // handy in the console
-app.generate('terrain');
+// ?region=<seed>&pop=<people> opens straight into a region (handy for links and screenshots)
+const query = new URLSearchParams(location.search);
+if (query.has('region')) {
+  app.regionConfig.seed = query.get('region') || app.regionConfig.seed;
+  if (Number(query.get('pop')) > 0) app.regionConfig.regionalPopulationTarget = Number(query.get('pop'));
+  document.getElementById('regionSeed').value = app.regionConfig.seed;
+  document.getElementById('regionPopulation').value = String(app.regionConfig.regionalPopulationTarget);
+  app.setMode('region'); app.generateRegion();
+} else app.generate('terrain');
+

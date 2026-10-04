@@ -15,7 +15,7 @@ const OSM_GROUP = {
 const GROUP_RANK = { regional: 5, arterial: 4, avenue: 3, connector: 2, local: 1 };
 // CityGen hierarchy levels -> the same groups
 export const HIERARCHY_GROUP = {
-  REGIONAL: 'regional', METROPOLITAN_ARTERIAL: 'arterial', PRIMARY_AVENUE: 'avenue',
+  REGIONAL_HIGHWAY: 'regional', URBAN_EXPRESSWAY: 'regional', METROPOLITAN_ARTERIAL: 'arterial', GRAND_BOULEVARD: 'arterial', PRIMARY_AVENUE: 'avenue',
   SECONDARY_AVENUE: 'connector', DISTRICT_CONNECTOR: 'connector', LOCAL_HIGH_STREET: 'local', LOCAL: 'local',
 };
 

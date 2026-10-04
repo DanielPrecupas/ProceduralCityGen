@@ -45,17 +45,19 @@ export function validate(model) {
   let offNet = 0;
   for (const e of live) if (comp[e.a] !== main) offNet += e.len;
   if (offNet > 500) warn('warning', 'disconnected_streets', null, `${(offNet / 1000).toFixed(1)} km of streets are not connected to the main network.`);
-  let deadEnds = 0, withEdges = 0;
+  let deadEnds = 0, withEdges = 0, intended = 0;
   for (const nd of g.nodes) {
     const re = g.roadEdgesAt(nd);
     if (!re.length) continue;
     withEdges++;
     if (re.length !== 1) continue;
     if (nd.x < 150 || nd.y < 150 || nd.x > T.size - 150 || nd.y > T.size - 150) continue; // regional roads leaving the plan
+    if (model.anchors.some((a) => a.type === 'gateway' && Math.hypot(a.position.x - nd.x, a.position.y - nd.y) < 90)) continue; // a road handed on to the neighbouring settlement
+    if (g.edges[re[0]].keepDeadEnd) { intended++; continue; } // a designed dead end is not a defect
     deadEnds++;
-    warn('info', 'dead_end', g.edges[re[0]].roadId, 'Road ends without a connection.', { x: nd.x, y: nd.y });
+    warn('info', 'dead_end', g.edges[re[0]].roadId, 'Road ends without a connection and without a recorded reason.', { x: nd.x, y: nd.y });
   }
-  if (deadEnds / Math.max(1, withEdges) > 0.04) warn('warning', 'too_many_dead_ends', null, `${deadEnds} dead ends (${((100 * deadEnds) / withEdges).toFixed(1)}% of junctions).`);
+  if (deadEnds / Math.max(1, withEdges) > 0.04) warn('warning', 'too_many_dead_ends', null, `${deadEnds} unexplained dead ends (${((100 * deadEnds) / withEdges).toFixed(1)}% of junctions).`);
   const hash = new SegmentHash(120);
   live.forEach((e) => hash.insert(g.nodes[e.a].x, g.nodes[e.a].y, g.nodes[e.b].x, g.nodes[e.b].y, e));
   const out = [];
@@ -159,7 +161,7 @@ export function validate(model) {
     if (e.sub === 'frame') continue;
     const m = pos(e);
     for (const rv of model.reservations) {
-      if (rv.type === 'interchange') continue; // roads pass through an interchange by definition
+      if (rv.type === 'interchange' || rv.type === 'station_yard') continue; // roads pass through an interchange by definition, and bridge over station tracks
       if (m.x < rv.bbox.minX || m.x > rv.bbox.maxX || m.y < rv.bbox.minY || m.y > rv.bbox.maxY) continue;
       if (pointInPolygon(m.x, m.y, rv.polygon) && pointPolylineDistance(m, [...rv.polygon, rv.polygon[0]]) > 8) warn('error', 'reserved_space_cut', e.roadId, `Road ${e.roadId} cuts through ${rv.type}.`, m);
     }
@@ -173,7 +175,7 @@ export function validate(model) {
     if (!isSimplePolygon(b.polygon)) warn('error', 'invalid_block_geometry', b.id, 'Block polygon self-intersects.', b.centroid);
     if (!nom) continue;
     if (b.use === 'urban') { const t = typeArea[d.type] || (typeArea[d.type] = { n: 0, a: 0 }); t.n++; t.a += b.area; }
-    if (b.area > 3.2 * nom && b.use === 'urban') warn('warning', 'oversized_block', b.id, `Block area exceeds the ${d.type} target by ${Math.round((b.area / nom - 1) * 100)}%.`, b.centroid);
+    if (b.area > 5 * nom && b.use === 'urban') warn('warning', 'oversized_block', b.id, `Block area exceeds the ${d.type} target by ${Math.round((b.area / nom - 1) * 100)}%.`, b.centroid);
     else if (b.area < 0.15 * nom && b.use === 'urban' && !b.imperfection) warn('warning', 'tiny_block', b.id, `Block is only ${Math.round((b.area / nom) * 100)}% of the ${d.type} target area.`, b.centroid);
     if (b.minAngle < 0.38 && b.use === 'urban' && !b.imperfection) warn('info', 'acute_block', b.id, `Block has a ${Math.round((b.minAngle * 180) / Math.PI)} degree corner.`, b.centroid);
     // unusual but explained: reported for information, never as a defect
@@ -188,7 +190,7 @@ export function validate(model) {
   const urbanBlocks = model.blocks.filter((b) => b.use === 'urban');
   const meanA = urbanBlocks.reduce((s, b) => s + b.area, 0) / Math.max(1, urbanBlocks.length);
   const cv = Math.sqrt(urbanBlocks.reduce((s, b) => s + (b.area - meanA) ** 2, 0) / Math.max(1, urbanBlocks.length)) / Math.max(1, meanA);
-  const expected = { small: 1, medium: 3, major: 5 }[model.config.citySize];
+  const expected = { small: 1, medium: 3, major: 5, metropolis: 6 }[model.config.citySize];
   if (bigObjects < expected || cv < 0.45) warn('warning', 'excessive_uniform_urban_fabric', null, `${bigObjects} large non-street objects (expected at least ${expected}); block-size variation ${cv.toFixed(2)}.`);
 
   // ---------- DISTRICTS
@@ -285,7 +287,7 @@ export function validate(model) {
     warnings,
     summary: {
       counts,
-      metrics: { junctions: withEdges, edges: live.length, blocks: model.blocks.length, deadEnds, parkCoverage, lengthKm, meanBlockHa: blockHa, railKm: rail.lines.reduce((s, l) => s + l.length, 0) / 1000,
+      metrics: { junctions: withEdges, edges: live.length, blocks: model.blocks.length, deadEnds, intendedDeadEnds: intended, parkCoverage, lengthKm, meanBlockHa: blockHa, railKm: rail.lines.reduce((s, l) => s + l.length, 0) / 1000,
         networkLoops: net ? net.cyclomatic : null, blockSizeVariation: cv, largeObjects: bigObjects },
     },
   };

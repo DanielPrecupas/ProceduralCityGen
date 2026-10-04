@@ -133,7 +133,7 @@ export class MapRenderer {
     const m = c.model, px = 1 / view.scale, mono = !!layers.mono;
     if (mono) D = detailFor(view.scale, true);
     else if (style === 'map') { drawMapStyle(ctx, view, layers, c, D); return; }
-    if (c.terrain) {
+    if (c.terrain && !layers.noBase) {
       if (layers.terrain || layers.water || mono) {
         ctx.imageSmoothingEnabled = true;
         ctx.drawImage(terrainPaint(c, 'plan', layers.terrain || mono), 0, 0, c.terrain.size, c.terrain.size);
@@ -261,6 +261,7 @@ export class MapRenderer {
   }
 
   drawRail(ctx, m, px, D) {
+    drawStationComplex(ctx, m.rail.stationComplex, px, D, false);
     ctx.lineJoin = 'round'; ctx.lineCap = 'butt';
     for (const l of m.rail.lines) {
       const freight = l.railClass === 'RAIL_FREIGHT', wdt = Math.max(freight ? 7 : 11, (freight ? 1.6 : 2.6) * px);
@@ -325,6 +326,20 @@ export class MapRenderer {
       if (glyph && r > 5.5 * px) { ctx.fillStyle = '#fff'; ctx.font = `bold ${(quiet ? 9.5 : 11) * k * px}px system-ui, sans-serif`; ctx.fillText(glyph, a.position.x, a.position.y + 0.5 * px); }
     }
   }
+}
+
+// The central station as a railway complex: yard, platform tracks fanning out of the running
+// lines, island platforms. Far out it is a grey band; close in the individual tracks show.
+export function drawStationComplex(ctx, complex, px, D, map) {
+  if (!complex) return;
+  const trace = (pts, close) => { ctx.beginPath(); pts.forEach((pt, i) => (i ? ctx.lineTo(pt.x, pt.y) : ctx.moveTo(pt.x, pt.y))); if (close) ctx.closePath(); };
+  ctx.setLineDash([]);
+  ctx.fillStyle = map ? '#d9d5d0' : '#cfcac2'; trace(complex.polygon, true); ctx.fill();
+  if (D.level < 1) return;
+  ctx.fillStyle = map ? '#bdb7ae' : '#a9a39a';
+  for (const pf of complex.platforms) { trace(pf, true); ctx.fill(); }
+  ctx.strokeStyle = map ? '#5f5f5f' : '#26282b'; ctx.lineWidth = Math.max(1.6, 0.9 * px); ctx.lineJoin = 'round'; ctx.lineCap = 'butt';
+  for (const t of complex.tracks) { trace(t); ctx.stroke(); }
 }
 
 // symbol sizes are interpolated with zoom so they neither swamp a far view nor vanish in a close one
